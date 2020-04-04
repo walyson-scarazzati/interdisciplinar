@@ -142,7 +142,7 @@ public class AssociadoData {
         return dados;
     }
      
-         public Vector Listar(String arg) throws SQLException {
+         public Vector Listar(String arg) throws SQLException, IllegalAccessException, ClassNotFoundException, Exception {
 
         Vector dados = new Vector();
         Conexao objConexao = new Conexao();
@@ -172,7 +172,7 @@ public class AssociadoData {
 
     }
 
-    public Vector listar() throws SQLException {
+    public Vector listar() throws SQLException, IllegalAccessException, ClassNotFoundException, Exception {
         Vector dados = new Vector();
         Conexao objConexao = new Conexao();
         String SQL = "select DISTINCT(A.associado_id),B.nome, B.CPF, "

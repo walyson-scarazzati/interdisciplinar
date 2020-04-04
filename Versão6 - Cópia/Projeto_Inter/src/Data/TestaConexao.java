@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
  * @author MaqLab
  */
 public class TestaConexao {
-       public static void main(String[] args){
+       public static void main(String[] args) throws IllegalAccessException, ClassNotFoundException, Exception{
        Conexao objConexao = new Conexao();// Objeto Conexão
        try{ // Tratamento
        String SQL = "insert into Parentescos values(3,'Pai')";
