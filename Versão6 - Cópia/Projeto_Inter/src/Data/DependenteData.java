@@ -103,7 +103,7 @@ public class DependenteData {
     }
     
     
-    public Dependente pesquisar (int id) throws Exception{
+    public Dependente pesquisar (int id) throws Exception, InstantiationException, IllegalAccessException, ClassNotFoundException{
       Dependente obj = null;
       Conexao objConexao = new Conexao();
       String SQL = "Select id, nome, data_nasc, endereco, telefone, email, rg, cpf, d.parentesco_id,  d.associado_id "
@@ -134,7 +134,7 @@ public class DependenteData {
     }
     
        
-      public Vector Listar(String arg) throws SQLException {
+      public Vector Listar(String arg) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, Exception {
 
         Vector dados = new Vector();
         Conexao objConexao = new Conexao();
@@ -169,7 +169,7 @@ public class DependenteData {
     }
     
           
-       public Vector listar() throws SQLException {
+       public Vector listar() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException, Exception {
         Vector dados = new Vector();
         Conexao objConexao = new Conexao();
         String SQL =  
