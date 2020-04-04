@@ -6,7 +6,6 @@ package Data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,23 +14,19 @@ import javax.swing.JOptionPane;
  */
 public class Conexao {
       
-private static Connection conexao;
+    private static Connection conexao;
+    public Conexao(){
+       try{
+           Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+           String url = "jdbc:odbc:odbcVendasTitulos";
+           conexao = DriverManager.getConnection(url);
+           //JOptionPane.showMessageDialog(null, "Conectado com sucesso !");
+          }catch (Exception erro){
+          JOptionPane.showMessageDialog(null, "Ocorreu um erro:" + erro.getMessage(), "Conexão", 3);
+       }
+       
+    }
 
-	public Conexao() throws SQLException, InstantiationException,
-			IllegalAccessException, ClassNotFoundException, Exception {
-		String url = "jdbc:mysql://localhost:3306/venda_de_titulos?useSSL=false&createDatabaseIfNotExist=true";
-
-		String user = "root";
-		String password = "123456";
-
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		conexao = DriverManager.getConnection(url, user, password);
-	}
-
-	public void closeConnection() throws SQLException {
-		conexao.close();
-	}
-	
     public static Connection getConexao() 
     { return conexao; }
     
