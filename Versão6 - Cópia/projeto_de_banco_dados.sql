@@ -1,169 +1,182 @@
-create database venda_de_titulos
+CREATE DATABASE IF NOT EXISTS venda_de_titulos 
+  CHARACTER SET utf8mb4 
+  COLLATE utf8mb4_unicode_ci;
 
-use venda_de_titulos
+USE venda_de_titulos;
 
+-- Table: Pessoas
+CREATE TABLE Pessoas (
+  id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  nome      VARCHAR(50)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  data_nasc DATE         NULL,
+  endereco  VARCHAR(40)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  telefone  VARCHAR(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  email     VARCHAR(40)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  RG        VARCHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  CPF       VARCHAR(11)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-create table Pessoas
-(
-  id        int         not null primary key, --identity,
-  nome      varchar(50) not null,
-  data_nasc varchar(30) null,
-  endereco  varchar(40) null,
-  telefone  varchar(30)  not null, ---
-  email     varchar(40) not null,
-  RG        int         not null,
-  CPF       int         not null
-)
+-- Table: Associados
+CREATE TABLE Associados (
+  associado_id INT  NOT NULL,
+  profissao    VARCHAR(60)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  FOREIGN KEY (associado_id) REFERENCES Pessoas(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-create table Associados
-(
-  associado_id   int         not null,
-  profissao      varchar(60) not null,
-  foreign key (associado_id ) references pessoas(id)
-)
-select * from Pessoas
+-- Table: Funcionarios
+CREATE TABLE Funcionarios (
+  funcionario_id INT  NOT NULL,
+  usuario        VARCHAR(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  senha          VARCHAR(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  salario        DECIMAL(10,2) NOT NULL,
+  tipo           INT  NOT NULL,
+  FOREIGN KEY (funcionario_id) REFERENCES Pessoas(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-   Select id, nome, data_nasc, endereco, telefone, email, rg, cpf, profissao
-    from Pessoas p, Associados a
-	where p.id = a.associado_id
+-- Table: Parentescos
+CREATE TABLE Parentescos (
+  parentesco_id INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  descricao     VARCHAR(20)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Table: Dependentes
+CREATE TABLE Dependentes (
+  dependente_id INT  NOT NULL,
+  parentesco_id INT  NOT NULL,
+  associado_id  INT  NOT NULL,
+  FOREIGN KEY (dependente_id) REFERENCES Pessoas(id),
+  FOREIGN KEY (parentesco_id) REFERENCES Parentescos(parentesco_id),
+  FOREIGN KEY (associado_id)  REFERENCES Pessoas(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-create table Funcionarios
-(
-  funcionario_id    int           not null,
-  usuario           varchar(30)   not null,
-  senha             varchar(30)   not null,
-  salario           decimal(10,2) not null,
-  tipo              int           not null,
-  foreign key (funcionario_id) references pessoas(id)
-)
+-- Table: Categorias
+CREATE TABLE Categorias (
+  id          INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  descricao   VARCHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  valor       DECIMAL(10,2) NOT NULL
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-select * from Funcionarios
+-- Table: Contratos_Titulos
+CREATE TABLE Contratos_Titulos (
+  id             INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  data_contrato  DATE         NOT NULL,
+  data_cancel    DATE         NULL,
+  status         INT  NOT NULL,
+  associado_id   INT  NOT NULL,
+  funcionario_id INT  NOT NULL,
+  categorias_id  INT  NOT NULL,
+  FOREIGN KEY (associado_id)   REFERENCES Pessoas(id),
+  FOREIGN KEY (funcionario_id) REFERENCES Pessoas(id),
+  FOREIGN KEY (categorias_id)  REFERENCES Categorias(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Table: Mensalidades
+CREATE TABLE Mensalidades (
+  id          INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  preco       DECIMAL(10,2) NULL,
+  data_pgto   DATE          NULL,
+  data_venc   DATE          NOT NULL,
+  valor       DECIMAL(10,2) NULL,
+  mes_ref     INT   NOT NULL,
+  contrato_id INT   NOT NULL,
+  FOREIGN KEY (contrato_id) REFERENCES Contratos_Titulos(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-   Select id, nome, data_nasc, endereco, telefone, email, rg, cpf, usuario, senha, salario, tipo
-    from Pessoas p, Funcionarios f
-	where p.id = f.funcionario_id
+-- Table: Modalidades_Esportes
+CREATE TABLE Modalidades_Esportes (
+  id            INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  descricao     VARCHAR(50)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  categoria_id  INT  NOT NULL,
+  FOREIGN KEY (categoria_id) REFERENCES Categorias(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Table: Status
+CREATE TABLE Status (
+  id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  descricao   VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-create table Parentescos
-(
-  parentesco_id   int         not null primary key,
-  descricao       varchar(20) not null
-)
+-- Table: Pagamentos
+CREATE TABLE Pagamentos (
+  id            INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  data_pgto     DATE          NULL,
+  data_venc     DATE          NULL,
+  valor         DECIMAL(10,2) NOT NULL,
+  contrato_id   INT  NOT NULL,
+  FOREIGN KEY (contrato_id) REFERENCES Contratos_Titulos(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-create table Dependentes
-(
-  dependente_id  int not null,
-  parentesco_id  int not null,
-  associado_id   int not null,
-  foreign key (dependente_id) references pessoas(id),
-   foreign key (parentesco_id) references parentescos(parentesco_id),
-  foreign key (associado_id)     references pessoas (id)
-)
+-- Table: Categoria_modalidades
+CREATE TABLE Categoria_modalidades (
+  id              INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  modalidade_id   INT NOT NULL,
+  categoria_id    INT NOT NULL,
+  FOREIGN KEY (modalidade_id) REFERENCES Modalidades_Esportes(id),
+  FOREIGN KEY (categoria_id)  REFERENCES Categorias(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-create table Categorias
-(
-  id        int         not null primary key, -- identity,
-  descricao varchar(15) not null,
-  valor     decimal(10,2)       not null
-)
+-- Inserting data
+INSERT INTO Pessoas (nome, data_nasc, endereco, telefone, email, RG, CPF) 
+VALUES 
+('Ana Felisberto', '1988-10-02', 'Rua: Ipiranga', '32146894', 'ana_felisberto@hotmail.com', '48786451-7', '40599520808'),
+('Beatriz Graciosa', '1977-01-10', 'Rua: Salvador', '32185943', 'beatriz_graciosa@hotmail.com', '50421211-9', '11400191444'),
+('Karina Formosa','1957-01-10','Rua: Dos poetas','32198392','karina_formosa@hotmail.com','30421595-1','61211418110'),
+('Débora Linda', '1964-09-10', 'Rua: Potirendaba', '32947297', 'debora_linda@hotmail.com', '11015201-14', '61100000818'),
+('Eliana Cristina', '1985-05-09', 'Rua: Votuporanga', '32483018', 'eliana_cristina@hotmail.com', '28462411-X', '10100995122'),
+('Fernanda Cristal', '1989-07-05', 'Rua: Brigadeiro', '32194029', 'fernanda_cristal@hotmail.com', '22548244-9', '84522506928'),
+('Gisele Esmeralda', '1987-04-08', 'Rua: Santa Efigenia', '32198384', 'gisele_esmeralda@hotmail.com', '76751244-9', '72679931912'),
+('Pedro Flavio', '2009-10-10', 'Rua: Brasilia', '997143269', 'pedro_flavio@hotmail.com', '77291431-8', '80269841917'),
+('Camila Rosa', '2007-09-01', 'Rua: México', '981116119', 'camila_rosa@hotmail.com', '99212129-4', '20196124819'),
+('Micaela Pérola', '2005-03-05', 'Rua: Mirassol', '988551129', 'micaela_perola@hotmail.com', '18716121-1', '86979727877');
 
+-- Insert into Associados
+INSERT INTO Associados (associado_id, profissao) 
+VALUES (1, 'Dentista'), (2, 'Mecânica'), (3, 'Advogada'), (4, 'Professora');
 
+-- Insert into Funcionarios
+INSERT INTO Funcionarios (funcionario_id, usuario, senha, salario, tipo) 
+VALUES (5, 'Eliana', 'xyz', 2000.00, 1), (6, 'Fernanda', 'pqk', 2100.00, 1), (7, 'Gisele', 'wkj', 1900.00, 1);
 
-create table Contratos_Titulos
-(
-  id             int         not null primary key, -- identity,
-  data_contrato  varchar(20) not null,
-  data_cancel    varchar(20) null, ---
-  status         int         not null,
-  associado_id   int         not null,
-  funcionario_id int         not null,
-  categorias_id int          not null,
-  foreign key (associado_id) references pessoas(id),
-  foreign key (funcionario_id) references pessoas(id),
-  foreign key (categorias_id) references  categorias(id),
-)
+-- Insert into Parentescos
+INSERT INTO Parentescos (descricao) 
+VALUES ('Pai'), ('Tio'), ('Mãe'), ('Tia');
 
-create table Mensalidades
-(
-  id          int         not null primary key, -- identity,
-  preco       decimal(10,2)  null, --
-  data_pgto   varchar(20) null,--
-  data_venc   varchar(20) not null,
-  valor       decimal(10,2)  null,--
-  mes_ref     int         not null,
-  contrato_id int         not null,
-  foreign key (contrato_id)  references Contratos_Titulos(id)
-)
+-- Insert into Dependentes
+INSERT INTO Dependentes (dependente_id, parentesco_id, associado_id) 
+VALUES (8, 3, 2), (9, 3, 3), (10, 3, 4);
 
-create table Modalidades_Esportes
-(
-  id            int         not null primary key, -- identity,
-  descricao     varchar(50) not null,
-  categoria_id  int         not null,
-   foreign key (categoria_id ) references categorias(id) 
-)
+-- Insert into Categorias
+INSERT INTO Categorias (descricao, valor) 
+VALUES ('Patrono', 400.00), ('Mensal', 40.00), ('Convite', 15.00);
 
+-- Insert into Status
+INSERT INTO Status (descricao) 
+VALUES ('Pago'), ('Em negociação'), ('Inadimplente');
 
+-- Insert into Contratos_Titulos
+INSERT INTO Contratos_Titulos (data_contrato, data_cancel, status, associado_id, funcionario_id, categorias_id) 
+VALUES ('2010-10-10', NULL, 1, 1, 5, 1), ('2001-05-20', NULL, 1, 2, 6, 2), ('2011-01-01', NULL, 1, 3, 7, 3);
 
+-- Insert into Mensalidades
+INSERT INTO Mensalidades (preco, data_pgto, data_venc, valor, mes_ref, contrato_id) 
+VALUES (40.00, '2011-01-05', '2011-01-10', 40.00, 1, 1), 
+       (40.00, '2011-02-05', '2011-02-10', 40.00, 2, 1),
+       (40.00, '2011-03-05', '2011-03-10', 40.00, 3, 2),
+       (40.00, '2011-04-05', '2011-04-10', 40.00, 4, 2),
+       (40.00, '2011-05-05', '2011-05-10', 40.00, 5, 3);
 
+-- Insert into Modalidades_Esportes
+INSERT INTO Modalidades_Esportes (descricao, categoria_id) 
+VALUES ('Futebol', 1), ('Basquete', 1), ('Vôlei', 2);
 
+-- Insert into Categoria_modalidades
+INSERT INTO Categoria_modalidades (modalidade_id, categoria_id) 
+VALUES (1, 1), (2, 1), (3, 2);
 
--- sp_help Associados -- Comando para fazer o dicionario de dado
-
---select * from Status
-
-select * from Associados a, Pessoas p where a.associado_id = p.id
-
-select * from Dependentes d, Pessoas p where d.dependente_id = p.id
-
-select * from Funcionarios f,  Pessoas p where f.funcionario_id= p.id
-
-select * from Parentescos
-
-select * from Contratos_Titulos
-
-select * from Mensalidades
-
-select parentesco_id, descricao from Parentescos p where p.parentesco_id =1
-
-------------------------------------------------
--
-        --ASSOCIADO        
-                
- select DISTINCT(A.associado_id),B.nome, B.CPF, CASE WHEN D.data_pgto > data_venc THEN 'DEVENDO' ELSE 'PAGO' END status_da_mensalidade 
-  from Associados A
-  JOIN Pessoas B On B.id = A.associado_id
-  JOIN Contratos_Titulos C on B.id = C.associado_id
-  JOIN Mensalidades D ON C.id = D.contrato_id
-  GROUP BY A.associado_id,B.nome, B.CPF, D.data_pgto, D.data_venc 
-  
-  --------------------------------------------------------
-  
-  --DEPENDENTE
-  
-
-  
-      select DISTINCT(A.dependente_id),B.nome, B.CPF, 
-      CASE WHEN D.data_pgto > data_venc THEN 'DEVENDO' ELSE 'PAGO' END status_da_mensalidade 
-         from Dependentes A 
-         JOIN Pessoas B On B.id = A.dependente_id 
-			JOIN Associados  E on E.associado_id = A.associado_id  
-			join Pessoas      r on  E.associado_id = r.id   
-			JOIN Contratos_Titulos C on r.id  = C.associado_id 
-                JOIN Mensalidades D ON C.id = D.contrato_id 
-               GROUP BY A.dependente_id,B.nome, B.CPF, D.data_pgto, D.data_venc 
-               
-    
-    
-   
-      "select DISTINCT(A.dependente_id),B.nome, B.CPF, "+ 
-      "CASE WHEN D.data_pgto > data_venc THEN 'DEVENDO' ELSE 'PAGO' END status_da_mensalidade"+ 
-         "from Dependentes A "
-        " JOIN Pessoas B On B.id = A.dependente_id " +
-		"	JOIN Associados  E on E.associado_id = A.associado_id  "+
-			" join Pessoas      r on  E.associado_id = r.id   " +
-			" JOIN Contratos_Titulos C on A.associado_id   = C.associado_id "+
-              "+  JOIN Mensalidades D ON C.id = D.contrato_id "+
-              " GROUP BY A.dependente_id,B.nome, B.CPF, D.data_pgto, D.data_venc";           
+-- Insert into Pagamentos
+INSERT INTO Pagamentos (data_pgto, data_venc, valor, contrato_id) 
+VALUES ('2011-01-05', '2011-01-10', 40.00, 1), 
+       ('2011-02-05', '2011-02-10', 40.00, 1),
+       ('2011-03-05', '2011-03-10', 40.00, 1),
+       ('2011-04-05', '2011-04-10', 40.00, 1),
+       ('2011-05-05', '2011-05-10', 40.00, 1);

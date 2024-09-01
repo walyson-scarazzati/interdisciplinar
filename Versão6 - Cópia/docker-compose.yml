@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  mysqldb:
+    container_name: interdisciplinarMysqldb5.7
+    image: "mysql:5.7"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: venda_de_titulos
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - ./projeto_de_banco_dados.sql:/docker-entrypoint-initdb.d/projeto_de_banco_dados.sql
+      - ./my.cnf:/etc/mysql/my.cnf
+

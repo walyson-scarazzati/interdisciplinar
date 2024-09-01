@@ -1,0 +1,20 @@
+# Ignore all .class files
+*.class
+
+# Ignore the 'build' directory inside the Projeto_Inter folder
+Projeto_Inter/build/
+
+# Ignore NetBeans specific directories
+Projeto_Inter/nbproject/private/
+Projeto_Inter/build/
+Projeto_Inter/dist/
+
+# Ignore other unnecessary or temporary files
+*.log
+*.tmp
+
+# Ignore all .class files within the build/classes directory
+Projeto_Inter/build/classes/**/*.class
+/Versão6 - Cópia/Projeto_Inter/build/
+/Versão6 - Cópia/Projeto_Inter/dist/
+/Versão6 - Cópia/Projeto_Inter/nbproject/private/
