@@ -102,49 +102,50 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jlTelefone" max="32767" attributes="0"/>
-                          <Component id="jlEndereco" max="32767" attributes="0"/>
-                          <Component id="jlDependente" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jlId" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jlRG" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="jlDependentes" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jlEmail" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jlParentesco" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jtId" min="-2" pref="63" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                              <Component id="jlData_Nascimento" min="-2" pref="118" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jftData_Nascimento" min="-2" pref="95" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jlTelefone" max="32767" attributes="0"/>
+                                  <Component id="jlEndereco" max="32767" attributes="0"/>
+                                  <Component id="jlDependente" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jlRG" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jlDependentes" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jlEmail" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jlParentesco" alignment="0" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
-                          <Component id="jtDependente" max="32767" attributes="0"/>
-                          <Component id="jtEndereco" max="32767" attributes="0"/>
-                          <Component id="jtEmail" max="32767" attributes="0"/>
-                          <Component id="jtAssociado" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jcbParentesco" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="jtRG" min="-2" pref="113" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jlCPF" min="-2" pref="32" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jtDependente" max="32767" attributes="0"/>
+                                  <Component id="jtEndereco" max="32767" attributes="0"/>
+                                  <Component id="jtEmail" max="32767" attributes="0"/>
+                                  <Component id="jtAssociado" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jcbParentesco" alignment="0" max="32767" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Component id="jtRG" min="-2" pref="113" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jlCPF" min="-2" pref="32" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="jtCPF" min="-2" pref="132" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jtCPF" min="-2" pref="132" max="-2" attributes="0"/>
+                              <Component id="jtTelefone" min="-2" pref="146" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jtTelefone" min="-2" pref="146" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jlData_Nascimento" min="-2" pref="136" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jftData_Nascimento" min="-2" pref="95" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="111" max="32767" attributes="0"/>
+                  <EmptySpace pref="144" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -152,8 +153,6 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jlId" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                      <Component id="jtId" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jlData_Nascimento" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       <Component id="jftData_Nascimento" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -200,34 +199,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jlId">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Id"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jtId">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="1"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Digite o id"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtIdActionPerformed"/>
-          </Events>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-          </AuxValues>
-        </Component>
         <Component class="javax.swing.JLabel" name="jlData_Nascimento">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">

@@ -21,7 +21,7 @@ public final class Associado extends Pessoa{
      dependentes = new Vector<Dependente>();
 
     }
-    public Associado(int id, String nome, String data_nasc, String endereco, String telefone, String email,int rg, int cpf,String profissao,Vector<Dependente> dependentes){
+    public Associado(int id, String nome, String data_nasc, String endereco, String telefone, String email,String rg, String cpf,String profissao,Vector<Dependente> dependentes){
      super(id, nome, endereco, telefone, email, rg, cpf, data_nasc);
      this.profissao = profissao;
       this.dependentes = dependentes;

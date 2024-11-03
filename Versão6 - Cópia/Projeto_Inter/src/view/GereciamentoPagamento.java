@@ -100,18 +100,17 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         jTfiltro.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         jTfiltro.setForeground(new java.awt.Color(102, 102, 102));
         jTfiltro.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTfiltro.setText("Filtrar");
-        jTfiltro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTfiltroActionPerformed(evt);
-            }
-        });
         jTfiltro.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTfiltroFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTfiltroFocusLost(evt);
+            }
+        });
+        jTfiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTfiltroActionPerformed(evt);
             }
         });
         jTfiltro.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -222,33 +221,27 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Vector cabecalho = new Vector();
+        cabecalho.add("Id");
+        cabecalho.add("Nome");
+        cabecalho.add("CPF");
+        cabecalho.add("status_da_mensalidade");
+        try {
+            if (jcbSelecione.getSelectedIndex() == 1) {
+                AssociadoData associadoData = new AssociadoData();
+                String filtro = jTfiltro.getText().trim();
+                jtb.setModel(new DefaultTableModel(associadoData.listar(filtro.isEmpty() ? "" : filtro), cabecalho));
+            }
 
- try {
-                if (jcbSelecione.getSelectedIndex()== 1) {
-                    Vector cabecalho = new Vector();
-                    cabecalho.add("Id");
-                    cabecalho.add("Nome");
-                    cabecalho.add("CPF");
-                    cabecalho.add("status_da_mensalidade");
-                    jtb.setModel(new DefaultTableModel(new AssociadoData().listar(), cabecalho));
-                }
-            
+            if (jcbSelecione.getSelectedIndex() == 2) {
+                DependenteData dependenteData = new DependenteData();
+                String filtro = jTfiltro.getText().trim();
+                jtb.setModel(new DefaultTableModel(dependenteData.listar(filtro.isEmpty() ? "" : filtro), cabecalho));
 
-            if 
-                (jcbSelecione.getSelectedIndex()== 2) {
-                    Vector cabecalho = new Vector();
-                    cabecalho.add("Id");
-                    cabecalho.add("Nome");
-                    cabecalho.add("CPF");
-                    cabecalho.add("status_da_mensalidade");
-                    jtb.setModel(new DefaultTableModel(new DependenteData().listar(), cabecalho));
+            }
 
-                }
-
-            }  catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro:" + e.getMessage());
-
-
 
         }// TO    // TODO add your handling code here:
     
@@ -269,34 +262,28 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTfiltroFocusLost
 
     private void jTfiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTfiltroKeyReleased
-        
-         
+
+        Vector cabecalho = new Vector();
+        cabecalho.add("Id");
+        cabecalho.add("Nome");
+        cabecalho.add("CPF");
+        cabecalho.add("status_da_mensalidade");
         try {
-            if (jcbSelecione.getSelectedIndex()== 1) {
-                Vector cabecalho = new Vector();
-                cabecalho.add("Id");
-                cabecalho.add("Nome");
-                cabecalho.add("CPF");
-                 cabecalho.add("status_da_mensalidade");
-                jtb.setModel(new DefaultTableModel(new AssociadoData().Listar(jTfiltro.getText()), cabecalho));
+            if (jcbSelecione.getSelectedIndex() == 1) {
+                AssociadoData associadoData = new AssociadoData();
+                jtb.setModel(new DefaultTableModel(associadoData.listar(jTfiltro.getText()), cabecalho));
             }
 
-            if (jcbSelecione.getSelectedIndex()== 2) {
-                Vector cabecalho = new Vector();
-                cabecalho.add("Id");
-                cabecalho.add("Nome");
-                cabecalho.add("CPF");
-                cabecalho.add("status_da_mensalidade");
-                jtb.setModel(new DefaultTableModel(new DependenteData().Listar(jTfiltro.getText()), cabecalho));
+            if (jcbSelecione.getSelectedIndex() == 2) {
+                DependenteData dependenteData = new DependenteData();
+                jtb.setModel(new DefaultTableModel(dependenteData.listar(jTfiltro.getText()), cabecalho));
 
             }
-        
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro:" + e.getMessage());
 
-        
-    }// TODO add
+        }// TODO add
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jTfiltroKeyReleased

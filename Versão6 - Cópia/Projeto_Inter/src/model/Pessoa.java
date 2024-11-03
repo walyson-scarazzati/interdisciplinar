@@ -14,8 +14,8 @@ public abstract class Pessoa {
    private String endereco;
    private String    telefone;
    private String email;
-   private int    rg;
-   private int    cpf;
+   private String    rg;
+   private String    cpf;
    private String    data_nasc;
    // Construtores Com e Sem parâmetros
    public Pessoa(){
@@ -24,11 +24,11 @@ public abstract class Pessoa {
     endereco  = " ";
     telefone  = " ";
     email     = " ";
-    rg        = 0;
-    cpf       = 0;
+    rg        = " ";
+    cpf       = " ";
     data_nasc = " ";
    }
-   public Pessoa(int id, String nome, String endereco, String telefone, String email, int rg, int cpf, String data_nasc){
+   public Pessoa(int id, String nome, String endereco, String telefone, String email, String rg, String cpf, String data_nasc){
     this.id   = id;
     this.nome = nome;
     this.endereco = endereco;
@@ -72,16 +72,16 @@ public abstract class Pessoa {
    public void setEmail(String email){
     this.email = email;
    }
-   public int getRG(){
+   public String getRG(){
     return rg;
    }
-   public void setRG(int rg){
+   public void setRG(String rg){
     this.rg = rg;
    }
-   public int getCpf(){
+   public String getCpf(){
     return cpf;
    }
-   public void setCpf(int cpf){
+   public void setCpf(String cpf){
     this.cpf = cpf;
    }
    public String getData_nasc(){

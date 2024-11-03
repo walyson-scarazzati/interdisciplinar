@@ -20,11 +20,10 @@ public class CategoriaData {
     
     public boolean incluir(Categoria obj) throws Exception{
         Conexao objConexao = new Conexao();
-        String SQL = "Insert into  Categorias values (?,?,?)";
+        String SQL = "INSERT INTO Categorias (descricao, valor) VALUES (?, ?)";
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1, obj.getId());
-        pstmt.setString(2,obj.getDescricao());
-        pstmt.setFloat(3, obj.getValor());
+        pstmt.setString(1,obj.getDescricao());
+        pstmt.setFloat(2, obj.getValor());
 
         
         int registros = pstmt.executeUpdate();
@@ -50,8 +49,8 @@ public class CategoriaData {
         while(rs.next()){
             Categoria obj = new Categoria();
             obj.setId(rs.getInt("id"));
-            obj.setDescricao(rs.getString("Descrição"));
-            obj.setValor(rs.getFloat("Valor"));
+            obj.setDescricao(rs.getString("descricao"));
+            obj.setValor(rs.getFloat("valor"));
             boolean add = dados.add(obj);
                  
         }
@@ -74,7 +73,7 @@ public class CategoriaData {
             obj= new Categoria();
             obj.setId(rs.getInt("id"));
             obj.setDescricao(rs.getString("descricao"));
-            obj.setValor(rs.getFloat("Valor"));
+            obj.setValor(rs.getFloat("valor"));
                     
         }
         return obj;
@@ -113,7 +112,7 @@ public class CategoriaData {
         public Vector<Categoria> carregarCombo() throws Exception {
         Vector<Categoria> dados = new Vector<Categoria>();
         Conexao objConexao = new Conexao();
-        String SQL = "Select * from  Categorias order by descricao";          
+        String SQL = "Select * from  Categorias";          
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
         ResultSet rs = pstmt.executeQuery();
         dados.add(new Categoria(0,"<Selecione>", 0));

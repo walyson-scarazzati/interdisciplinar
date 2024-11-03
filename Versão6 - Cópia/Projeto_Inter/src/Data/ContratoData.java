@@ -6,6 +6,8 @@ package Data;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import model.Associado;
 import model.Categoria;
@@ -18,24 +20,47 @@ import model.Funcionario;
  */
 public class ContratoData {
 
-    public boolean incluir(Contrato obj) throws Exception{
+    public boolean incluir(Contrato obj) throws Exception {
         Conexao objConexao = new Conexao();
         String SQL = "Insert into  Contratos_Titulos values(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1,obj.getNro_contrato());
-        pstmt.setString(2,obj.getData_contrato());
-        pstmt.setString(3,obj.getData_cancelamento());
-        pstmt.setInt(4,obj.getStatus());
-        pstmt.setInt(5,obj.getAssociado().getId());
-        pstmt.setInt(6,obj.getFuncionario().getId());
-        pstmt.setInt(7,obj.getCategoria().getId());
-        int registros = pstmt.executeUpdate();
-        if (registros>0){
+        pstmt.setInt(1, obj.getNro_contrato());
 
-            return true;}
-        else
+        SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Handle data_contrato
+        String dataContrato = obj.getData_contrato().trim();
+        if (dataContrato.isEmpty() || dataContrato.equals("/  /")) {
+            pstmt.setNull(2, java.sql.Types.DATE); // or handle the default value
+        } else {
+            Date date = originalFormat.parse(dataContrato);
+            String formattedDate = targetFormat.format(date);
+            pstmt.setString(2, formattedDate);
+        }
+
+        // Handle data_cancelamento
+        String dataCancelamento = obj.getData_cancelamento().trim();
+        if (dataCancelamento.isEmpty() || dataCancelamento.equals("/  /")) {
+            pstmt.setNull(3, java.sql.Types.DATE); // or handle the default value
+        } else {
+            Date date2 = originalFormat.parse(dataCancelamento);
+            String formattedDate2 = targetFormat.format(date2);
+            pstmt.setString(3, formattedDate2);
+        }
+
+        pstmt.setInt(4, obj.getStatus());
+        pstmt.setInt(5, obj.getAssociado().getId());
+        pstmt.setInt(6, obj.getFuncionario().getId());
+        pstmt.setInt(7, obj.getCategoria().getId());
+        int registros = pstmt.executeUpdate();
+        if (registros > 0) {
+
+            return true;
+        } else {
             return false;
- 
+        }
+
     }
     
     public boolean excluir(int id)throws Exception{
@@ -57,24 +82,7 @@ public class ContratoData {
            return false;
        }
     
-//        public boolean excluir(int id)throws Exception{
-//        Conexao objConexao = new Conexao();
-//        String SQL = "Delete from  Contratos_Titulos where id = ?"; 
-//        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-//        pstmt.setInt(1, id);
-//        int registros = pstmt.executeUpdate();      
-//      if(registros > 0){
-//          String SQL = "Delete from  Contratos_Titulos where id = ?"; 
-//        PreparedStatement pstmt2 = objConexao.getConexao().prepareStatement(SQL);
-//        pstmt.setInt(1, id);
-//          int registros2 = pstmt2.executeUpdate();
-//          if(registros2 >0){
-//            objConexao.getConexao().commit();
-//          }
-//          return true;}
-//          else
-//           return false;
-//       }
+
            public boolean editar(Contrato obj) throws Exception{
         Conexao objConexao = new Conexao();
         String SQL = "Update  Contratos_Titulos set status = ?, data_cancel  = ?, data_contrato = ? where id = ?";

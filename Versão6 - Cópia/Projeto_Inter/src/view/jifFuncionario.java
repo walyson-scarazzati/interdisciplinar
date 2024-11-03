@@ -42,8 +42,6 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jlID = new javax.swing.JLabel();
-        jtID = new javax.swing.JTextField();
         Data_Nascimento = new javax.swing.JLabel();
         jftData_Nascimento = new javax.swing.JFormattedTextField();
         jlFuncionario = new javax.swing.JLabel();
@@ -103,13 +101,6 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setForeground(new java.awt.Color(255, 255, 255));
-
-        jlID.setBackground(new java.awt.Color(0, 0, 102));
-        jlID.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jlID.setForeground(new java.awt.Color(0, 0, 102));
-        jlID.setText("ID");
-
-        jtID.setToolTipText("Digite o Funcionario");
 
         Data_Nascimento.setBackground(new java.awt.Color(0, 0, 102));
         Data_Nascimento.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -225,55 +216,52 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(75, 75, 75)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlID, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlEndereco)
-                    .addComponent(jlTelefone)
-                    .addComponent(jlEmail)
-                    .addComponent(jlRG, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlUsuario)
-                    .addComponent(jlTipo))
-                .addGap(34, 34, 34)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jC_usuario_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jtID, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(44, 44, 44)
-                            .addComponent(Data_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(34, 34, 34)
-                            .addComponent(jftData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jtFuncionario)
-                        .addComponent(jtEndereco))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jtEmail, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jtRG, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(31, 31, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jlCPF)
-                                .addComponent(jlSenha))
-                            .addGap(34, 34, 34)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(Data_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jftData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlEndereco)
+                            .addComponent(jlTelefone)
+                            .addComponent(jlEmail)
+                            .addComponent(jlRG, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlUsuario)
+                            .addComponent(jlTipo))
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jC_usuario_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                                .addComponent(jtSenha)))))
-                .addContainerGap(112, Short.MAX_VALUE))
+                                .addComponent(jtFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                                .addComponent(jtEndereco))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jtEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jlSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jtRG, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(31, 31, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jlCPF)
+                                        .addComponent(jlSenha))
+                                    .addGap(34, 34, 34)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                                        .addComponent(jtSenha)))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlID, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Data_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jftData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
@@ -385,7 +373,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -419,14 +407,14 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-        jtID.setEditable(false);
+
         jftData_Nascimento.setEditable(true);
         jtFuncionario.setEditable(true);
         jtEndereco.setEditable(true);
@@ -448,7 +436,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
-        jtID.setEditable(true);
+
         jftData_Nascimento.setEditable(true);
         jtFuncionario.setEditable(true);
         jtEndereco.setEditable(true);
@@ -466,12 +454,11 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
                 jbPesquisar.setEnabled(true);
-        jtID.requestFocus();
         limparCampos();
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-        jtID.setEditable(true);
+
         jftData_Nascimento.setEditable(true);
         jtFuncionario.setEditable(true);
         jtEndereco.setEditable(true);
@@ -517,11 +504,9 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        if(jtID.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Digite o id");
-        }else {
+
             try{
-                if(DAO.excluir(Integer.parseInt(jtID.getText()))){
+                if(DAO.excluir(1)){
                     JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
                     jbCancelarActionPerformed(evt);
                 }else{
@@ -530,7 +515,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
             }catch(Exception ex){
                 JOptionPane.showMessageDialog(this, "Erro ao excluir: " + ex.getMessage());
             }
-        }
+        
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jftData_NascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jftData_NascimentoActionPerformed
@@ -538,16 +523,14 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jftData_NascimentoActionPerformed
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
-            if(jtID.getText().equals("")){
-           JOptionPane.showMessageDialog(this, "Digite o id");
-        }else{
+
              try{
                   DAO = new FuncionarioData();
-                  obj = DAO.pesquisarFuncionarios(Integer.parseInt(jtID.getText()));
+                  obj = DAO.pesquisarFuncionarios(1);
                   if(obj == null){
                      JOptionPane.showMessageDialog(this, "Registro não encontrado");
                   }else{
-                     jtID.setText(String.valueOf(obj.getId()));
+                     //jtID.setText(String.valueOf(obj.getId()));
                      jftData_Nascimento.setText(obj.getData_nasc());
                      jtFuncionario.setText(obj.getNome());
                      jtEndereco.setText(obj.getEndereco());
@@ -568,7 +551,6 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
           }catch(Exception ex){
              JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
           }
-        }
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefoneActionPerformed
@@ -593,7 +575,6 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlEmail;
     private javax.swing.JLabel jlEndereco;
     private javax.swing.JLabel jlFuncionario;
-    private javax.swing.JLabel jlID;
     private javax.swing.JLabel jlRG;
     private javax.swing.JLabel jlSalario;
     private javax.swing.JLabel jlSenha;
@@ -604,7 +585,6 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtEmail;
     private javax.swing.JTextField jtEndereco;
     private javax.swing.JTextField jtFuncionario;
-    private javax.swing.JTextField jtID;
     private javax.swing.JTextField jtRG;
     private javax.swing.JFormattedTextField jtSalario;
     private javax.swing.JTextField jtSenha;
@@ -613,7 +593,6 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
  private void limparCampos(){
-    jtID.setText("");
     jftData_Nascimento.setText("");
     jtFuncionario.setText("");
     jtEndereco.setText("");
@@ -628,9 +607,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
   }
   private boolean validarCampos() throws Exception{
     String msg ="";
-    if(jtID.getText().equals("")){
-      msg+="\nID";
-    }
+
     if(jftData_Nascimento.getText().equals("  /  /    ")){
       msg+="\nData_Nascimento";
     }
@@ -678,15 +655,14 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
   }
   private boolean preencherObjeto()throws Exception{
     obj = new Funcionario();
-    obj.setId(Integer.parseInt(jtID.getText()));
     obj.setData_nasc(jftData_Nascimento.getText());
     obj.setNome(jtFuncionario.getText());
     obj.setEndereco(jtEndereco.getText());
     obj.setTelefone(jtTelefone.getText());
     obj.setSalario(Double.parseDouble(jtSalario.getText().replace(",", ".").toUpperCase()));
     obj.setEmail(jtEmail.getText());
-    obj.setRG(Integer.parseInt(jtRG.getText()));
-    obj.setCpf(Integer.parseInt(jtCPF.getText()));
+    obj.setRG(jtRG.getText());
+    obj.setCpf(jtCPF.getText());
     obj.setUsuario(jtUsuario.getText());
     obj.setSenha(jtSenha.getText());
     obj.setTipo(jC_usuario_tipo.getSelectedIndex());

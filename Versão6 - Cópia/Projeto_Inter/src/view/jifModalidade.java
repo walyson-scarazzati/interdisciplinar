@@ -9,6 +9,7 @@ import Data.Modalidade_esportivaData;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Categoria;
 import model.Modalidade_esportiva;
 
@@ -17,18 +18,59 @@ import model.Modalidade_esportiva;
  * @author MaqLab
  */
 public class jifModalidade extends javax.swing.JInternalFrame {
+
     Modalidade_esportiva obj;
-      Modalidade_esportivaData DAO;
-       Vector<Categoria> vetorCategoria;
-      int acao=0;
+    Modalidade_esportivaData DAO;
+    Vector<Categoria> vetorCategoria;
+    int acao = 0;
+
     /**
      * Creates new form jifModalidade
      */
     public jifModalidade() {
         initComponents();
-         obj = new Modalidade_esportiva();
-         DAO = new Modalidade_esportivaData();
+        loadData();
+        obj = new Modalidade_esportiva();
+        DAO = new Modalidade_esportivaData();
         vetorCategoria = new Vector<Categoria>();
+    }
+
+    private void loadData() {
+        try {
+            DAO = new Modalidade_esportivaData();
+            // Vector<Modalidade_esportiva> dados = DAO.carregarCombo();
+            Vector<Modalidade_esportiva> dados = DAO.listarModalidade_esportiva();
+            // Vector<Modalidade_esportiva> dados = DAO.pesquisar(jTdescricao.getText());
+
+            // Create the column names for the table
+            Vector<String> columnNames = new Vector<>();
+            columnNames.add("Descrição");
+            columnNames.add("Categoria");
+
+            // Create the data vector for the table
+            Vector<Vector<Object>> tableData = new Vector<>();
+
+            for (Modalidade_esportiva modalidade : dados) {
+                Vector<Object> row = new Vector<>();
+                row.add(modalidade.getDescricao()); // Add other fields if necessary
+
+                // Add Categoria description if Categoria is not null
+                Categoria categoria = modalidade.getCategoria();
+                if (categoria != null) {
+                    row.add(categoria.getDescricao());
+                } else {
+                    row.add("N/A"); // or any placeholder for null categories
+                }
+
+                tableData.add(row);
+            }
+
+            // Create the table model and set it to the JTable
+            DefaultTableModel model = new DefaultTableModel(tableData, columnNames);
+            jtbPesquisar.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar dados: " + e.getMessage());
+        }
     }
 
     /**
@@ -43,16 +85,12 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLid1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLid = new javax.swing.JLabel();
-        jTid = new javax.swing.JTextField();
         jLdescricao = new javax.swing.JLabel();
         jTdescricao = new javax.swing.JTextField();
         jlmodalidade = new javax.swing.JLabel();
         jcCategoria = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbPesquisar = new javax.swing.JTable();
-        jbAdicionar = new javax.swing.JButton();
-        jbRemover = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jBnovo = new javax.swing.JButton();
         jBsalvar = new javax.swing.JButton();
@@ -89,20 +127,9 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jLid1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLid1.setForeground(new java.awt.Color(0, 0, 102));
         jLid1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLid1.setText("MODALIDADE ESPORTIVA");
+        jLid1.setText(" Modalidade Esportiva");
 
-        jLid.setBackground(new java.awt.Color(0, 0, 102));
-        jLid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLid.setForeground(new java.awt.Color(0, 0, 102));
-        jLid.setText("ID");
-
-        jTid.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTid.setToolTipText("Digite o id");
-        jTid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTidActionPerformed(evt);
-            }
-        });
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLdescricao.setBackground(new java.awt.Color(0, 0, 102));
         jLdescricao.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -125,21 +152,19 @@ public class jifModalidade extends javax.swing.JInternalFrame {
             }
         });
 
-        jtbPesquisar.setBackground(new java.awt.Color(255, 0, 0));
-        jtbPesquisar.setForeground(new java.awt.Color(255, 0, 0));
         jtbPesquisar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "IdModalidade", "Descricao", "Categoria"
+                "Descrição", "Categoria de Plano"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -152,22 +177,6 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtbPesquisar);
 
-        jbAdicionar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jbAdicionar.setText("+");
-        jbAdicionar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbAdicionarActionPerformed(evt);
-            }
-        });
-
-        jbRemover.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jbRemover.setText("-");
-        jbRemover.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbRemoverActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -176,32 +185,20 @@ public class jifModalidade extends javax.swing.JInternalFrame {
                 .addGap(51, 51, 51)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(131, 131, 131)
-                            .addComponent(jbAdicionar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jbRemover))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLid, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLdescricao)
-                                .addComponent(jlmodalidade))
-                            .addGap(40, 40, 40)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTid, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTdescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jcCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(103, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLdescricao)
+                            .addComponent(jlmodalidade))
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTdescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLid)
-                    .addComponent(jTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLdescricao)
                     .addComponent(jTdescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -209,11 +206,7 @@ public class jifModalidade extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlmodalidade, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbAdicionar)
-                    .addComponent(jbRemover))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -314,14 +307,16 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLid1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLid1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -336,27 +331,21 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbRemoverActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbRemoverActionPerformed
-
     private void jBnovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBnovoActionPerformed
         // TODO add your handling code here:
 
-        jTid.setEditable(true);
         jTdescricao.setEditable(true);
         jcCategoria.setEnabled(true);
         jBnovo.setEnabled(false);
         jbPesquisar.setEnabled(false);
         jBsalvar.setEnabled(true);
         jBcancelar.setEnabled(true);
-        jTid.requestFocus();
         limparCampos();
         acao = 1;
     }//GEN-LAST:event_jBnovoActionPerformed
@@ -364,7 +353,6 @@ public class jifModalidade extends javax.swing.JInternalFrame {
     private void jBcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBcancelarActionPerformed
         // TODO add your handling code here:
 
-        jTid.setEditable(true);
         jTdescricao.setEditable(false);
         jcCategoria.setEnabled(true);
         jBnovo.setEnabled(true);
@@ -373,67 +361,59 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jbPesquisar.setEnabled(true);
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
-        jTid.requestFocus();
         limparCampos();
     }//GEN-LAST:event_jBcancelarActionPerformed
 
-    private void jTidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTidActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTidActionPerformed
-
-    private void jcCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcCategoriaActionPerformed
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jcCategoriaActionPerformed
-
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
-        if(jTid.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Digite um id");
-        } else {
-            try {
-                DAO = new Modalidade_esportivaData();
-                obj = DAO.pesquisar(Integer.parseInt(jTid.getText()));
-                if(obj==null){
-                    JOptionPane.showMessageDialog(this, "Registro não encontrado !");
-                } else {
-                    jTdescricao.setText(obj.getDescricao());
-                    jbEditar.setEnabled(true);
-                    jbExcluir.setEnabled(true);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
+
+        try {
+            DAO = new Modalidade_esportivaData();
+            obj = DAO.pesquisar(jTdescricao.getText());
+            if (obj == null) {
+                JOptionPane.showMessageDialog(this, "Registro não encontrado !");
+            } else {
+                jTdescricao.setText(obj.getDescricao());
+                jbEditar.setEnabled(true);
+                jbExcluir.setEnabled(true);
             }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
         }
+
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jBsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsalvarActionPerformed
         // TODO add your handling code here:
 
         try {
-            if(validarCampos()){
+            if (validarCampos()) { // Validate input fields
                 obj = new Modalidade_esportiva();
-                if(preencherObjeto()){
+                if (preencherObjeto()) { // Populate the object
                     DAO = new Modalidade_esportivaData();
-                    if(acao==1) { //incluir
-                        if(DAO.incluir(obj)) {
-                            JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
-                            jBcancelarActionPerformed(evt);
-                        }}
-                        if(acao==2){
-                            if(DAO.editar(obj)){
-                                JOptionPane.showMessageDialog(this, "Alterado com sucesso !");
-                                jBcancelarActionPerformed(evt);
-                            }}
-                        }
+                    boolean success = false;
+
+                    if (acao == 1) { // Incluir (Add)
+                        success = DAO.incluir(obj);
+                    } else if (acao == 2) { // Editar (Edit)
+                        success = DAO.editar(obj);
                     }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar" +
-                        ex.getMessage());
+
+                    if (success) {
+                        JOptionPane.showMessageDialog(this, "Operação realizada com sucesso !");
+                        loadData(); // Refresh data
+                        jBcancelarActionPerformed(evt); // Reset form
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Não foi possível realizar a operação.");
+                    }
                 }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
+        }
     }//GEN-LAST:event_jBsalvarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-        jTid.setEditable(false);
+
         jTdescricao.setEditable(true);
         jcCategoria.setEnabled(true);
         jBnovo.setEnabled(false);
@@ -443,96 +423,173 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         acao=2;
+        //acao = 2;
+        // Get the selected row index
+    int selectedRow = jtbPesquisar.getSelectedRow();
+
+    if (selectedRow >= 0) {
+        try {
+            // Retrieve the ID of the selected row (assuming the ID is in the first column)
+            Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
+            
+            // Convert ID to an integer
+            int id;
+            if (idObject instanceof Integer) {
+                id = (Integer) idObject;
+            } else if (idObject instanceof String) {
+                //id = Integer.parseInt((String) idObject);
+                Modalidade_esportiva modalidade_esportiva = DAO.pesquisar(idObject.toString());
+               modalidade_esportiva.getId();
+                // Convert from String to int
+               // id = Integer.parseInt((String) idObject);
+               id = modalidade_esportiva.getId();
+            } else {
+                throw new NumberFormatException("ID format is not correct.");
+            }
+
+            // Fetch the selected record details from the database
+            DAO = new Modalidade_esportivaData();
+            obj = DAO.pesquisarPorId(id); // Assuming you have a method to fetch by ID
+
+            if (obj != null) {
+                // Populate form fields with the selected record's details
+                jTdescricao.setText(obj.getDescricao());
+
+                // Ensure jcCategoria is properly populated before setting selected item
+                jcCategoria.setSelectedItem(obj.getCategoria()); // Ensure obj.getCategoria() matches an item in jcCategoria
+                
+                // Enable form fields for editing
+                jTdescricao.setEditable(true);
+                jcCategoria.setEnabled(true);
+                jBnovo.setEnabled(false);
+                jBsalvar.setEnabled(true);
+                jBcancelar.setEnabled(true);
+                jbPesquisar.setEnabled(false);
+                jbEditar.setEnabled(false);
+                jbExcluir.setEnabled(false);
+
+                acao = 2; // Indicating that the form is in edit mode
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Erro no formato do ID: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao tentar editar: " + e.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, selecione um registro para editar.");
+    }
     }//GEN-LAST:event_jbEditarActionPerformed
 
-    private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbAdicionarActionPerformed
-
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        if(jTid.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Digite o id");
-        } else {
-            try {
-                if(DAO.excluir(Integer.parseInt(jTid.getText()))){
-                    JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
-                    jBcancelarActionPerformed(evt);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Erro ao excluir:" + e.getMessage());
+
+        try {
+        // Get the selected row index
+        int selectedRow = jtbPesquisar.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            // Assuming the ID is in the first column of the table
+            Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
+            
+            int id;
+            if (idObject instanceof String) {
+               Modalidade_esportiva modalidade_esportiva = DAO.pesquisar(idObject.toString());
+               modalidade_esportiva.getId();
+                // Convert from String to int
+               // id = Integer.parseInt((String) idObject);
+               id = modalidade_esportiva.getId();
+            } else if (idObject instanceof Integer) {
+                // Directly cast if it's already an Integer
+                id = (Integer) idObject;
+            } else {
+                // Handle unexpected type
+                throw new ClassCastException("Unexpected type for ID in table: " + idObject.getClass());
             }
+
+            // Pass the ID to the DAO's excluir method
+           if (DAO.excluir(id)) {
+                JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!");
+
+                // Optionally, remove the row from the table model
+                ((DefaultTableModel) jtbPesquisar.getModel()).removeRow(selectedRow);
+
+                // Call the cancel button action to reset the form (if applicable)
+                jBcancelarActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma linha para excluir.");
         }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Formato de ID inválido: " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+    }
+
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-         CategoriaData DAOCategoria = new CategoriaData();
-        try{
-          vetorCategoria = DAOCategoria.carregarCombo();
-          jcCategoria.setModel(new DefaultComboBoxModel(vetorCategoria));
-    }catch(Exception e){
-       JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
+        CategoriaData DAOCategoria = new CategoriaData();
+        try {
+            vetorCategoria = DAOCategoria.carregarCombo();
+            jcCategoria.setModel(new DefaultComboBoxModel(vetorCategoria));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
         }        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameActivated
+
+    private void jcCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcCategoriaActionPerformed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcCategoriaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBcancelar;
     private javax.swing.JButton jBnovo;
     private javax.swing.JButton jBsalvar;
     private javax.swing.JLabel jLdescricao;
-    private javax.swing.JLabel jLid;
     private javax.swing.JLabel jLid1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTdescricao;
-    private javax.swing.JTextField jTid;
-    private javax.swing.JButton jbAdicionar;
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbExcluir;
     private javax.swing.JButton jbPesquisar;
-    private javax.swing.JButton jbRemover;
     private javax.swing.JComboBox jcCategoria;
     private javax.swing.JLabel jlmodalidade;
     private javax.swing.JTable jtbPesquisar;
     // End of variables declaration//GEN-END:variables
 
-private void limparCampos() {
-        jTid.setText("");
+    private void limparCampos() {
         jTdescricao.setText("");
         jcCategoria.setSelectedIndex(0);
-       
+
     }
 
-private boolean validarCampos() throws Exception {
-        if(jTid.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Digite o id");
-            jTid.requestFocus();
-            return false;
-        }
-        if(jTdescricao.getText().equals("")){
+    private boolean validarCampos() throws Exception {
+        if (jTdescricao.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Digite o nome do Descrição");
             jTdescricao.requestFocus();
             return false;
         }
-        
-        if(jcCategoria.getSelectedIndex() == 0){
+
+        if (jcCategoria.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Digite a categoria");
             jTdescricao.requestFocus();
             return false;
         }
-        
-             return true;
+
+        return true;
     }
 
-
-private boolean preencherObjeto() throws Exception {
-        obj.setId(Integer.parseInt(jTid.getText()));
+    private boolean preencherObjeto() throws Exception {
         obj.setDescricao(jTdescricao.getText());
-         obj.setCategoria(vetorCategoria.
-            get(jcCategoria.getSelectedIndex()));    
+        obj.setCategoria(vetorCategoria.
+                get(jcCategoria.getSelectedIndex()));
         return true;
     }
 

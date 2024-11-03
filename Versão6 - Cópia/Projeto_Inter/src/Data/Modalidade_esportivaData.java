@@ -4,146 +4,219 @@
  */
 package Data;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
+import model.Categoria;
 import model.Modalidade_esportiva;
-
 
 /**
  *
  * autor : Isabel Cristina da Silva Bolognani
  */
 public class Modalidade_esportivaData {
-    
-    public boolean incluir(Modalidade_esportiva obj) throws Exception{
-        Conexao objConexao = new Conexao();
-        String SQL = "Insert into Modalidades_Esportes values (?,?,?)";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1, obj.getId());
-        pstmt.setString(2,obj.getDescricao());
-        pstmt.setInt(3, obj.getCategoria().getId());
-        
-        int registros = pstmt.executeUpdate();
-        
-        if (registros>0){
 
-            return true;}
-        else
-            return false;
-    }
-    
-    public Modalidade_esportiva pesquisar(int id) throws Exception{
-        Modalidade_esportiva obj = null;
-        Conexao objConexao = new Conexao();
-        String SQL = "select * from Modalidades_Esportes where id=?";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement (SQL);
-        pstmt.setInt(1,id);
-             
-        ResultSet rs= pstmt.executeQuery();
-        if(rs.next()){           
-            
-            obj= new Modalidade_esportiva();
-            obj.setId(rs.getInt("id"));
-            obj.setDescricao(rs.getString("descricao"));
-                               
+    public boolean incluir(Modalidade_esportiva obj) throws Exception {
+        String SQL = "INSERT INTO Modalidades_Esportes (descricao, categoria_id) VALUES (?, ?)";
+
+        try (Connection conn = Conexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setString(1, obj.getDescricao());
+            pstmt.setInt(2, obj.getCategoria().getId());
+
+            int registros = pstmt.executeUpdate();
+            return registros > 0;
+
+        } catch (SQLException e) {
+            throw new Exception("Erro ao incluir modalidade esportiva: " + e.getMessage(), e);
         }
+    }
+
+    public Modalidade_esportiva pesquisar(String descricao_esportiva) throws Exception {
+        Modalidade_esportiva obj = null;
+        String SQL;
+
+        if (descricao_esportiva == null || descricao_esportiva.trim().isEmpty()) {
+            SQL = "SELECT * FROM Modalidades_Esportes";
+        } else {
+            SQL = "SELECT * FROM Modalidades_Esportes WHERE descricao LIKE ?";
+        }
+
+        try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            if (descricao_esportiva != null && !descricao_esportiva.trim().isEmpty()) {
+                pstmt.setString(1, "%" + descricao_esportiva + "%");
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                obj = new Modalidade_esportiva();
+                obj.setId(rs.getInt("id"));
+                obj.setDescricao(rs.getString("descricao"));
+                // Assuming Categoria is set elsewhere
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao pesquisar modalidade esportiva: " + e.getMessage(), e);
+        }
+
         return obj;
     }
-    
-    
-    public Vector listarTodos(String pesq) throws Exception {
-        Vector dados = new Vector();
-        Conexao objConexao = new Conexao();
-        String SQL = "Select * from Modalidades_Esportes where descricao like '"
-                +pesq+"%' order by descricao";
-        PreparedStatement pstmt = objConexao.getConexao().
-                prepareStatement(SQL);
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
-            Vector linha = new Vector();
-            linha.add(rs.getInt("id"));
-            linha.add(rs.getString("descricao"));
-            linha.add("");
-            dados.add(linha);
+
+    public Modalidade_esportiva pesquisarPorId(int id) throws Exception {
+        Modalidade_esportiva obj = null;
+        String SQL = "SELECT m.id, m.descricao, c.id AS categoria_id, c.descricao AS categoria_descricao "
+                + "FROM Modalidades_Esportes m "
+                + "JOIN Categorias c ON m.categoria_id = c.id "
+                + "WHERE m.id = ?";
+
+        try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    obj = new Modalidade_esportiva();
+                    obj.setId(rs.getInt("id"));
+                    obj.setDescricao(rs.getString("descricao"));
+
+                    // Populate the Categoria object
+                    Categoria categoria = new Categoria();
+                    categoria.setId(rs.getInt("categoria_id"));
+                    categoria.setDescricao(rs.getString("categoria_descricao"));
+                    obj.setCategoria(categoria);
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao pesquisar modalidade esportiva por ID: " + e.getMessage(), e);
         }
+
+        return obj;
+    }
+
+    public Vector<Modalidade_esportiva> listarModalidade_esportiva() throws Exception {
+        Vector<Modalidade_esportiva> dados = new Vector<>();
+        String SQL = "SELECT * FROM Modalidades_Esportes ORDER BY id";
+
+        try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL); ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Modalidade_esportiva obj = new Modalidade_esportiva();
+                obj.setId(rs.getInt("id"));
+                obj.setDescricao(rs.getString("descricao"));
+                dados.add(obj);
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao listar modalidades esportivas: " + e.getMessage(), e);
+        }
+
         return dados;
     }
-    
-     public Vector listar() throws Exception{
-       Conexao objConexao = new Conexao();
-       Vector dados = new Vector();
-       String SQL = "Select * from Modalidades_Esportes order by id";
-       PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-       ResultSet rs = pstmt.executeQuery();
-       while(rs.next()){
-          Vector linha = new Vector();
-          linha.add(rs.getInt("id"));
-          linha.add (rs.getString("descricao"));
-          dados.add(linha);
-       } 
-       return dados;
-     }
-    
-       public Vector<Modalidade_esportiva> listarModalidade_esportiva() throws Exception {
-       Conexao objConexao = new Conexao ();
-        Vector<Modalidade_esportiva> dados = new Vector<Modalidade_esportiva>();
-        String SQL = "Select * from Modalidades_Esportes order by id";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()){
-            
-          Modalidade_esportiva obj = new Modalidade_esportiva();
-            
-        obj.setId(rs.getInt("id"));
-        obj.setDescricao(rs.getString("descricao"));
-        dados.add(obj);
+
+    public boolean excluir(int id) throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = Conexao.getConexao();
+
+            // Start transaction
+            conn.setAutoCommit(false);
+
+            // Remove dependent records
+            String removeDependentsSQL = "DELETE FROM Categoria_modalidades WHERE modalidade_id = ?";
+            pstmt = conn.prepareStatement(removeDependentsSQL);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+
+            // Remove the record from Modalidades_Esportes
+            String deleteSQL = "DELETE FROM Modalidades_Esportes WHERE id = ?";
+            pstmt = conn.prepareStatement(deleteSQL);
+            pstmt.setInt(1, id);
+            int registros = pstmt.executeUpdate();
+
+            if (registros > 0) {
+                conn.commit(); // Commit transaction
+                return true;
+            } else {
+                conn.rollback(); // Rollback transaction
+                return false;
+            }
+        } catch (Exception e) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback on exception
+                } catch (SQLException se) {
+                    // Handle rollback exception
+                }
+            }
+            throw new Exception("Erro ao excluir modalidade esportiva: " + e.getMessage(), e);
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
         }
+    }
+
+    public boolean excluir2(int id) throws Exception {
+        String SQL = "DELETE FROM Modalidades_Esportes WHERE id = ?";
+        try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.setInt(1, id);
+            int registros = pstmt.executeUpdate();
+            return registros > 0;
+        } catch (Exception e) {
+            throw new Exception("Erro ao excluir modalidade esportiva: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean editar(Modalidade_esportiva obj) throws Exception {
+        String SQL = "UPDATE Modalidades_Esportes SET descricao = ?, categoria_id = ? WHERE id = ?";
+        try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.setString(1, obj.getDescricao());
+            pstmt.setInt(2, obj.getCategoria().getId());
+            pstmt.setInt(3, obj.getId());
+            int registros = pstmt.executeUpdate();
+            return registros > 0;
+        } catch (Exception e) {
+            throw new Exception("Erro ao editar modalidade esportiva: " + e.getMessage(), e);
+        }
+    }
+
+    public Vector<Modalidade_esportiva> carregarCombo() throws Exception {
+        Vector<Modalidade_esportiva> dados = new Vector<>();
+        String SQL = "SELECT m.id, m.descricao, c.id AS categoria_id, c.descricao AS categoria_descricao "
+                + "FROM Modalidades_Esportes m "
+                + "JOIN Categorias c ON m.categoria_id = c.id "
+                + "ORDER BY c.id";
+
+        try (Connection conn = Conexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL); ResultSet rs = pstmt.executeQuery()) {
+
+            // Adding the default option
+            dados.add(new Modalidade_esportiva(0, "<Selecione>", null));
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String descricao = rs.getString("descricao");
+
+                // Fetching Categoria details
+                //int categoriaId = rs.getInt("categoria_id");
+                String categoriaDescricao = rs.getString("categoria_descricao");
+                //Categoria categoria = new Categoria(categoriaId, categoriaDescricao); // Assuming Categoria has a constructor
+                Categoria categoria = new Categoria(categoriaDescricao); // Assuming Categoria has a constructor
+
+                dados.add(new Modalidade_esportiva(id, descricao, categoria));
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao carregar modalidades esportivas para o combo: " + e.getMessage(), e);
+        }
+
         return dados;
+
     }
-      
-        
-      
-      public boolean excluir(int id)throws Exception{
-        Conexao objConexao = new Conexao();
-        String SQL = "Delete from Modalidades_Esportes where id = ?"; 
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1, id);
-        int registros = pstmt.executeUpdate();
-        if(registros>0){
-      
-            return true;}
-        else
-            return false;
-    }
-      
-      
-      public boolean editar(Modalidade_esportiva obj) throws Exception{
-        Conexao objConexao = new Conexao();
-        String SQL = "Update Modalidades_Esportes set descricao = ? where id = ?";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement (SQL);
-        pstmt.setString(1, obj.getDescricao());
-        pstmt.setInt(2, obj.getId());
-        int registros = pstmt.executeUpdate();
-        if(registros>0)
-        return true;
-        else
-        return false;
-        
-  }
-      
-//      public Vector<Modalidade_esportiva> carregarCombo() throws Exception {
-//        Vector<Modalidade_esportiva> dados = new Vector<Modalidade_esportiva>();
-//        Conexao objConexao = new Conexao();
-//        String SQL = "Select * from Modalidades_Esportes order by descricao";
-//        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-//        ResultSet rs = pstmt.executeQuery();
-//        dados.add(new Modalidade_esportiva(0,"<Selecione>"));
-//        while(rs.next()){
-//            dados.add(new Modalidade_esportiva(rs.getInt("id"),
-//                    rs.getString("descricao")));
-//                    }
-//   return dados;
-//    }
-        
-} 
+
+}

@@ -7,11 +7,16 @@ package view;
 import Data.AssociadoData;
 import Data.DependenteData;
 import Data.FuncionarioData;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import model.Associado;
 import model.Dependente;
 
@@ -39,19 +44,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
     }
 
-    
-//   public static void mostrarDependentes(){
-//          DefaultTableModel model
-//                = (DefaultTableModel) jtbDependentes.getModel();
-//       for(int i =0; i<vetorDependentes.size();i++){
-//        model.addRow(new  String[]{
-//                        ""+ vetorDependentes.get(i).getId(),
-//                        vetorDependentes.get(i).getNome(),
-//                       "" + vetorDependentes.get(i).getCpf()});
-//       }
-//       
-//   }
-//   
     
         public static void mostrarDependentes() {
         DefaultTableModel model
@@ -89,8 +81,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jlAssoc = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jlId = new javax.swing.JLabel();
-        jtId = new javax.swing.JTextField();
         jlData_Nascimento = new javax.swing.JLabel();
         jftData_Nascimento = new javax.swing.JFormattedTextField();
         jtAssociado = new javax.swing.JTextField();
@@ -137,24 +127,20 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
                 .addComponent(jlAssoc, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlAssoc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jlAssoc, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        jlId.setBackground(new java.awt.Color(0, 0, 102));
-        jlId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jlId.setForeground(new java.awt.Color(0, 0, 102));
-        jlId.setText("Id");
-
-        jtId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jtId.setToolTipText("Digite id");
 
         jlData_Nascimento.setBackground(new java.awt.Color(0, 0, 102));
         jlData_Nascimento.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -167,10 +153,20 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        jftData_Nascimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jftData_NascimentoActionPerformed(evt);
+            }
+        });
 
         jtAssociado.setEditable(false);
         jtAssociado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtAssociado.setToolTipText("Digite o nome ");
+        jtAssociado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtAssociadoActionPerformed(evt);
+            }
+        });
 
         jlAssociado.setBackground(new java.awt.Color(0, 0, 102));
         jlAssociado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -291,24 +287,17 @@ public class jifAssociado extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(120, 120, 120)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlEndereco)
                             .addComponent(jlAssociado)
-                            .addComponent(jlId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlTelefone)
                             .addComponent(jlEmail)
                             .addComponent(jlRG, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlProfissao))
                         .addGap(29, 29, 29)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
-                                .addComponent(jlData_Nascimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jftData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jtAssociado)
                             .addComponent(jtEndereco)
                             .addComponent(jtEmail)
@@ -319,7 +308,11 @@ public class jifAssociado extends javax.swing.JInternalFrame {
                                 .addComponent(jlCPF)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                                 .addComponent(jtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jlData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jftData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -331,8 +324,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlId, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jftData_Nascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -499,7 +490,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
     private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
 
-        jifDependente ini = new jifDependente(Integer.parseInt(jtId.getText()));
+        jifDependente ini = new jifDependente(jtAssociado.getText());
         jfPrincipal.jdpPrincipal.add(ini);
         ini.toFront();
         ini.setVisible(true);
@@ -514,7 +505,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbAdicionarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-        jtId.setEditable(true);
+
         jftData_Nascimento.setEditable(true);
         jtAssociado.setEditable(true);
         jtEndereco.setEditable(true);
@@ -528,7 +519,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jbCancelar.setEnabled(true);
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
-        jtId.requestFocus();
         limparCampos();
         acao = 1;
     }//GEN-LAST:event_jbNovoActionPerformed
@@ -543,7 +533,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
                         //percorrer o vetor de dependentes inlcuindo cada depende
                         JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
                         jbCancelarActionPerformed(evt);
-                        cadastrarDependentes();
+                       // cadastrarDependentes();
                               DefaultTableModel tableModel =(DefaultTableModel) jtbDependentes.getModel();  
                                  tableModel.setNumRows(0);   
                     }}if(acao==2){
@@ -572,7 +562,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
                             dep.setEmail(vetorDependentes.get(i).getEmail());
                             dep.setRG(vetorDependentes.get(i).getRG());
                             dep.setCpf(vetorDependentes.get(i).getCpf());
-//                            dep.setId(vetorDependentes.get(i).getId());
                             dep.setParentesco(vetorDependentes.get(i).getParentesco());
                             dep.setIdAssociado(obj.getId());
                             
@@ -588,7 +577,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     }
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
-        jtId.setEditable(true);
+
         jftData_Nascimento.setEditable(true);
         jtAssociado.setEditable(true);
         jtEndereco.setEditable(true);
@@ -601,15 +590,13 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jbSalvar.setEnabled(false);
         jbCancelar.setEnabled(false);
         jbEditar.setEnabled(false);
-                jbPesquisar.setEnabled(true);
+        jbPesquisar.setEnabled(true);
         jbExcluir.setEnabled(false);
-        
-        jtId.requestFocus();
         limparCampos();
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-        jtId.setEditable(false);
+
         jftData_Nascimento.setEditable(true);
         jtAssociado.setEditable(true);
         jtEndereco.setEditable(true);
@@ -627,11 +614,9 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        if (jtId.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Digite o id");
-        } else {
+
             try {
-                if (DAO.excluir(Integer.parseInt(jtId.getText()))) {
+                if (DAO.excluir(Integer.parseInt(jtAssociado.getText()))) {
                     JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
                     jbCancelarActionPerformed(evt);
                 } else {
@@ -640,7 +625,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao excluir: " + ex.getMessage());
             }
-        }
+        
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jtbDependentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbDependentesMouseClicked
@@ -671,18 +656,33 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtbDependentesMouseClicked
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
-        if(jtId.getText().equals("")){
-          JOptionPane.showMessageDialog(this, "Digite o id");
-        }else{
+
              try{
                  DAO = new AssociadoData();
-                 obj = DAO.pesquisar(Integer.parseInt(jtId.getText()));
+                 obj = DAO.pesquisar(jtCPF.getText());
                  if(obj == null){
                     JOptionPane.showMessageDialog(this, "Registro não encontrado");
                  }else{
-                     jtId.setText(String.valueOf(obj.getId()));
                      jtAssociado.setText(obj.getNome());
-                     jftData_Nascimento.setText(obj.getData_nasc());
+                     
+                     String dataNascimento = obj.getData_nasc();
+                     if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                         // Convert date format from yyyy-MM-dd to dd/MM/yyyy
+                         SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+                         SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+                         try {
+                             Date date = originalFormat.parse(dataNascimento);
+                             String formattedDate = targetFormat.format(date);
+                             jftData_Nascimento.setText(formattedDate);
+                         } catch (ParseException e) {
+                             // Handle parsing error
+                             JOptionPane.showMessageDialog(this, "Erro ao formatar a data: " + e.getMessage());
+                         }
+                     } else {
+                         jftData_Nascimento.setText(""); // Handle null or empty date
+                     }
+                     
+                     
                      jtEndereco.setText(obj.getEndereco());
                      jtTelefone.setText(String.valueOf(obj.getTelefone()));
                      jtEmail.setText(obj.getEmail());
@@ -699,7 +699,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
              }catch(Exception ex){
                JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
              }
-        }
+        
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jtRGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtRGActionPerformed
@@ -709,6 +709,14 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     private void jtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtTelefoneActionPerformed
+
+    private void jtAssociadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtAssociadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtAssociadoActionPerformed
+
+    private void jftData_NascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jftData_NascimentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jftData_NascimentoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
@@ -730,7 +738,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlData_Nascimento;
     private javax.swing.JLabel jlEmail;
     private javax.swing.JLabel jlEndereco;
-    private javax.swing.JLabel jlId;
     private javax.swing.JLabel jlProfissao;
     private javax.swing.JLabel jlRG;
     private javax.swing.JLabel jlTelefone;
@@ -738,7 +745,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtCPF;
     private javax.swing.JTextField jtEmail;
     private javax.swing.JTextField jtEndereco;
-    private javax.swing.JTextField jtId;
     private javax.swing.JTextField jtProfissao;
     private javax.swing.JTextField jtRG;
     private javax.swing.JFormattedTextField jtTelefone;
@@ -746,7 +752,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void limparCampos() {
-        jtId.setText(null);
+
         jftData_Nascimento.setText(null);
         jtAssociado.setText(null);
         jtEndereco.setText(null);
@@ -759,9 +765,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
     private boolean validarCampos() throws Exception {
         String msg = "";
-        if (jtId.getText().equals("")) {
-            msg += "\nId";
-        }
         if (jftData_Nascimento.getText().equals("  /  /    ")) {
             msg += "\nData_Nascimento";
         }
@@ -798,14 +801,13 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
     private boolean preencherObjeto() throws Exception {
         obj = new Associado();
-        obj.setId(Integer.parseInt(jtId.getText()));
         obj.setData_nasc(jftData_Nascimento.getText());
         obj.setNome(jtAssociado.getText());
         obj.setEndereco(jtEndereco.getText());
         obj.setTelefone(jtTelefone.getText());
         obj.setEmail(jtEmail.getText());
-        obj.setRG(Integer.parseInt(jtRG.getText()));
-        obj.setCpf(Integer.parseInt(jtCPF.getText()));
+        obj.setRG(jtRG.getText());
+        obj.setCpf(jtCPF.getText());
         obj.setProfissao(jtProfissao.getText());
 //     for(int i=0; i<jtbDependente.getRowCount();i++){
 //         obj.adicionarDependente();

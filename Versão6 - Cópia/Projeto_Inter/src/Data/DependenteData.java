@@ -23,16 +23,15 @@ public class DependenteData {
     
         public boolean incluir (Dependente obj) throws Exception{
        Conexao objConexao = new Conexao();
-       String SQL = "Insert into Pessoas values (?,?,?,?,?,?,?,?)";
+       String SQL = "Insert into Pessoas values (?,?,?,?,?,?,?)";
        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-       pstmt.setInt(1, obj.getId());
-       pstmt.setString(2, obj.getNome());
-       pstmt.setString(3, obj.getData_nasc());
-       pstmt.setString(4, obj.getEndereco());
-       pstmt.setString(5, obj.getTelefone());
-       pstmt.setString(6, obj.getEmail());
-       pstmt.setInt(7, obj.getRG());
-       pstmt.setInt(8, obj.getCpf());
+       pstmt.setString(1, obj.getNome());
+       pstmt.setString(2, obj.getData_nasc());
+       pstmt.setString(3, obj.getEndereco());
+       pstmt.setString(4, obj.getTelefone());
+       pstmt.setString(5, obj.getEmail());
+       pstmt.setString(6, obj.getRG());
+       pstmt.setString(7, obj.getCpf());
        int registros = pstmt.executeUpdate();
        if(registros >0){
        String SQL2 = "Insert into Dependentes values (?,?,?)";
@@ -73,8 +72,8 @@ public class DependenteData {
          pstmt2.setString(3, obj.getEndereco());
          pstmt2.setString(4, obj.getTelefone());
          pstmt2.setString(5, obj.getEmail());
-         pstmt2.setInt(6, obj.getRG());
-         pstmt2.setInt(7, obj.getCpf());
+         pstmt2.setString(6, obj.getRG());
+         pstmt2.setString(7, obj.getCpf());
          pstmt2.setInt(8, obj.getId());
          int registros2 = pstmt2.executeUpdate();
         return true;}
@@ -103,7 +102,7 @@ public class DependenteData {
     }
     
     
-    public Dependente pesquisar (int id) throws Exception{
+    public Dependente pesquisar (String nome) throws Exception{
       Dependente obj = null;
       Conexao objConexao = new Conexao();
       String SQL = "Select id, nome, data_nasc, endereco, telefone, email, rg, cpf, d.parentesco_id,  d.associado_id "
@@ -112,7 +111,7 @@ public class DependenteData {
               + " d.associado_id = a.associado_id and "
             + " pe.parentesco_id = d.parentesco_id and p.id = ?";
       PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-      pstmt.setInt(1, id);
+      pstmt.setString(1, nome);
       ResultSet rs = pstmt.executeQuery();
       if(rs.next()){
         obj = new Dependente();
@@ -122,8 +121,8 @@ public class DependenteData {
         obj.setEndereco(rs.getString("endereco"));
         obj.setTelefone(rs.getString("telefone"));
         obj.setEmail(rs.getString("email"));
-        obj.setRG(rs.getInt("rg"));
-        obj.setCpf(rs.getInt("cpf"));
+        obj.setRG(rs.getString("rg"));
+        obj.setCpf(rs.getString("cpf"));
             Parentesco obj2 = new  Parentesco ();
             obj2.setId(rs.getInt("parentesco_id"));
             obj.setParentesco (obj2);
@@ -133,8 +132,56 @@ public class DependenteData {
       return obj;
     }
     
+    public Vector listar(String arg) throws SQLException, IllegalAccessException, ClassNotFoundException, Exception {
+        Vector dados = new Vector();
+        Conexao objConexao = new Conexao();
+
+        // Montagem da consulta SQL
+        String SQL = "SELECT DISTINCT(A.dependente_id), B.nome, B.CPF, "
+                + "CASE WHEN D.data_pgto > D.data_venc THEN 'DEVENDO' ELSE 'PAGO' END AS status_da_mensalidade "
+                + "FROM Dependentes A "
+                + "JOIN Pessoas B ON B.id = A.dependente_id "
+                + "JOIN Associados E ON E.associado_id = A.associado_id "
+                + "JOIN Contratos_Titulos C ON E.associado_id = C.associado_id "
+                + "JOIN Mensalidades D ON C.id = D.contrato_id ";
+
+        // Verifica se o filtro está presente e adiciona a cláusula WHERE
+        if (arg != null && !arg.trim().isEmpty()) {
+            SQL += "WHERE B.nome LIKE ? ";
+        }
+
+        SQL += "GROUP BY A.dependente_id, B.nome, B.CPF, D.data_pgto, D.data_venc";
+
+        // Criação do PreparedStatement
+        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
+
+        // Se o filtro foi fornecido, define o parâmetro para a consulta
+        if (arg != null && !arg.trim().isEmpty()) {
+            pstmt.setString(1, "%" + arg + "%");
+        }
+
+        ResultSet rs = pstmt.executeQuery();
+
+        // Processa os resultados da query
+        while (rs.next()) {
+            Vector linha = new Vector();
+            linha.addElement(rs.getInt("dependente_id"));
+            linha.addElement(rs.getString("nome"));
+            linha.addElement(rs.getString("CPF"));
+            linha.addElement(rs.getString("status_da_mensalidade"));
+            dados.addElement(linha);
+        }
+
+        // Fechamento dos recursos
+        rs.close();
+        pstmt.close();
+        objConexao.getConexao().close();
+
+        return dados;
+    }
+
        
-      public Vector Listar(String arg) throws SQLException, IllegalAccessException, ClassNotFoundException, Exception {
+      public Vector listar2(String arg) throws SQLException, IllegalAccessException, ClassNotFoundException, Exception {
 
         Vector dados = new Vector();
         Conexao objConexao = new Conexao();
@@ -168,33 +215,6 @@ public class DependenteData {
 
     }
     
-          
-       public Vector listar() throws SQLException, IllegalAccessException, ClassNotFoundException, Exception {
-        Vector dados = new Vector();
-        Conexao objConexao = new Conexao();
-        String SQL =  
-          "select DISTINCT(A.dependente_id),B.nome, B.CPF, " +
-      "CASE WHEN D.data_pgto > data_venc THEN 'DEVENDO' ELSE 'PAGO' END status_da_mensalidade " +
-       "  from Dependentes A "+
-         " JOIN Pessoas B On B.id = A.dependente_id " +
-			" JOIN Associados  E on E.associado_id = A.associado_id  " +
-			" JOIN Contratos_Titulos C on E.associado_id  = C.associado_id " +
-              "  JOIN Mensalidades D ON C.id = D.contrato_id " +
-              " GROUP BY A.dependente_id,B.nome, B.CPF, D.data_pgto, D.data_venc ";
-//        String SQL = "SELECT dependente_id , nome,  cpf  FROM Dependentes d, Pessoas p where d.dependente_id  = p.id order by  associado_id ";
-        PreparedStatement pstmt =objConexao.getConexao().prepareStatement(SQL);
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            Vector linha = new Vector();
-            linha.addElement(rs.getInt("dependente_id"));
-            linha.addElement(rs.getString("nome"));
-            linha.addElement(rs.getString("CPF"));
-            linha.addElement(rs.getString("status_da_mensalidade"));
-            dados.addElement(linha);
-
-        }
-        return dados;
-
-    }
+         
       
 }

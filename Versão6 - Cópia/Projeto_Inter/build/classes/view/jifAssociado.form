@@ -64,15 +64,20 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="45" max="32767" attributes="0"/>
                   <Component id="jlAssoc" min="-2" pref="708" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jlAssoc" alignment="1" pref="71" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="jlAssoc" pref="71" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -107,12 +112,11 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jScrollPane1" pref="473" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="475" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jlEndereco" min="-2" max="-2" attributes="0"/>
                               <Component id="jlAssociado" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlId" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="jlTelefone" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jlEmail" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jlRG" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
@@ -120,13 +124,6 @@
                           </Group>
                           <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="jtId" min="-2" pref="67" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                                  <Component id="jlData_Nascimento" max="32767" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jftData_Nascimento" min="-2" pref="95" max="-2" attributes="0"/>
-                              </Group>
                               <Component id="jtAssociado" max="32767" attributes="0"/>
                               <Component id="jtEndereco" max="32767" attributes="0"/>
                               <Component id="jtEmail" max="32767" attributes="0"/>
@@ -140,6 +137,11 @@
                               </Group>
                               <Component id="jtTelefone" min="-2" pref="146" max="-2" attributes="0"/>
                           </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jlData_Nascimento" min="-2" pref="157" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jftData_Nascimento" min="-2" pref="95" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -156,8 +158,6 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jlId" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="jtId" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jlData_Nascimento" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="jftData_Nascimento" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -211,28 +211,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jlId">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Id"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jtId">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="1"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Digite id"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jlData_Nascimento">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -254,6 +232,9 @@
               <Format format="##/##/####" subtype="-1" type="5"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jftData_NascimentoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jtAssociado">
           <Properties>
@@ -263,6 +244,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Digite o nome "/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtAssociadoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jlAssociado">
           <Properties>

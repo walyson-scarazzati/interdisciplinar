@@ -21,7 +21,7 @@ public final class Funcionario extends Pessoa {
      salario = 0;
      tipo = 0;
     }
-    public Funcionario(int id,String nome, String data_nasc, String endereco, String telefone, String email, int rg, int cpf, String usuario, String senha, double salario,int tipo){
+    public Funcionario(int id,String nome, String data_nasc, String endereco, String telefone, String email, String rg, String cpf, String usuario, String senha, double salario,int tipo){
     super(id, nome, endereco, telefone, email, rg, cpf, data_nasc);
     
      this.usuario = usuario;

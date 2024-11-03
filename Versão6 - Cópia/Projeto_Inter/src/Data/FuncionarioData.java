@@ -28,17 +28,16 @@ public class FuncionarioData {
        pstmt.setString(4, obj.getEndereco());
        pstmt.setString(5, obj.getTelefone());
        pstmt.setString(6, obj.getEmail());
-       pstmt.setInt(7, obj.getRG());
-       pstmt.setInt(8, obj.getCpf());
+       pstmt.setString(7, obj.getRG());
+       pstmt.setString(8, obj.getCpf());
        int registros = pstmt.executeUpdate();
        if(registros > 0){
-          String SQL2 = "Insert into Funcionarios values (?,?,?,?,?)";
+          String SQL2 = "Insert into Funcionarios values (?,?,?,?)";
           PreparedStatement pstmt2 = objConexao.getConexao().prepareStatement(SQL2);
-          pstmt2.setInt(1, obj.getId());
-          pstmt2.setString(2, obj.getUsuario());
-          pstmt2.setString(3, obj.getSenha());
-          pstmt2.setDouble(4, obj.getSalario());
-          pstmt2.setInt(5, obj.getTipo());
+          pstmt2.setString(1, obj.getUsuario());
+          pstmt2.setString(2, obj.getSenha());
+          pstmt2.setDouble(3, obj.getSalario());
+          pstmt2.setInt(4, obj.getTipo());
           int registros2 = pstmt2.executeUpdate();
           if(registros2 > 0){
             objConexao.getConexao().commit();
@@ -73,8 +72,8 @@ public class FuncionarioData {
         pstmt2.setString(3, obj.getEndereco());
         pstmt2.setString(4, obj.getTelefone());
         pstmt2.setString(5, obj.getEmail());
-        pstmt2.setInt(6, obj.getRG());
-        pstmt2.setInt(7, obj.getCpf());
+        pstmt2.setString(6, obj.getRG());
+        pstmt2.setString(7, obj.getCpf());
         pstmt2.setInt(8, obj.getId());
         int registros2 = pstmt2.executeUpdate();
         if(registros2 >0){
@@ -125,8 +124,8 @@ public class FuncionarioData {
          obj.setEndereco(rs.getString("endereco"));
          obj.setTelefone(rs.getString("telefone"));
          obj.setEmail(rs.getString("email"));
-         obj.setRG(rs.getInt("rg"));
-         obj.setCpf(rs.getInt("cpf"));
+         obj.setRG(rs.getString("rg"));
+         obj.setCpf(rs.getString("cpf"));
          obj.setUsuario(rs.getString("usuario"));
          obj.setSenha(rs.getString("senha"));
          obj.setSalario(rs.getDouble("salario"));
@@ -164,12 +163,13 @@ public class FuncionarioData {
                      " where p.id = f.funcionario_id"; 
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
         ResultSet rs = pstmt.executeQuery();
-        dados.add(new Funcionario(0, "<Selecione>", "", "", "", "", 0, 0, "", "", 0, 0));
+        dados.add(new Funcionario(0, "<Selecione>", "", "", "", "",  "",  "", "", "", 0, 0));
+     
         while(rs.next()){     
             Funcionario obj = new Funcionario();
             obj.setId(rs.getInt("id"));
             obj.setNome(rs.getString("nome").trim());
-            obj.setCpf(rs.getInt("CPF"));
+            obj.setCpf(rs.getString("CPF"));
             dados.add(obj);
         }
         return dados;

@@ -37,7 +37,7 @@
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="53" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -99,57 +99,58 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jlID" min="-2" pref="35" max="-2" attributes="0"/>
-                      <Component id="jlFuncionario" min="-2" pref="92" max="-2" attributes="0"/>
-                      <Component id="jlEndereco" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jlTelefone" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jlEmail" min="-2" max="-2" attributes="0"/>
-                      <Component id="jlRG" min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="jlUsuario" min="-2" max="-2" attributes="0"/>
-                      <Component id="jlTipo" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jC_usuario_tipo" min="-2" pref="146" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jtID" min="-2" pref="67" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                              <Component id="Data_Nascimento" min="-2" pref="120" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                              <Component id="jftData_Nascimento" min="-2" pref="95" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jtFuncionario" max="32767" attributes="0"/>
-                          <Component id="jtEndereco" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="Data_Nascimento" min="-2" pref="120" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="jftData_Nascimento" min="-2" pref="95" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jtEmail" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="jtTelefone" min="-2" pref="146" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jlSalario" min="-2" pref="63" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jtSalario" min="-2" pref="110" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlFuncionario" min="-2" pref="92" max="-2" attributes="0"/>
+                              <Component id="jlEndereco" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlTelefone" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlEmail" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlRG" min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="jlUsuario" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlTipo" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jtRG" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
-                                  <Component id="jtUsuario" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="44" pref="31" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jlCPF" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jlSenha" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jC_usuario_tipo" min="-2" pref="146" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jtCPF" pref="114" max="32767" attributes="0"/>
-                                  <Component id="jtSenha" max="32767" attributes="0"/>
+                                  <Component id="jtFuncionario" pref="360" max="32767" attributes="0"/>
+                                  <Component id="jtEndereco" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jtEmail" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jtTelefone" min="-2" pref="146" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="jlSalario" min="-2" pref="63" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jtSalario" min="-2" pref="110" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jtRG" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
+                                          <Component id="jtUsuario" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="44" pref="31" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jlCPF" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jlSenha" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jtCPF" pref="114" max="32767" attributes="0"/>
+                                          <Component id="jtSenha" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="112" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -158,8 +159,6 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jlID" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="jtID" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="Data_Nascimento" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="jftData_Nascimento" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -210,25 +209,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jlID">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="0" red="0" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="ID"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jtID">
-          <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Digite o Funcionario"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="Data_Nascimento">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -505,7 +485,7 @@
                       <Component id="jbExcluir" min="-2" pref="75" max="-2" attributes="0"/>
                       <Component id="jbCancelar" min="-2" pref="84" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="105" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

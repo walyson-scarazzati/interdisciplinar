@@ -28,6 +28,12 @@ public class Categoria {
       this.valor     = valor;
     
     }
+    
+    public Categoria(String descricao) {
+        this.id = id;
+        this.descricao = descricao;
+        this.valor = 0; // Default value
+    }
 
     public String getDescricao() {
         return descricao;

@@ -46,8 +46,6 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jlId = new javax.swing.JLabel();
-        jtId = new javax.swing.JTextField();
         jlDataPgto = new javax.swing.JLabel();
         jtDatapgto = new javax.swing.JFormattedTextField();
         jlPreco = new javax.swing.JLabel();
@@ -80,15 +78,15 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameActivated(evt);
             }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
             public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -101,7 +99,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 102));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("MENSALIDADE");
+        jLabel7.setText("Mensalidade");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -115,14 +113,6 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        jlId.setBackground(new java.awt.Color(0, 0, 102));
-        jlId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jlId.setForeground(new java.awt.Color(0, 0, 102));
-        jlId.setText(" id");
-
-        jtId.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jtId.setToolTipText("Digite o id");
 
         jlDataPgto.setBackground(new java.awt.Color(0, 0, 102));
         jlDataPgto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -194,23 +184,18 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jlValor)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(64, 64, 64))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jlDataVenc)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jtDataVenc, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(25, 25, 25)
-                                .addComponent(jlDataPgto))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jlValor)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jlDataVenc)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtDataVenc, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jtDatapgto, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
@@ -222,21 +207,15 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
                                         .addComponent(jcNroContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlPreco)
-                            .addComponent(jlId, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(371, 371, 371)
-                        .addComponent(jtDatapgto, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(72, Short.MAX_VALUE))
+                    .addComponent(jlPreco)
+                    .addComponent(jlDataPgto))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlId)
-                    .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlDataPgto)
                     .addComponent(jtDatapgto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -345,8 +324,8 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -363,12 +342,9 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
 
-        if(jtId.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Digite um id");
-        }else{
             try{
                 DAO = new MensalidadeData();
-                obj = DAO.pesquisar(Integer.parseInt(jtId.getText()));
+                obj = DAO.pesquisar(1);
                 if(obj == null){
                     JOptionPane.showMessageDialog(this, "Registro não encontrado");
                 }else{
@@ -394,7 +370,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
             }catch(Exception ex){
                 JOptionPane.showMessageDialog(this,"Erro ao pesquisar: " + ex.getMessage());
             }
-        }    // TODO add your handling code here:
+
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
@@ -422,7 +398,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-        jtId.setEditable(true);
+
         jtPreco.setEditable(true);
         jtDatapgto.setEditable(true);
         jtDataVenc.setEditable(true);
@@ -434,7 +410,6 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbCancelar.setEnabled(true);
         jbPesquisar.setEnabled(false);
-        jtId.requestFocus();
         limparCampos();
         acao = 1;
 
@@ -442,7 +417,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
-        jtId.setEditable(true);
+
         jtPreco.setEditable(false);
         jtDatapgto.setEditable(false);
         jtDataVenc.setEditable(false);
@@ -454,12 +429,11 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbCancelar.setEnabled(false);
         jbPesquisar.setEnabled(true);
-        jtId.requestFocus();
         limparCampos();// TODO add your handling code here:
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-        jtId.setEditable(false);
+
         jtPreco.setEditable(true);
         jtDatapgto.setEditable(true);
         jtDataVenc.setEditable(true);
@@ -502,20 +476,17 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox jcNroContrato;
     private javax.swing.JLabel jlDataPgto;
     private javax.swing.JLabel jlDataVenc;
-    private javax.swing.JLabel jlId;
     private javax.swing.JLabel jlMesRef;
     private javax.swing.JLabel jlPreco;
     private javax.swing.JLabel jlValor;
     private javax.swing.JFormattedTextField jtDataVenc;
     private javax.swing.JFormattedTextField jtDatapgto;
-    private javax.swing.JTextField jtId;
     private javax.swing.JTextField jtMesRef;
     private javax.swing.JFormattedTextField jtPreco;
     private javax.swing.JFormattedTextField jtValor;
     // End of variables declaration//GEN-END:variables
 
  private void limparCampos() {
-        jtId.setText("");
         jtPreco.setText("");
         jtDatapgto.setText("");
         jtDataVenc.setText("");
@@ -526,11 +497,6 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
          
     }
     private boolean validarCampos() throws Exception{
-       if(jtId.getText().equals("")){
-          JOptionPane.showMessageDialog(this, "Digite o id");
-          jtId.requestFocus();
-          return false;
-       }
          if(jtPreco.getText().equals("")){
          JOptionPane.showMessageDialog(this, "Digite o preço");
          jtPreco.setText("0,00");
@@ -571,7 +537,6 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
        return true;
     }
     private boolean preencherObjeto() throws Exception{
-      obj.setId(Integer.parseInt(jtId.getText()));
       obj.setPreco(Float.parseFloat(jtPreco.getText().replace(",", ".").toUpperCase()));
        obj.setData_pgto(jtDatapgto.getText());
        obj.setData_venc(jtDataVenc.getText());
