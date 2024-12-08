@@ -163,17 +163,6 @@ public class Modalidade_esportivaData {
         }
     }
 
-    public boolean excluir2(int id) throws Exception {
-        String SQL = "DELETE FROM Modalidades_Esportes WHERE id = ?";
-        try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {
-            pstmt.setInt(1, id);
-            int registros = pstmt.executeUpdate();
-            return registros > 0;
-        } catch (Exception e) {
-            throw new Exception("Erro ao excluir modalidade esportiva: " + e.getMessage(), e);
-        }
-    }
-
     public boolean editar(Modalidade_esportiva obj) throws Exception {
         String SQL = "UPDATE Modalidades_Esportes SET descricao = ?, categoria_id = ? WHERE id = ?";
         try (Connection conn = new Conexao().getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL)) {

@@ -5,7 +5,12 @@
 package view;
 
 import Data.ParentescoData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Modalidade_esportiva;
 import model.Parentesco;
 
 /**
@@ -13,14 +18,58 @@ import model.Parentesco;
  * @author MaqLab
  */
 public class jifParentesco extends javax.swing.JInternalFrame {
-     Parentesco obj;
+
+    Parentesco obj;
     ParentescoData DAO;
     int acao = 0;
+
     /**
      * Creates new form jifParentesco
      */
     public jifParentesco() {
         initComponents();
+        loadData();
+
+        jtbPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbPesquisarMouseClicked(evt);
+            }
+        });
+    }
+
+    private void loadData() {
+        try {
+            DAO = new ParentescoData();
+
+            Vector<Parentesco> dados = DAO.listar();
+
+            Vector<String> columnNames = new Vector<>();
+            columnNames.add("Descrição");
+
+            Vector<Vector<Object>> tableData = new Vector<>();
+
+            for (Parentesco parentesco : dados) {
+                Vector<Object> row = new Vector<>();
+                row.add(parentesco.getDescricao()); // Add other fields if necessary
+
+                tableData.add(row);
+            }
+
+            DefaultTableModel model = new DefaultTableModel(tableData, columnNames);
+            jtbPesquisar.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar dados: " + e.getMessage());
+        }
+    }
+
+    private void jtbPesquisarMouseClicked(java.awt.event.MouseEvent evt) {
+        // Verifica se uma linha foi selecionada
+        int selectedRow = jtbPesquisar.getSelectedRow();
+        if (selectedRow >= 0) {
+            // Habilita os botões de editar e excluir
+            jbEditar.setEnabled(true);
+            jbExcluir.setEnabled(true);
+        }
     }
 
     /**
@@ -41,6 +90,11 @@ public class jifParentesco extends javax.swing.JInternalFrame {
         jbNovo = new javax.swing.JButton();
         jbSalvar = new javax.swing.JButton();
         jbCancelar = new javax.swing.JButton();
+        jbPesquisar = new javax.swing.JButton();
+        jbEditar = new javax.swing.JButton();
+        jbExcluir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbPesquisar = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -129,18 +183,52 @@ public class jifParentesco extends javax.swing.JInternalFrame {
             }
         });
 
+        jbPesquisar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jbPesquisar.setText("Pesquisar");
+        jbPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPesquisarActionPerformed(evt);
+            }
+        });
+
+        jbEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jbEditar.setText("Editar");
+        jbEditar.setEnabled(false);
+        jbEditar.setMinimumSize(new java.awt.Dimension(79, 23));
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
+
+        jbExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jbExcluir.setText("Excluir");
+        jbExcluir.setEnabled(false);
+        jbExcluir.setMinimumSize(new java.awt.Dimension(79, 23));
+        jbExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(81, 81, 81)
-                .addComponent(jbNovo)
-                .addGap(41, 41, 41)
-                .addComponent(jbSalvar)
-                .addGap(38, 38, 38)
-                .addComponent(jbCancelar)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbNovo)
+                    .addComponent(jbPesquisar))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbSalvar)
+                    .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbCancelar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,8 +238,38 @@ public class jifParentesco extends javax.swing.JInternalFrame {
                     .addComponent(jbNovo)
                     .addComponent(jbSalvar)
                     .addComponent(jbCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbPesquisar)
+                    .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
+
+        jtbPesquisar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Descrição"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jtbPesquisar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,6 +278,10 @@ public class jifParentesco extends javax.swing.JInternalFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,8 +290,9 @@ public class jifParentesco extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -178,9 +301,12 @@ public class jifParentesco extends javax.swing.JInternalFrame {
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
 
         jtDescricao.setEditable(false);
-        jbSalvar.setEnabled(false);
-        jbCancelar.setEnabled(true);
         jbNovo.setEnabled(true);
+        jbPesquisar.setEnabled(true);
+        jbSalvar.setEnabled(false);
+        jbEditar.setEnabled(false);
+        jbExcluir.setEnabled(false);
+        jbCancelar.setEnabled(false);
         limparCampos();
 
         // TODO add your handling code here:
@@ -192,33 +318,157 @@ public class jifParentesco extends javax.swing.JInternalFrame {
         jbNovo.setEnabled(false);
         jbSalvar.setEnabled(true);
         jbCancelar.setEnabled(true);
+        jbPesquisar.setEnabled(false);
+        limparCampos();
+        acao = 1;
 
-        // TODO add your handling code here:
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         try {
-            if(validarCampos()){
+            if (validarCampos()) {
                 obj = new Parentesco();
-                if(preencherObjeto()){
-                    DAO = new ParentescoData();
 
-                    if(DAO.incluir(obj)) {
-                        JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
-                        jbCancelarActionPerformed(evt);
-                        jbNovoActionPerformed(evt);
+                if (preencherObjeto()) {
+                    if (DAO == null) {
+                        DAO = new ParentescoData();
+                    }
+                    boolean success = false;
+
+                    if (acao == 1) { // Incluir (Add)
+                        success = DAO.incluir(obj);
+                    } else if (acao == 2) { // Editar (Edit)
+                        int id = getSelectedRowId();
+                        obj.setId(id);
+                        success = DAO.atualizar(obj);
                     }
 
+                    if (success) {
+                        JOptionPane.showMessageDialog(this, "Operação realizada com sucesso!");
+                        loadData();
+                        jbCancelarActionPerformed(evt);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Não foi possível realizar a operação.");
+                    }
                 }
             }
-
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro no banco de dados: " + e.getMessage());
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar" +
-                ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jbSalvarActionPerformed
+
+    private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
+
+        try {
+            DAO = new ParentescoData();
+            ArrayList<Parentesco> lista = DAO.pesquisarPorDescricao(jtDescricao.getText());
+
+            if (lista.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+            } else {
+                DefaultTableModel model = (DefaultTableModel) jtbPesquisar.getModel();
+                model.setRowCount(0); // Clear table
+
+                for (Parentesco p : lista) {
+                    model.addRow(new Object[]{p.getId(), p.getDescricao()});
+                }
+
+                jbEditar.setEnabled(true);
+                jbExcluir.setEnabled(true);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jbPesquisarActionPerformed
+
+    private int getSelectedRowId() {
+        int selectedRow = jtbPesquisar.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            try {
+                Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
+                System.out.println("Valor obtido da tabela na coluna ID: " + idObject);
+
+                if (idObject instanceof Integer) {
+                    return (Integer) idObject;
+                } else if (idObject instanceof String) {
+                    try {
+                        Parentesco parentesco = DAO.pesquisar(idObject.toString());
+                        return parentesco.getId();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "ID inválido na tabela. Não é possível realizar operação. Valor encontrado: " + idObject);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Tipo de ID inválido na tabela. Não é possível realizar operação. Tipo encontrado: " + idObject.getClass().getName());
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao obter o ID da linha selecionada: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada.");
         }
 
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbSalvarActionPerformed
+        return -1; // Return invalid ID if an error occurs
+    }
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+        jtDescricao.setEditable(true);
+        jbNovo.setEnabled(false);
+        jbSalvar.setEnabled(true);
+        jbCancelar.setEnabled(true);
+        jbPesquisar.setEnabled(false);
+        jbEditar.setEnabled(false);
+        jbExcluir.setEnabled(false);
+        acao = 2;
+    try {
+        int selectedRow = getSelectedRowId();
+
+        if (selectedRow >= 0) {
+
+            DAO = new ParentescoData();
+            obj = DAO.pesquisarPorId(selectedRow);
+
+            if (obj != null) {
+                jtDescricao.setText(obj.getDescricao());
+                acao = 2;
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma linha para editar.");
+        }
+    } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jbEditarActionPerformed
+
+    private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
+        try {
+            int selectedRow = getSelectedRowId();
+
+            if (selectedRow >= 0) {
+
+                if (DAO.excluir(selectedRow)) {
+                    JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!");
+
+                    loadData();
+
+                    jbCancelarActionPerformed(evt);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Formato de ID inválido: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+        }
+
+
+    }//GEN-LAST:event_jbExcluirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel2;
@@ -226,31 +476,43 @@ public class jifParentesco extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbCancelar;
+    private javax.swing.JButton jbEditar;
+    private javax.swing.JButton jbExcluir;
     private javax.swing.JButton jbNovo;
+    private javax.swing.JButton jbPesquisar;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JTextField jtDescricao;
+    private javax.swing.JTable jtbPesquisar;
     // End of variables declaration//GEN-END:variables
 
- private void limparCampos() {
+    private void limparCampos() {
         jtDescricao.setText("");
 
     }
-    private boolean validarCampos() throws Exception{
-       if(jtDescricao.getText().equals("")){
-         JOptionPane.showMessageDialog(this, "Digite a descrição");
-         jtDescricao.requestFocus();
-         return false;
-       }
-      
-       return true;
-    }
-    private boolean preencherObjeto() throws Exception{
-      obj.setDescricao(jtDescricao.getText());
 
-      return true;
+    private boolean validarCampos() throws Exception {
+        if (jtDescricao.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Digite a descrição");
+            jtDescricao.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
-
+    private boolean preencherObjeto() throws Exception {
+        try {
+            if (acao == 2) {
+                obj.setId(obj.getId());
+            }
+            obj.setDescricao(jtDescricao.getText());
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao preencher o objeto: " + e.getMessage());
+            return false;
+        }
+    }
 
 }
