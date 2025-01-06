@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.Modalidade_esportiva;
 import model.Parentesco;
 
 /**
@@ -63,10 +62,8 @@ public class jifParentesco extends javax.swing.JInternalFrame {
     }
 
     private void jtbPesquisarMouseClicked(java.awt.event.MouseEvent evt) {
-        // Verifica se uma linha foi selecionada
         int selectedRow = jtbPesquisar.getSelectedRow();
         if (selectedRow >= 0) {
-            // Habilita os botões de editar e excluir
             jbEditar.setEnabled(true);
             jbExcluir.setEnabled(true);
         }
@@ -369,7 +366,7 @@ public class jifParentesco extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
             } else {
                 DefaultTableModel model = (DefaultTableModel) jtbPesquisar.getModel();
-                model.setRowCount(0); // Clear table
+                model.setRowCount(0);
 
                 for (Parentesco p : lista) {
                     model.addRow(new Object[]{p.getId(), p.getDescricao()});
@@ -410,7 +407,7 @@ public class jifParentesco extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada.");
         }
 
-        return -1; // Return invalid ID if an error occurs
+        return -1;
     }
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
@@ -489,7 +486,6 @@ public class jifParentesco extends javax.swing.JInternalFrame {
 
     private void limparCampos() {
         jtDescricao.setText("");
-
     }
 
     private boolean validarCampos() throws Exception {

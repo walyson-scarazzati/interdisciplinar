@@ -5,8 +5,10 @@
 package view;
 
 import Data.CategoriaData;
+import Data.Modalidade_esportivaData;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Categoria;
 import model.Modalidade_esportiva;
 
@@ -15,17 +17,56 @@ import model.Modalidade_esportiva;
  * @author MaqLab
  */
 public class jifCategorias extends javax.swing.JInternalFrame {
-     Categoria obj;
+
+    Categoria obj;
     Vector<Modalidade_esportiva> vetorModalidade_esportiva;
     CategoriaData DAO;
+    int acao = 0;
+
     /**
      * Creates new form jifCategorias
      */
     public jifCategorias() {
         initComponents();
-         obj = new Categoria();
+        obj = new Categoria();
+        loadData();
         vetorModalidade_esportiva = new Vector<Modalidade_esportiva>();
         DAO = new CategoriaData();
+        jtbPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbPesquisarMouseClicked(evt);
+            }
+        });
+    }
+
+    private void jtbPesquisarMouseClicked(java.awt.event.MouseEvent evt) {
+        int selectedRow = jtbPesquisar.getSelectedRow();
+        if (selectedRow >= 0) {
+            jbEditar.setEnabled(true);
+            jbExcluir.setEnabled(true);
+        }
+    }
+
+    private void loadData() {
+        try {
+            DAO = new CategoriaData();
+            Vector<Categoria> dados = DAO.listar();
+            Vector<String> columnNames = new Vector<>();
+            columnNames.add("Descrição");
+            columnNames.add("valor");
+            Vector<Vector<Object>> tableData = new Vector<>();
+            for (Categoria categoria : dados) {
+                Vector<Object> row = new Vector<>();
+                row.add(categoria.getDescricao());
+                row.add(categoria.getValor());
+                tableData.add(row);
+            }
+            // Create the table model and set it to the JTable
+            DefaultTableModel model = new DefaultTableModel(tableData, columnNames);
+            jtbPesquisar.setModel(model);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar dados: " + e.getMessage());
+        }
     }
 
     /**
@@ -71,6 +112,11 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         jTvalor.setEditable(false);
         jTvalor.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        jTvalor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTvalorActionPerformed(evt);
+            }
+        });
 
         jtbPesquisar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -273,7 +319,6 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBnovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBnovoActionPerformed
-        // TODO add your handling code here:
 
         jTdescricao.setEditable(true);
         jTvalor.setEditable(true);
@@ -282,59 +327,91 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jBsalvar.setEnabled(true);
         jBcancelar.setEnabled(true);
         limparCampos();
-        //   acao = 1;
+        acao = 1;
     }//GEN-LAST:event_jBnovoActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        // if(jTid.getText().equals("")){
-            //  JOptionPane.showMessageDialog(this, "Digite o id");
-            // } else {
-            //  try {
-                //     if(DAO.excluir(Integer.parseInt(jTid.getText()))){
-                    //     JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
-                    //         jBcancelarActionPerformed(evt);
-                    //     } else {
-                    //         JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
-                    //   }
-                // } catch (Exception e) {
-                //    JOptionPane.showMessageDialog(this, "Erro ao excluir:" + e.getMessage());
-                // }
-            //  }
+        try {
+
+            int selectedRow = getSelectedRowId();
+
+            if (selectedRow >= 0) {
+                if (DAO.excluir(selectedRow)) {
+                    JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!");
+                    loadData();
+                    jBcancelarActionPerformed(evt);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, selecione uma linha para excluir.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Formato de ID inválido: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
+        }
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-
-        // jTdescricao.setEditable(true);
-        // jTvalor.setEditable(true);
+        jTdescricao.setEditable(true);
         jBnovo.setEnabled(false);
         jBsalvar.setEnabled(true);
         jBcancelar.setEnabled(true);
         jbPesquisar.setEnabled(false);
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
-        // acao=2;
+        acao = 2;
+
+        int selectedRow = getSelectedRowId();
+
+        if (selectedRow >= 0) {
+            try {
+
+                DAO = new CategoriaData();
+                obj = DAO.pesquisarPorId(selectedRow);
+
+                if (obj != null) {
+                    jTdescricao.setText(obj.getDescricao());
+                    jTvalor.setText(""+ obj.getValor());
+                    jTdescricao.setEditable(true);
+                    jBnovo.setEnabled(false);
+                    jBsalvar.setEnabled(true);
+                    jBcancelar.setEnabled(true);
+                    jbPesquisar.setEnabled(false);
+                    jbEditar.setEnabled(false);
+                    jbExcluir.setEnabled(false);
+                    acao = 2;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Erro no formato do ID: " + e.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao tentar editar: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um registro para editar.");
+        }
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
-        //if(jTid.getText().equals("")){
-            //  JOptionPane.showMessageDialog(this, "Digite um id");
-            // } else {
-            //  try {
-                //  DAO = new CategoriaData();
-                //  obj = DAO.pesquisar(Integer.parseInt(jTid.getText()));
-                //  if(obj==null){
-                    //      JOptionPane.showMessageDialog(this, "Registro não encontrado !");
-                    //  } else {
-                    //     jTdescricao.setText(obj.getDescricao());
-                    //    jTvalor.setText(""+obj.getValor());
-                    //ou jtPreco.setText(String.valueOf(obj.getPreco()));
-                    //     jbEditar.setEnabled(true);
-                    //    jbExcluir.setEnabled(true);
-                    //   }
-                // } catch (Exception ex) {
-                // JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
-                // }
-            // }
+
+        try {
+            DAO = new CategoriaData();
+            obj = DAO.pesquisar(jTdescricao.getText());
+            if (obj == null) {
+                JOptionPane.showMessageDialog(this, "Registro não encontrado !");
+            } else {
+                jTdescricao.setText(obj.getDescricao());
+                jTvalor.setText("" + obj.getValor());
+                jbEditar.setEnabled(true);
+                jbExcluir.setEnabled(true);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jBcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBcancelarActionPerformed
@@ -351,30 +428,70 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         limparCampos();
     }//GEN-LAST:event_jBcancelarActionPerformed
 
-    private void jBsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsalvarActionPerformed
-        // TODO add your handling code here:
-        try {
-            if(validarCampos()){
-                obj = new Categoria();
-                if(preencherObjeto()){
-                    DAO = new CategoriaData();
-                    //   if(acao==1) { //incluir
-                        if(DAO.incluir(obj)) {
-                            JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
-                            jBcancelarActionPerformed(evt);
-                        }}
-                        //  if(acao==2){
-                            //    if(DAO.editar(obj)){
-                                //     JOptionPane.showMessageDialog(this, "Alterado com sucesso !");
-                                //    jBcancelarActionPerformed(evt);
-                                //    }}
-                        //   }
+    private int getSelectedRowId() {
+        int selectedRow = jtbPesquisar.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            try {
+                Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
+                System.out.println("Valor obtido da tabela na coluna ID: " + idObject);
+
+                if (idObject instanceof Integer) {
+                    return (Integer) idObject;
+                } else if (idObject instanceof String) {
+                    try {
+                        Categoria categoria = DAO.pesquisar(idObject.toString());
+                        return categoria.getId();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "ID inválido na tabela. Não é possível realizar operação. Valor encontrado: " + idObject);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Tipo de ID inválido na tabela. Não é possível realizar operação. Tipo encontrado: " + idObject.getClass().getName());
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao salvar" +
-                    ex.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao obter o ID da linha selecionada: " + e.getMessage());
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada.");
+        }
+
+        return -1;
+    }
+
+    private void jBsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsalvarActionPerformed
+        try {
+            if (validarCampos()) {
+                obj = new Categoria();
+                if (preencherObjeto()) {
+                    DAO = new CategoriaData();
+                    boolean success = false;
+
+                    if (acao == 1) {
+                        success = DAO.incluir(obj);
+                    } else if (acao == 2) {
+                        int id = getSelectedRowId();
+                        obj.setId(id);
+                        success = DAO.editar(obj);
+                    }
+
+                    if (success) {
+                        JOptionPane.showMessageDialog(this, "Operação realizada com sucesso !");
+                        loadData(); // Refresh data
+                        jBcancelarActionPerformed(evt); // Reset form
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Não foi possível realizar a operação.");
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar: " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jBsalvarActionPerformed
+
+    private void jTvalorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTvalorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTvalorActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBcancelar;
@@ -395,42 +512,41 @@ public class jifCategorias extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtbPesquisar;
     // End of variables declaration//GEN-END:variables
 
- private void limparCampos() {
+    private void limparCampos() {
         jTdescricao.setText("");
         jTvalor.setText("");
     }
 
-private boolean validarCampos() throws Exception {
-       String msg="";
+    private boolean validarCampos() throws Exception {
+        String msg = "";
 
-    if(jTdescricao.getText().equals("")){
-        msg+="\nDescrição";   }
-    if(jTvalor.getText().equals("")){
-        jTvalor.setText("0,00");
-        msg+="\n Valor";}
-    
-    
-    if(msg.equals(""))
-        return true;
-    else {
-        JOptionPane.showMessageDialog(this, 
-         "Os seguintes campos devem ser preenchidos"
-         +msg,"Validar Campos",
-         JOptionPane.ERROR_MESSAGE);
-        return false; }
-    
-   }
-      
+        if (jTdescricao.getText().equals("")) {
+            msg += "\nDescrição";
+        }
+        if (jTvalor.getText().equals("")) {
+            jTvalor.setText("0,00");
+            msg += "\n Valor";
+        }
 
-private boolean preencherObjeto() throws Exception {
+        if (msg.equals("")) {
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Os seguintes campos devem ser preenchidos"
+                    + msg, "Validar Campos",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+    }
+
+    private boolean preencherObjeto() throws Exception {
         obj = new Categoria();
         obj.setId(1);
         obj.setDescricao(jTdescricao.getText());
         obj.setValor(Float.parseFloat(jTvalor.getText().replace(",", ".").toUpperCase()));
-        
-      
+
         return true;
     }
-
 
 }

@@ -14,7 +14,7 @@ import model.Modalidade_esportiva;
 
 /**
  *
- * autor : Isabel Cristina da Silva Bolognani
+ * autor :
  */
 public class Modalidade_esportivaData {
 
@@ -55,7 +55,11 @@ public class Modalidade_esportivaData {
                 obj = new Modalidade_esportiva();
                 obj.setId(rs.getInt("id"));
                 obj.setDescricao(rs.getString("descricao"));
+                
                 // Assuming Categoria is set elsewhere
+                Categoria categoria = new Categoria();
+                    categoria.setId(rs.getInt("categoria_id"));
+                    obj.setCategoria(categoria);
             }
         } catch (Exception e) {
             throw new Exception("Erro ao pesquisar modalidade esportiva: " + e.getMessage(), e);
@@ -84,7 +88,6 @@ public class Modalidade_esportivaData {
                     // Populate the Categoria object
                     Categoria categoria = new Categoria();
                     categoria.setId(rs.getInt("categoria_id"));
-                    categoria.setDescricao(rs.getString("categoria_descricao"));
                     obj.setCategoria(categoria);
                 }
             }

@@ -33,33 +33,39 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         obj = new Modalidade_esportiva();
         DAO = new Modalidade_esportivaData();
         vetorCategoria = new Vector<Categoria>();
+        jtbPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbPesquisarMouseClicked(evt);
+            }
+        });
+    }
+    
+    private void jtbPesquisarMouseClicked(java.awt.event.MouseEvent evt) {
+        int selectedRow = jtbPesquisar.getSelectedRow();
+        if (selectedRow >= 0) {
+            jbEditar.setEnabled(true);
+            jbExcluir.setEnabled(true);
+        }
     }
 
     private void loadData() {
         try {
             DAO = new Modalidade_esportivaData();
-            // Vector<Modalidade_esportiva> dados = DAO.carregarCombo();
             Vector<Modalidade_esportiva> dados = DAO.listarModalidade_esportiva();
-            // Vector<Modalidade_esportiva> dados = DAO.pesquisar(jTdescricao.getText());
-
-            // Create the column names for the table
             Vector<String> columnNames = new Vector<>();
             columnNames.add("Descrição");
             columnNames.add("Categoria");
 
-            // Create the data vector for the table
             Vector<Vector<Object>> tableData = new Vector<>();
 
             for (Modalidade_esportiva modalidade : dados) {
                 Vector<Object> row = new Vector<>();
-                row.add(modalidade.getDescricao()); // Add other fields if necessary
-
-                // Add Categoria description if Categoria is not null
+                row.add(modalidade.getDescricao()); 
                 Categoria categoria = modalidade.getCategoria();
                 if (categoria != null) {
                     row.add(categoria.getDescricao());
                 } else {
-                    row.add("N/A"); // or any placeholder for null categories
+                    row.add("N/A");
                 }
 
                 tableData.add(row);
@@ -338,7 +344,6 @@ public class jifModalidade extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBnovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBnovoActionPerformed
-        // TODO add your handling code here:
 
         jTdescricao.setEditable(true);
         jcCategoria.setEnabled(true);
@@ -383,18 +388,19 @@ public class jifModalidade extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jBsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsalvarActionPerformed
-        // TODO add your handling code here:
 
         try {
-            if (validarCampos()) { // Validate input fields
+            if (validarCampos()) {
                 obj = new Modalidade_esportiva();
-                if (preencherObjeto()) { // Populate the object
+                if (preencherObjeto()) {
                     DAO = new Modalidade_esportivaData();
                     boolean success = false;
 
-                    if (acao == 1) { // Incluir (Add)
+                    if (acao == 1) {
                         success = DAO.incluir(obj);
-                    } else if (acao == 2) { // Editar (Edit)
+                    } else if (acao == 2) {
+                        int id = getSelectedRowId();
+                        obj.setId(id);
                         success = DAO.editar(obj);
                     }
 
@@ -412,6 +418,37 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jBsalvarActionPerformed
 
+    private int getSelectedRowId() {
+        int selectedRow = jtbPesquisar.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            try {
+                Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
+                System.out.println("Valor obtido da tabela na coluna ID: " + idObject);
+
+                if (idObject instanceof Integer) {
+                    return (Integer) idObject;
+                } else if (idObject instanceof String) {
+                    try {
+                        Modalidade_esportiva modalidade_esportiva = DAO.pesquisar(idObject.toString());
+                        return modalidade_esportiva.getId();
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "ID inválido na tabela. Não é possível realizar operação. Valor encontrado: " + idObject);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Tipo de ID inválido na tabela. Não é possível realizar operação. Tipo encontrado: " + idObject.getClass().getName());
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao obter o ID da linha selecionada: " + e.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada.");
+        }
+
+        return -1;
+    }
+
+
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
 
         jTdescricao.setEditable(true);
@@ -422,111 +459,75 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jbPesquisar.setEnabled(false);
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
-        acao=2;
-        //acao = 2;
-        // Get the selected row index
-    int selectedRow = jtbPesquisar.getSelectedRow();
+        acao = 2;
 
-    if (selectedRow >= 0) {
-        try {
-            // Retrieve the ID of the selected row (assuming the ID is in the first column)
-            Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
-            
-            // Convert ID to an integer
-            int id;
-            if (idObject instanceof Integer) {
-                id = (Integer) idObject;
-            } else if (idObject instanceof String) {
-                //id = Integer.parseInt((String) idObject);
-                Modalidade_esportiva modalidade_esportiva = DAO.pesquisar(idObject.toString());
-               modalidade_esportiva.getId();
-                // Convert from String to int
-               // id = Integer.parseInt((String) idObject);
-               id = modalidade_esportiva.getId();
-            } else {
-                throw new NumberFormatException("ID format is not correct.");
+        int selectedRow = getSelectedRowId();
+
+        if (selectedRow >= 0) {
+            try {
+
+                DAO = new Modalidade_esportivaData();
+                obj = DAO.pesquisarPorId(selectedRow);
+
+                if (obj != null) {
+                    jTdescricao.setText(obj.getDescricao());
+                    //jcCategoria.setSelectedItem(obj.getCategoria());
+                    if (jcCategoria.getItemCount() > 0) {
+                        // Seleciona a categoria correspondente no combobox
+                        for (int i = 0; i < jcCategoria.getItemCount(); i++) {
+                            Categoria categoria = (Categoria) jcCategoria.getItemAt(i);
+                            if (categoria.getId() == obj.getCategoria().getId()) {
+                                jcCategoria.setSelectedIndex(i);
+                                break;
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Erro: O combobox de categorias está vazio.");
+                    }
+                    jTdescricao.setEditable(true);
+                    jcCategoria.setEnabled(true);
+                    jBnovo.setEnabled(false);
+                    jBsalvar.setEnabled(true);
+                    jBcancelar.setEnabled(true);
+                    jbPesquisar.setEnabled(false);
+                    jbEditar.setEnabled(false);
+                    jbExcluir.setEnabled(false);
+                    acao = 2;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Erro no formato do ID: " + e.getMessage());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao tentar editar: " + e.getMessage());
             }
-
-            // Fetch the selected record details from the database
-            DAO = new Modalidade_esportivaData();
-            obj = DAO.pesquisarPorId(id); // Assuming you have a method to fetch by ID
-
-            if (obj != null) {
-                // Populate form fields with the selected record's details
-                jTdescricao.setText(obj.getDescricao());
-
-                // Ensure jcCategoria is properly populated before setting selected item
-                jcCategoria.setSelectedItem(obj.getCategoria()); // Ensure obj.getCategoria() matches an item in jcCategoria
-                
-                // Enable form fields for editing
-                jTdescricao.setEditable(true);
-                jcCategoria.setEnabled(true);
-                jBnovo.setEnabled(false);
-                jBsalvar.setEnabled(true);
-                jBcancelar.setEnabled(true);
-                jbPesquisar.setEnabled(false);
-                jbEditar.setEnabled(false);
-                jbExcluir.setEnabled(false);
-
-                acao = 2; // Indicating that the form is in edit mode
-            } else {
-                JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Erro no formato do ID: " + e.getMessage());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao tentar editar: " + e.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um registro para editar.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, selecione um registro para editar.");
-    }
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
         try {
-        // Get the selected row index
-        int selectedRow = jtbPesquisar.getSelectedRow();
 
-        if (selectedRow >= 0) {
-            // Assuming the ID is in the first column of the table
-            Object idObject = jtbPesquisar.getValueAt(selectedRow, 0);
-            
-            int id;
-            if (idObject instanceof String) {
-               Modalidade_esportiva modalidade_esportiva = DAO.pesquisar(idObject.toString());
-               modalidade_esportiva.getId();
-                // Convert from String to int
-               // id = Integer.parseInt((String) idObject);
-               id = modalidade_esportiva.getId();
-            } else if (idObject instanceof Integer) {
-                // Directly cast if it's already an Integer
-                id = (Integer) idObject;
+            int selectedRow = getSelectedRowId();
+
+            if (selectedRow >= 0) {
+                if (DAO.excluir(selectedRow)) {
+                    JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!");
+                    loadData();
+                    jBcancelarActionPerformed(evt);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
+                }
             } else {
-                // Handle unexpected type
-                throw new ClassCastException("Unexpected type for ID in table: " + idObject.getClass());
+                JOptionPane.showMessageDialog(this, "Por favor, selecione uma linha para excluir.");
             }
-
-            // Pass the ID to the DAO's excluir method
-           if (DAO.excluir(id)) {
-                JOptionPane.showMessageDialog(this, "Registro excluído com sucesso!");
-
-                // Optionally, remove the row from the table model
-                ((DefaultTableModel) jtbPesquisar.getModel()).removeRow(selectedRow);
-
-                // Call the cancel button action to reset the form (if applicable)
-                jBcancelarActionPerformed(evt);
-            } else {
-                JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione uma linha para excluir.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Formato de ID inválido: " + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Formato de ID inválido: " + e.getMessage());
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
-    }
 
     }//GEN-LAST:event_jbExcluirActionPerformed
 

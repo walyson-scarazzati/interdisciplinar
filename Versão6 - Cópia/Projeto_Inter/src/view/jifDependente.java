@@ -4,20 +4,15 @@
  */
 package view;
 
-import Data.AssociadoData;
 import Data.DependenteData;
 import Data.ParentescoData;
-import java.awt.Frame;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Associado;
 import model.Dependente;
 import model.Parentesco;
-import static view.jifAssociado.obj;
 
 /**
  *

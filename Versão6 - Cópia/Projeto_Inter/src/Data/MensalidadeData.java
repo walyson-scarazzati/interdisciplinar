@@ -6,7 +6,7 @@ package Data;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Vector;
+import java.text.SimpleDateFormat;
 import model.Contrato;
 import model.Mensalidade;
 
@@ -23,8 +23,8 @@ public class MensalidadeData {
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
         pstmt.setInt(1,obj.getId());
         pstmt.setFloat(2,obj.getPreco());
-        pstmt.setString(3,obj.getData_pgto());
-        pstmt.setString(4,obj.getData_venc());
+        pstmt.setString(3, convertToDate(obj.getData_pgto()));
+        pstmt.setString(4, convertToDate(obj.getData_venc()));
         pstmt.setFloat(5,obj.getValor());
         pstmt.setString(6,obj.getMes_ref());
          pstmt.setInt(7,obj.getContrato().getNro_contrato());
@@ -36,14 +36,20 @@ public class MensalidadeData {
             return false; 
     }
     
+    private String convertToDate(String date) throws Exception {
+    SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return outputFormat.format(inputFormat.parse(date));
+}
+    
     public boolean editar(Mensalidade obj) throws Exception{
         Conexao objConexao = new Conexao();
         String SQL = "Update Mensalidades set  mes_ref = ?,  valor = ?, data_venc = ?, data_pgto = ?, preco = ? where id = ?";
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement (SQL);
         pstmt.setString(1,obj.getMes_ref());
         pstmt.setFloat(2,obj.getValor());
-        pstmt.setString(3,obj.getData_venc());
-        pstmt.setString(4,obj.getData_pgto());
+        pstmt.setString(3,convertToDate(obj.getData_venc()));
+        pstmt.setString(4,convertToDate(obj.getData_pgto()));
         pstmt.setFloat(5,obj.getPreco());
         pstmt.setInt(6,obj.getId());
         int registros = pstmt.executeUpdate();
@@ -96,10 +102,5 @@ public class MensalidadeData {
         }
         return obj;
     }
-     
-     
-        
-      
-     
-    
+
 }
