@@ -373,7 +373,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
                 if (obj != null) {
                     jTdescricao.setText(obj.getDescricao());
-                    jTvalor.setText(""+ obj.getValor());
+                    jTvalor.setText("" + obj.getValor());
                     jTdescricao.setEditable(true);
                     jBnovo.setEnabled(false);
                     jBsalvar.setEnabled(true);

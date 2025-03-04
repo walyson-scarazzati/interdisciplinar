@@ -16,10 +16,12 @@ import static view.jifAssociado.obj;
  * @author MaqLab
  */
 public class jifFuncionario extends javax.swing.JInternalFrame {
+
     Funcionario obj;
     Vector<Funcionario> vetorFuncionarios;
     FuncionarioData DAO;
     int acao = 0;
+
     /**
      * Creates new form jifFuncionario
      */
@@ -432,7 +434,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
-          acao = 2;
+        acao = 2;
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -453,7 +455,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jbCancelar.setEnabled(false);
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
-                jbPesquisar.setEnabled(true);
+        jbPesquisar.setEnabled(true);
         limparCampos();
     }//GEN-LAST:event_jbCancelarActionPerformed
 
@@ -473,49 +475,51 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jbNovo.setEnabled(false);
         jbSalvar.setEnabled(true);
         jbCancelar.setEnabled(true);
-       jbEditar.setEnabled(false);
-       jbExcluir.setEnabled(false);
-       jbPesquisar.setEnabled(false);
+        jbEditar.setEnabled(false);
+        jbExcluir.setEnabled(false);
+        jbPesquisar.setEnabled(false);
         limparCampos();
         acao = 1;
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        try{
-            if(validarCampos()){
-                if(preencherObjeto()){
-                    if(acao == 1){
-                    if(DAO.incluir(obj)){
-                        JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
-                        jbCancelarActionPerformed(evt);
+        try {
+            if (validarCampos()) {
+                if (preencherObjeto()) {
+                    if (acao == 1) {
+                        if (DAO.incluir(obj)) {
+                            JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
+                            jbCancelarActionPerformed(evt);
 
-                    }}
-                    if(acao == 2){
-                    if(DAO.editar(obj)){
-                        JOptionPane.showMessageDialog(this, "Alterado com sucesso !");
-                        jbCancelarActionPerformed(evt);
+                        }
+                    }
+                    if (acao == 2) {
+                        if (DAO.editar(obj)) {
+                            JOptionPane.showMessageDialog(this, "Alterado com sucesso !");
+                            jbCancelarActionPerformed(evt);
 
-                    }}
+                        }
+                    }
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar !" + ex.getMessage());
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
-            try{
-                if(DAO.excluir(1)){
-                    JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
-                    jbCancelarActionPerformed(evt);
-                }else{
-                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro ");
-                }
-            }catch(Exception ex){
-                JOptionPane.showMessageDialog(this, "Erro ao excluir: " + ex.getMessage());
+        try {
+            if (DAO.excluir(1)) {
+                JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
+                jbCancelarActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro ");
             }
-        
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jftData_NascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jftData_NascimentoActionPerformed
@@ -524,33 +528,32 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
 
-             try{
-                  DAO = new FuncionarioData();
-                  obj = DAO.pesquisarFuncionarios(1);
-                  if(obj == null){
-                     JOptionPane.showMessageDialog(this, "Registro não encontrado");
-                  }else{
-                     //jtID.setText(String.valueOf(obj.getId()));
-                     jftData_Nascimento.setText(obj.getData_nasc());
-                     jtFuncionario.setText(obj.getNome());
-                     jtEndereco.setText(obj.getEndereco());
-                     jtTelefone.setText(String.valueOf(obj.getTelefone()));
-                     jtSalario.setText(String.valueOf(obj.getSalario()));
-                     jtEmail.setText(obj.getEmail());
-                     jtRG.setText(String.valueOf(obj.getRG()));
-                     jtCPF.setText(String.valueOf(obj.getCpf()));
-                     jtUsuario.setText(obj.getUsuario());
-                     jtSenha.setText(obj.getSenha());
-                    jC_usuario_tipo.setSelectedIndex(obj.getTipo());
-                     jbEditar.setEnabled(true);
-                     jbCancelar.setEnabled(true);
-                     jbExcluir.setEnabled(true);
-                     jbPesquisar.setEnabled(false);
-                     jbNovo.setEnabled(false);
-                  }
-          }catch(Exception ex){
-             JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
-          }
+        try {
+            DAO = new FuncionarioData();
+            obj = DAO.pesquisarFuncionarios(1);
+            if (obj == null) {
+                JOptionPane.showMessageDialog(this, "Registro não encontrado");
+            } else {
+                jftData_Nascimento.setText(obj.getData_nasc());
+                jtFuncionario.setText(obj.getNome());
+                jtEndereco.setText(obj.getEndereco());
+                jtTelefone.setText(String.valueOf(obj.getTelefone()));
+                jtSalario.setText(String.valueOf(obj.getSalario()));
+                jtEmail.setText(obj.getEmail());
+                jtRG.setText(String.valueOf(obj.getRG()));
+                jtCPF.setText(String.valueOf(obj.getCpf()));
+                jtUsuario.setText(obj.getUsuario());
+                jtSenha.setText(obj.getSenha());
+                jC_usuario_tipo.setSelectedIndex(obj.getTipo());
+                jbEditar.setEnabled(true);
+                jbCancelar.setEnabled(true);
+                jbExcluir.setEnabled(true);
+                jbPesquisar.setEnabled(false);
+                jbNovo.setEnabled(false);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
+        }
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefoneActionPerformed
@@ -592,83 +595,83 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtUsuario;
     // End of variables declaration//GEN-END:variables
 
- private void limparCampos(){
-    jftData_Nascimento.setText("");
-    jtFuncionario.setText("");
-    jtEndereco.setText("");
-    jtTelefone.setText("");
-    jtSalario.setText("");
-    jtEmail.setText("");
-    jtRG.setText("");
-    jtCPF.setText("");
-    jtUsuario.setText("");
-    jtSenha.setText("");
-    jC_usuario_tipo.setSelectedIndex(0);
-  }
-  private boolean validarCampos() throws Exception{
-    String msg ="";
+    private void limparCampos() {
+        jftData_Nascimento.setText("");
+        jtFuncionario.setText("");
+        jtEndereco.setText("");
+        jtTelefone.setText("");
+        jtSalario.setText("");
+        jtEmail.setText("");
+        jtRG.setText("");
+        jtCPF.setText("");
+        jtUsuario.setText("");
+        jtSenha.setText("");
+        jC_usuario_tipo.setSelectedIndex(0);
+    }
 
-    if(jftData_Nascimento.getText().equals("  /  /    ")){
-      msg+="\nData_Nascimento";
+    private boolean validarCampos() throws Exception {
+        String msg = "";
+
+        if (jftData_Nascimento.getText().equals("  /  /    ")) {
+            msg += "\nData_Nascimento";
+        }
+        if (jtFuncionario.getText().equals("")) {
+            msg += "\nFuncionario";
+        }
+        if (jtEndereco.getText().equals("")) {
+            msg += "\nEndereco";
+        }
+        if (jtTelefone.getText().equals("(  )    -    ")) {
+            msg += "\nTelefone";
+        }
+        if (jtSalario.getText().equals("")) {
+            jtSalario.setText("0,00");
+            msg += "\nSalario";
+        }
+        if (jtEmail.getText().equals("")) {
+            msg += "\nnEmail";
+        }
+        if (jtRG.getText().equals("")) {
+            msg += "\nRG";
+        }
+        if (jtCPF.getText().equals("")) {
+            msg += "\nCPF";
+        }
+        if (jtUsuario.getText().equals("")) {
+            msg += "\nUsuario";
+        }
+
+        if (jtSenha.getText().equals("")) {
+            msg += "\nSenha";
+        }
+
+        if (jC_usuario_tipo.getSelectedIndex() == 0) {
+            msg += "\n Tipo";
+        }
+
+        if (msg.equals("")) {
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this, "Os seguintes campos devem ser preenchidos" + msg, "Validar Campos", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
-    if(jtFuncionario.getText().equals("")){
-      msg+="\nFuncionario";
-    }
-    if(jtEndereco.getText().equals("")){
-      msg+="\nEndereco";
-    }
-    if(jtTelefone.getText().equals("(  )    -    ")){
-      msg+="\nTelefone";
-    }
-    if(jtSalario.getText().equals("")){
-         jtSalario.setText("0,00");
-      msg+="\nSalario";
-    }
-    if(jtEmail.getText().equals("")){
-      msg+="\nnEmail";
-    }
-    if(jtRG.getText().equals("")){
-      msg+="\nRG";
-    }
-    if(jtCPF.getText().equals("")){
-      msg+="\nCPF";
-    }
-    if(jtUsuario.getText().equals("")){
-      msg+="\nUsuario";
-    }
-    
-     if(jtSenha.getText().equals("")){
-      msg+="\nSenha";
-    }
-    
-    if(jC_usuario_tipo.getSelectedIndex() == 0 ){
-      msg+="\n Tipo";
-    }
-    
-   
-    if(msg.equals(""))
+
+    private boolean preencherObjeto() throws Exception {
+        obj = new Funcionario();
+        obj.setData_nasc(jftData_Nascimento.getText());
+        obj.setNome(jtFuncionario.getText());
+        obj.setEndereco(jtEndereco.getText());
+        obj.setTelefone(jtTelefone.getText());
+        obj.setSalario(Double.parseDouble(jtSalario.getText().replace(",", ".").toUpperCase()));
+        obj.setEmail(jtEmail.getText());
+        obj.setRG(jtRG.getText());
+        obj.setCpf(jtCPF.getText());
+        obj.setUsuario(jtUsuario.getText());
+        obj.setSenha(jtSenha.getText());
+        obj.setTipo(jC_usuario_tipo.getSelectedIndex());
+
         return true;
-    else{
-       JOptionPane.showMessageDialog(this, "Os seguintes campos devem ser preenchidos" + msg, "Validar Campos", JOptionPane.ERROR_MESSAGE);
-       return false;
     }
-  }
-  private boolean preencherObjeto()throws Exception{
-    obj = new Funcionario();
-    obj.setData_nasc(jftData_Nascimento.getText());
-    obj.setNome(jtFuncionario.getText());
-    obj.setEndereco(jtEndereco.getText());
-    obj.setTelefone(jtTelefone.getText());
-    obj.setSalario(Double.parseDouble(jtSalario.getText().replace(",", ".").toUpperCase()));
-    obj.setEmail(jtEmail.getText());
-    obj.setRG(jtRG.getText());
-    obj.setCpf(jtCPF.getText());
-    obj.setUsuario(jtUsuario.getText());
-    obj.setSenha(jtSenha.getText());
-    obj.setTipo(jC_usuario_tipo.getSelectedIndex());
-    
-    return true;
-  }
-
 
 }

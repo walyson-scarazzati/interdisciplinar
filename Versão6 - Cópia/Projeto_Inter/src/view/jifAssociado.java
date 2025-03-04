@@ -41,16 +41,14 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         vetorAssociados = new Vector<Associado>();
         vetorDependentes = new Vector<Dependente>();
         DAO = new AssociadoData();
-
     }
 
-    
-        public static void mostrarDependentes() {
+    public static void mostrarDependentes() {
         DefaultTableModel model
                 = (DefaultTableModel) jtbDependentes.getModel();
 
-        if (vetorDependentes.size() > 0) { //só vai add se eu tiver alguma coisa 
-            int qtdLinhas = model.getRowCount(); // vai na tabela e pego a sqtd de linha
+        if (vetorDependentes.size() > 0) {
+            int qtdLinhas = model.getRowCount();
             for (int i = 0; i < qtdLinhas; i++) { //limpa a tabela 
                 model.removeRow(i); //remove a linha
             }
@@ -61,14 +59,8 @@ public class jifAssociado extends javax.swing.JInternalFrame {
                     "" + vetorDependentes.get(i).getCpf()});
             }
         }
-        
-        //limpar a tabela!!!
-
     }
-       
 
-       
-   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -501,7 +493,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 //        
 //        model.addRow(new String[]{"sdfas sadf asdf "});
 
-
     }//GEN-LAST:event_jbAdicionarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
@@ -528,49 +519,51 @@ public class jifAssociado extends javax.swing.JInternalFrame {
             if (validarCampos()) {
                 if (preencherObjeto()) {
                     //inlcui associado
-                    if(acao==1){
-                    if (DAO.incluir(obj)) {
-                        //percorrer o vetor de dependentes inlcuindo cada depende
-                        JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
-                        jbCancelarActionPerformed(evt);
-                       // cadastrarDependentes();
-                              DefaultTableModel tableModel =(DefaultTableModel) jtbDependentes.getModel();  
-                                 tableModel.setNumRows(0);   
-                    }}if(acao==2){
-                          if(DAO.editar(obj)){
-                              JOptionPane.showMessageDialog(this, "Alterado com sucesso !");                              
-                              jbCancelarActionPerformed(evt);
-                            
-                       }
-                    
-                
+                    if (acao == 1) {
+                        if (DAO.incluir(obj)) {
+                            //percorrer o vetor de dependentes inlcuindo cada depende
+                            JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
+                            jbCancelarActionPerformed(evt);
+                            // cadastrarDependentes();
+                            DefaultTableModel tableModel = (DefaultTableModel) jtbDependentes.getModel();
+                            tableModel.setNumRows(0);
+                        }
+                    }
+                    if (acao == 2) {
+                        if (DAO.editar(obj)) {
+                            JOptionPane.showMessageDialog(this, "Alterado com sucesso !");
+                            jbCancelarActionPerformed(evt);
+
+                        }
+
+                    }
+                }
             }
-                }}
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar" + ex.getMessage());
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
-    
-    private void cadastrarDependentes() throws Exception{
-        for(int i = 0; i < vetorDependentes.size(); i++){
-                            Dependente dep = new Dependente();
-                            dep.setId(vetorDependentes.get(i).getId());
-                            dep.setNome(vetorDependentes.get(i).getNome());
-                            dep.setData_nasc(vetorDependentes.get(i).getData_nasc());
-                            dep.setEndereco(vetorDependentes.get(i).getEndereco());
-                            dep.setTelefone(vetorDependentes.get(i).getTelefone());
-                            dep.setEmail(vetorDependentes.get(i).getEmail());
-                            dep.setRG(vetorDependentes.get(i).getRG());
-                            dep.setCpf(vetorDependentes.get(i).getCpf());
-                            dep.setParentesco(vetorDependentes.get(i).getParentesco());
-                            dep.setIdAssociado(obj.getId());
-                            
-                            DependenteData depDB = new DependenteData();
-                            depDB.incluir(dep);
-                        }
-                        vetorDependentes.clear();
+
+    private void cadastrarDependentes() throws Exception {
+        for (int i = 0; i < vetorDependentes.size(); i++) {
+            Dependente dep = new Dependente();
+            dep.setId(vetorDependentes.get(i).getId());
+            dep.setNome(vetorDependentes.get(i).getNome());
+            dep.setData_nasc(vetorDependentes.get(i).getData_nasc());
+            dep.setEndereco(vetorDependentes.get(i).getEndereco());
+            dep.setTelefone(vetorDependentes.get(i).getTelefone());
+            dep.setEmail(vetorDependentes.get(i).getEmail());
+            dep.setRG(vetorDependentes.get(i).getRG());
+            dep.setCpf(vetorDependentes.get(i).getCpf());
+            dep.setParentesco(vetorDependentes.get(i).getParentesco());
+            dep.setIdAssociado(obj.getId());
+
+            DependenteData depDB = new DependenteData();
+            depDB.incluir(dep);
+        }
+        vetorDependentes.clear();
     }
-    
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
 // TODO add your handling code here:
 
@@ -615,91 +608,68 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
-            try {
-                if (DAO.excluir(Integer.parseInt(jtAssociado.getText()))) {
-                    JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
-                    jbCancelarActionPerformed(evt);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro ");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao excluir: " + ex.getMessage());
+        try {
+            if (DAO.excluir(Integer.parseInt(jtAssociado.getText()))) {
+                JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
+                jbCancelarActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro ");
             }
-        
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir: " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jtbDependentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbDependentesMouseClicked
-//        try {
-//            new jifDependente().show();
-//            int linha = jtbDependentes.getSelectedRow();
-//            if (linha > -1) {
-//                jtId.setText(jtbDependentes.getValueAt(linha, 0).toString());
-//                jtDependente.setText(jtbDependentes.getValueAt(linha, 1).toString());
-//                obj.jtCPF.setText(jtbDependentes.getValueAt(linha, 2).toString());
-//
-//            }
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(this, e.getMessage());
-//        }
 
-        //        DefaultTableModel model;
-//       model = (DefaultTableModel)jifAssociado.jtbDependentes.getModel();
-//
-//            int filasele = jtbDependentes.getSelectedRow(); 
-//            String []registros= new String[3];
-//            registros[0]=jtbDependentes.getValueAt(filasele, 0).toString();
-//            registros[1]=jtbDependentes.getValueAt(filasele, 1).toString();
-//            registros[2]=jtbDependentes.getValueAt(filasele, 8).toString();
-//            model.addRow(registros);
-//            jifAssociado.jtbDependentes.setModel(model);
         // TODO add your handling code here:
     }//GEN-LAST:event_jtbDependentesMouseClicked
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
 
-             try{
-                 DAO = new AssociadoData();
-                 obj = DAO.pesquisar(jtCPF.getText());
-                 if(obj == null){
-                    JOptionPane.showMessageDialog(this, "Registro não encontrado");
-                 }else{
-                     jtAssociado.setText(obj.getNome());
-                     
-                     String dataNascimento = obj.getData_nasc();
-                     if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
-                         // Convert date format from yyyy-MM-dd to dd/MM/yyyy
-                         SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
-                         SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
-                         try {
-                             Date date = originalFormat.parse(dataNascimento);
-                             String formattedDate = targetFormat.format(date);
-                             jftData_Nascimento.setText(formattedDate);
-                         } catch (ParseException e) {
-                             // Handle parsing error
-                             JOptionPane.showMessageDialog(this, "Erro ao formatar a data: " + e.getMessage());
-                         }
-                     } else {
-                         jftData_Nascimento.setText(""); // Handle null or empty date
-                     }
-                     
-                     
-                     jtEndereco.setText(obj.getEndereco());
-                     jtTelefone.setText(String.valueOf(obj.getTelefone()));
-                     jtEmail.setText(obj.getEmail());
-                     jtRG.setText(String.valueOf(obj.getRG()));
-                     jtCPF.setText(String.valueOf(obj.getCpf()));
-                     jtProfissao.setText(obj.getProfissao());
-                     jbEditar.setEnabled(true);
-                     jbCancelar.setEnabled(true);
-                     jbExcluir.setEnabled(true);
-                     jbPesquisar.setEnabled(false);
-                     jbNovo.setEnabled(false);
-                     jbSalvar.setEnabled(false);
-                 }
-             }catch(Exception ex){
-               JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
-             }
-        
+        try {
+            DAO = new AssociadoData();
+            obj = DAO.pesquisar(jtCPF.getText());
+            if (obj == null) {
+                JOptionPane.showMessageDialog(this, "Registro não encontrado");
+            } else {
+                jtAssociado.setText(obj.getNome());
+
+                String dataNascimento = obj.getData_nasc();
+                if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
+                    // Convert date format from yyyy-MM-dd to dd/MM/yyyy
+                    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date date = originalFormat.parse(dataNascimento);
+                        String formattedDate = targetFormat.format(date);
+                        jftData_Nascimento.setText(formattedDate);
+                    } catch (ParseException e) {
+                        // Handle parsing error
+                        JOptionPane.showMessageDialog(this, "Erro ao formatar a data: " + e.getMessage());
+                    }
+                } else {
+                    jftData_Nascimento.setText(""); // Handle null or empty date
+                }
+
+                jtEndereco.setText(obj.getEndereco());
+                jtTelefone.setText(String.valueOf(obj.getTelefone()));
+                jtEmail.setText(obj.getEmail());
+                jtRG.setText(String.valueOf(obj.getRG()));
+                jtCPF.setText(String.valueOf(obj.getCpf()));
+                jtProfissao.setText(obj.getProfissao());
+                jbEditar.setEnabled(true);
+                jbCancelar.setEnabled(true);
+                jbExcluir.setEnabled(true);
+                jbPesquisar.setEnabled(false);
+                jbNovo.setEnabled(false);
+                jbSalvar.setEnabled(false);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jtRGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtRGActionPerformed
@@ -774,7 +744,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         if (jtEndereco.getText().equals("")) {
             msg += "\nEndereco";
         }
-         if (jtTelefone.getText().equals("(  )    -    ")) {
+        if (jtTelefone.getText().equals("(  )    -    ")) {
             msg += "\nTelefone";
         }
         if (jtEmail.getText().equals("")) {
@@ -809,9 +779,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         obj.setRG(jtRG.getText());
         obj.setCpf(jtCPF.getText());
         obj.setProfissao(jtProfissao.getText());
-//     for(int i=0; i<jtbDependente.getRowCount();i++){
-//         obj.adicionarDependente();
-//     }
         obj.setDependente(vetorDependentes);
         return true;
     }

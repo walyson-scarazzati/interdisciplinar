@@ -39,7 +39,7 @@ public class AssociadoData {
 
         try {
             conn = objConexao.getConexao();
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false);
 
             // Insert Associado into Pessoas
             int associadoId = insertPessoa(conn, associado.getNome(), associado.getData_nasc(), associado.getEndereco(), associado.getTelefone(), associado.getEmail(), associado.getRG(), associado.getCpf());
@@ -333,10 +333,7 @@ public class AssociadoData {
                 + "from Associados A JOIN Pessoas B On B.id = A.associado_id "
                 + "JOIN Contratos_Titulos C on B.id = C.associado_id "
                 + "JOIN Mensalidades D ON C.id = D.contrato_id ";
-        // + "WHERE B.nome LIKE '%" + arg + "%' "
-        // + "GROUP BY A.associado_id,B.nome, B.CPF, D.data_pgto, D.data_venc ";
 
-        // Se o parâmetro arg não for nulo ou vazio, adicione o filtro
         if (arg != null && !arg.trim().isEmpty()) {
             SQL += "WHERE B.nome LIKE ? ";
         }
@@ -345,14 +342,12 @@ public class AssociadoData {
 
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
 
-        // Defina o valor do parâmetro do filtro se necessário
         if (arg != null && !arg.trim().isEmpty()) {
             pstmt.setString(1, "%" + arg + "%");
         }
 
         ResultSet rs = pstmt.executeQuery();
 
-        // percorre a lista de resultado da query:
         while (rs.next()) {
             Vector linha = new Vector();
             linha.addElement(rs.getInt("associado_id"));
@@ -364,7 +359,5 @@ public class AssociadoData {
         }
 
         return dados;
-
     }
-
 }

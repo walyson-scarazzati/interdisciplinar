@@ -23,21 +23,19 @@ import model.Funcionario;
  */
 public class jifContrato extends javax.swing.JInternalFrame {
 
-      Contrato  obj;
-    ContratoData  DAO;
+    Contrato obj;
+    ContratoData DAO;
     int acao = 0;
     Vector<Funcionario> vetorFuncionarios;
     Vector<Associado> vetorAssociado;
-     Vector<Categoria> vetorCategoria;
+    Vector<Categoria> vetorCategoria;
+
     /**
      * Creates new form jifContrato
      */
     public jifContrato() {
         initComponents();
-        
-     
-        
-        
+
     }
 
     /**
@@ -392,7 +390,7 @@ public class jifContrato extends javax.swing.JInternalFrame {
         jbCancelar.setEnabled(true);
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
-           jbEditar.setEnabled(false);
+        jbEditar.setEnabled(false);
         acao = 1;// TODO add your handling code here:
     }//GEN-LAST:event_jbNovoActionPerformed
 
@@ -416,59 +414,64 @@ public class jifContrato extends javax.swing.JInternalFrame {
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         try {
-            if(validarCampos()){
+            if (validarCampos()) {
                 obj = new Contrato();
-                if(preencherObjeto()){
+                if (preencherObjeto()) {
                     DAO = new ContratoData();
-                    if(acao==1) { //incluir
-                        if(DAO.incluir(obj)) {
+                    if (acao == 1) {
+                        if (DAO.incluir(obj)) {
                             JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
                             jbCancelarActionPerformed(evt);
-                        }}
-                            if(acao==2) { //incluir
-                        if(DAO.editar(obj)) {
+                        }
+                    }
+                    if (acao == 2) {
+                        if (DAO.editar(obj)) {
                             JOptionPane.showMessageDialog(this, "Alterado com sucesso !");
                             jbCancelarActionPerformed(evt);
-                        }}
+                        }
                     }
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao salvar" +
-                    ex.getMessage());
-            }        // TODO add your handling code here:
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar"
+                    + ex.getMessage());
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
-        if(jtNroContrato.getText().equals("")){
+        if (jtNroContrato.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Digite um numero do contrato");
-        }else{
-            try{
+        } else {
+            try {
                 DAO = new ContratoData();
                 obj = DAO.pesquisar(Integer.parseInt(jtNroContrato.getText()));
-                if(obj == null){
+                if (obj == null) {
                     JOptionPane.showMessageDialog(this, "Registro não encontrado");
-                }else{
+                } else {
 
                     jtDataCon.setText(obj.getData_contrato());
                     jtDataCancelar.setText(obj.getData_cancelamento());
                     //                jcStatus.set("" +obj.getStatus());
-                    jcAssociado.setEnabled (true);
-                     for(int i=0;i<vetorAssociado.size();i++){
-                         if(vetorAssociado.get(i).getId()==obj.getAssociado().getId())
-                             jcAssociado.setSelectedIndex(i);
-                     }
-                     
-                       for(int i=0;i<vetorFuncionarios.size();i++){
-                         if(vetorFuncionarios.get(i).getId()==obj.getFuncionario().getId())
-                             jcFuncionario.setSelectedIndex(i);
-                     }
-                         for(int i=0;i<vetorCategoria.size();i++){
-                         if(vetorCategoria.get(i).getId()==obj.getCategoria().getId())
-                             jcCategoria.setSelectedIndex(i);
-                     }
+                    jcAssociado.setEnabled(true);
+                    for (int i = 0; i < vetorAssociado.size(); i++) {
+                        if (vetorAssociado.get(i).getId() == obj.getAssociado().getId()) {
+                            jcAssociado.setSelectedIndex(i);
+                        }
+                    }
+
+                    for (int i = 0; i < vetorFuncionarios.size(); i++) {
+                        if (vetorFuncionarios.get(i).getId() == obj.getFuncionario().getId()) {
+                            jcFuncionario.setSelectedIndex(i);
+                        }
+                    }
+                    for (int i = 0; i < vetorCategoria.size(); i++) {
+                        if (vetorCategoria.get(i).getId() == obj.getCategoria().getId()) {
+                            jcCategoria.setSelectedIndex(i);
+                        }
+                    }
 
                     jcStatus.setSelectedIndex(obj.getStatus());
-                    jcCategoria.setEnabled (true);
+                    jcCategoria.setEnabled(true);
                     jcFuncionario.setEnabled(true);
                     jbNovo.setEnabled(false);
                     jbSalvar.setEnabled(false);
@@ -478,24 +481,24 @@ public class jifContrato extends javax.swing.JInternalFrame {
                     jbEditar.setEnabled(true);
 
                 }
-            }catch(Exception ex){
-                JOptionPane.showMessageDialog(this,"Erro ao pesquisar: " + ex.getMessage());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
             }
         }    // TODO        // TODO add your handling code here:
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-        if(jtNroContrato.getText().equals("")){
+        if (jtNroContrato.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Digite o Nro do Contrato");
-        }else{
-            try{
-                if(DAO.excluir(Integer.parseInt(jtNroContrato.getText()))){
+        } else {
+            try {
+                if (DAO.excluir(Integer.parseInt(jtNroContrato.getText()))) {
                     JOptionPane.showMessageDialog(this, "Registro excluído com sucesso");
                     jbCancelarActionPerformed(evt);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "Não foi possível excluir com sucesso");
                 }
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao exclui: " + ex.getMessage());
             }
         }          // TODO add your handling code here:
@@ -503,32 +506,30 @@ public class jifContrato extends javax.swing.JInternalFrame {
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
 
-        
         FuncionarioData DAOFuncionario = new FuncionarioData();
-        try{
-          vetorFuncionarios = DAOFuncionario.carregarCombo();
-          jcFuncionario.setModel(new DefaultComboBoxModel(vetorFuncionarios));
-    }catch(Exception e){
-       JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
+        try {
+            vetorFuncionarios = DAOFuncionario.carregarCombo();
+            jcFuncionario.setModel(new DefaultComboBoxModel(vetorFuncionarios));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
         }
-        
-           AssociadoData DAOAssociado = new AssociadoData();
-        try{
-          vetorAssociado = DAOAssociado.carregarCombo();
-          jcAssociado.setModel(new DefaultComboBoxModel(vetorAssociado));
-    }catch(Exception e){
-       JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
+
+        AssociadoData DAOAssociado = new AssociadoData();
+        try {
+            vetorAssociado = DAOAssociado.carregarCombo();
+            jcAssociado.setModel(new DefaultComboBoxModel(vetorAssociado));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
         }
-        
-          CategoriaData DAOCategoria = new CategoriaData();
-        try{
-          vetorCategoria = DAOCategoria.carregarCombo();
-          jcCategoria.setModel(new DefaultComboBoxModel(vetorCategoria));
-    }catch(Exception e){
-       JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
+
+        CategoriaData DAOCategoria = new CategoriaData();
+        try {
+            vetorCategoria = DAOCategoria.carregarCombo();
+            jcCategoria.setModel(new DefaultComboBoxModel(vetorCategoria));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
         }
-        
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameActivated
 
@@ -555,7 +556,7 @@ public class jifContrato extends javax.swing.JInternalFrame {
         jbPesquisar.setEnabled(false);
         jbEditar.setEnabled(false);
         acao = 2;
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jbEditarActionPerformed
 
@@ -587,71 +588,68 @@ public class jifContrato extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void limparCampos() {
-       jtNroContrato.setText("");
-       jtDataCancelar.setText("");
-       jtDataCon.setText("");
-       jcStatus.setSelectedIndex(0);
-       jcAssociado.setSelectedIndex(0);
-       jcFuncionario.setSelectedIndex(0);
-       jcCategoria.setSelectedIndex(0);
+        jtNroContrato.setText("");
+        jtDataCancelar.setText("");
+        jtDataCon.setText("");
+        jcStatus.setSelectedIndex(0);
+        jcAssociado.setSelectedIndex(0);
+        jcFuncionario.setSelectedIndex(0);
+        jcCategoria.setSelectedIndex(0);
     }
-    private boolean validarCampos() throws Exception{
-       if(jtNroContrato.getText().equals("")){
-          JOptionPane.showMessageDialog(this, "Digite o Nro do Contrato");
-          jtNroContrato.requestFocus();
-          return false;
-       }
-       if(jtDataCancelar.getText().equals("")){
-         JOptionPane.showMessageDialog(this, "Digite a Data de Cancelar");
-         jtDataCancelar.requestFocus();
-         return false;
-       }
-       if(jtDataCon.getText().equals("")){
-         JOptionPane.showMessageDialog(this, "Digite a Data de Contrato");
-         jtDataCon.requestFocus();
-         return false;
-       }
-      
-       if(jcStatus.getSelectedIndex()==0){
-         JOptionPane.showMessageDialog(this, "Digite o Status");
-         return false;
-       }
-       
-        if(jcAssociado.getSelectedIndex()==0){
-         JOptionPane.showMessageDialog(this, "Digite o Associado");
-         return false;
-       }
-        
-        if(jcFuncionario.getSelectedIndex()==0){
-         JOptionPane.showMessageDialog(this, "Digite o funcionario");
-         return false;
-       }
-        
-        
-         
-          if(jcCategoria.getSelectedIndex()==0){
-         JOptionPane.showMessageDialog(this, "Digite a Categoria");
-         return false;
-       }
-       
-       return true;
-    }
-    private boolean preencherObjeto() throws Exception{
-      obj.setNro_contrato(Integer.parseInt(jtNroContrato.getText()));
-      obj.setData_cancelamento(jtDataCancelar.getText());
-      obj.setData_contrato(jtDataCon.getText());
-       obj.setAssociado(vetorAssociado.
-            get(jcAssociado.getSelectedIndex()));
-       obj.setFuncionario(vetorFuncionarios.
-               get(jcFuncionario.getSelectedIndex()));
-    obj.setStatus(jcStatus.getSelectedIndex());
-             
-     obj.setCategoria(vetorCategoria.
-            get(jcCategoria.getSelectedIndex()));
-      
-      return true;
-    }
-        
 
+    private boolean validarCampos() throws Exception {
+        if (jtNroContrato.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Digite o Nro do Contrato");
+            jtNroContrato.requestFocus();
+            return false;
+        }
+        if (jtDataCancelar.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Digite a Data de Cancelar");
+            jtDataCancelar.requestFocus();
+            return false;
+        }
+        if (jtDataCon.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Digite a Data de Contrato");
+            jtDataCon.requestFocus();
+            return false;
+        }
 
+        if (jcStatus.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Digite o Status");
+            return false;
+        }
+
+        if (jcAssociado.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Digite o Associado");
+            return false;
+        }
+
+        if (jcFuncionario.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Digite o funcionario");
+            return false;
+        }
+
+        if (jcCategoria.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Digite a Categoria");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean preencherObjeto() throws Exception {
+        obj.setNro_contrato(Integer.parseInt(jtNroContrato.getText()));
+        obj.setData_cancelamento(jtDataCancelar.getText());
+        obj.setData_contrato(jtDataCon.getText());
+        obj.setAssociado(vetorAssociado.
+                get(jcAssociado.getSelectedIndex()));
+        obj.setFuncionario(vetorFuncionarios.
+                get(jcFuncionario.getSelectedIndex()));
+        obj.setStatus(jcStatus.getSelectedIndex());
+
+        obj.setCategoria(vetorCategoria.
+                get(jcCategoria.getSelectedIndex()));
+
+        return true;
+    }
 }

@@ -27,8 +27,6 @@ public class jifDependente extends javax.swing.JInternalFrame {
     DefaultTableModel modelo;
     Vector<Dependente> vetorDependente;
     int acao = 0;
-    //criar um vetor de dependente, na hora que salva(DEPENDENTE) adiciona, e atualiza a jtabel do associado
-    //jtabel de associado publica e estatica
 
     /**
      * Creates new form jifDependente
@@ -42,8 +40,6 @@ public class jifDependente extends javax.swing.JInternalFrame {
         vetorDependente = new Vector<Dependente>();
         DAO = new DependenteData();
 
-
-
     }
 
     public jifDependente(String nome) {
@@ -53,7 +49,6 @@ public class jifDependente extends javax.swing.JInternalFrame {
         vetorAssociado = new Vector<Associado>();
         vetorParentescos = new Vector<Parentesco>();
         DAO = new DependenteData();
-        //jtAssociado.setText(String.valueOf(id));
         jtAssociado.setText(nome);
     }
 
@@ -93,6 +88,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jbCancelar = new javax.swing.JButton();
         jbPesquisar = new javax.swing.JButton();
         jbExcluir = new javax.swing.JButton();
+        jbEditar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -369,6 +365,15 @@ public class jifDependente extends javax.swing.JInternalFrame {
             }
         });
 
+        jbEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jbEditar.setText("Editar");
+        jbEditar.setEnabled(false);
+        jbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -379,12 +384,14 @@ public class jifDependente extends javax.swing.JInternalFrame {
                     .addComponent(jbPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jbNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(68, 68, 68)
-                .addComponent(jbSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(61, 61, 61)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,7 +404,8 @@ public class jifDependente extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbPesquisar)
-                    .addComponent(jbExcluir))
+                    .addComponent(jbExcluir)
+                    .addComponent(jbEditar))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
@@ -440,7 +448,6 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jbNovo.setEnabled(false);
         jbSalvar.setEnabled(true);
         jbCancelar.setEnabled(true);
-//        jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
         limparCampos();
@@ -450,7 +457,6 @@ public class jifDependente extends javax.swing.JInternalFrame {
         try {
             if (validarCampos()) {
                 if (preencherObjeto()) {
-//                    if(DAO.incluir(obj)){
                     if (jifAssociado.vetorDependentes == null) {
                         jifAssociado.vetorDependentes = new Vector<>();
                     }
@@ -458,21 +464,11 @@ public class jifDependente extends javax.swing.JInternalFrame {
                     jifAssociado.mostrarDependentes();
                     JOptionPane.showMessageDialog(this, "Salvo");
                     limparCampos();
-//                    }else{
-//                          JOptionPane.showMessageDialog(this, "não foi SAlvo");
-//                    }
                 }
-                
-                
             }
-
-
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao salvo " + ex.getMessage());
         }
-
-
-
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -490,26 +486,26 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jbNovo.setEnabled(true);
         jbSalvar.setEnabled(false);
         jbCancelar.setEnabled(false);
-//        jbEditar.setEnabled(false);
+        jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(true);
         limparCampos();
-          acao = 1;
+        acao = 1;
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
-            try {
-                if (DAO.excluir(Integer.parseInt(jtDependente.getText()))) {
-                    JOptionPane.showMessageDialog(this, "Excluido com sucesso !");
-                    jbCancelarActionPerformed(evt);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro ");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao excluir " + ex.getMessage());
+        try {
+            if (DAO.excluir(Integer.parseInt(jtDependente.getText()))) {
+                JOptionPane.showMessageDialog(this, "Excluido com sucesso !");
+                jbCancelarActionPerformed(evt);
+            } else {
+                JOptionPane.showMessageDialog(this, "Não foi possível excluir o registro ");
             }
-   
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
@@ -531,42 +527,60 @@ public class jifDependente extends javax.swing.JInternalFrame {
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
 
-             try{
-                  DAO = new DependenteData();
-                  obj = DAO.pesquisar(jtDependente.getText());
-                  if(obj == null){
-                     JOptionPane.showMessageDialog(this, "Registro não encontrado");
-                  }else{
-                     jftData_Nascimento.setText(obj.getData_nasc());
-                     jtDependente.setText(obj.getNome());
-                     jtEndereco.setText(obj.getEndereco());
-                     jtTelefone.setText(String.valueOf(obj.getTelefone()));
-                     jtEmail.setText(obj.getEmail());
-                     jtRG.setText(String.valueOf(obj.getRG()));
-                     jtCPF.setText(String.valueOf(obj.getCpf()));
-                     jcbParentesco.setEnabled (true);
-                  
-                     for(int i=0;i<vetorParentescos.size();i++){
-                         if(vetorParentescos.get(i).getId()==obj.getParentesco().getId())
-                             jcbParentesco.setSelectedIndex(i);
-                     }
-                     jtAssociado.setText(String.valueOf(obj.getIdAssociado()));
-//                     jbEditar.setEnabled(true);
-                     jbCancelar.setEnabled(true);
-                     jbExcluir.setEnabled(true);
-                     jbPesquisar.setEnabled(false);
-                     jbNovo.setEnabled(false);
-                     jbSalvar.setEnabled(false);
-                  }
-          }catch(Exception ex){
-             JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
-          }
-        
+        try {
+            DAO = new DependenteData();
+            obj = DAO.pesquisar(jtDependente.getText());
+            if (obj == null) {
+                JOptionPane.showMessageDialog(this, "Registro não encontrado");
+            } else {
+                jftData_Nascimento.setText(obj.getData_nasc());
+                jtDependente.setText(obj.getNome());
+                jtEndereco.setText(obj.getEndereco());
+                jtTelefone.setText(String.valueOf(obj.getTelefone()));
+                jtEmail.setText(obj.getEmail());
+                jtRG.setText(String.valueOf(obj.getRG()));
+                jtCPF.setText(String.valueOf(obj.getCpf()));
+                jcbParentesco.setEnabled(true);
+
+                for (int i = 0; i < vetorParentescos.size(); i++) {
+                    if (vetorParentescos.get(i).getId() == obj.getParentesco().getId()) {
+                        jcbParentesco.setSelectedIndex(i);
+                    }
+                }
+                jtAssociado.setText(String.valueOf(obj.getIdAssociado()));
+                jbEditar.setEnabled(true);
+                jbCancelar.setEnabled(true);
+                jbExcluir.setEnabled(true);
+                jbPesquisar.setEnabled(false);
+                jbNovo.setEnabled(false);
+                jbSalvar.setEnabled(false);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
+        }
+
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTelefoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtTelefoneActionPerformed
+
+    private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
+
+        jftData_Nascimento.setEditable(true);
+        jtEndereco.setEditable(true);
+        jtTelefone.setEditable(true);
+        jtEmail.setEditable(true);
+        jtRG.setEditable(true);
+        jtCPF.setEditable(true);
+        jbNovo.setEnabled(false);
+        jbSalvar.setEnabled(true);
+        jbCancelar.setEnabled(true);
+        jbEditar.setEnabled(false);
+        jbExcluir.setEnabled(false);
+        jbPesquisar.setEnabled(false);
+        acao = 2;
+    }//GEN-LAST:event_jbEditarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel9;
@@ -574,6 +588,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton jbCancelar;
+    private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbExcluir;
     private javax.swing.JButton jbNovo;
     private javax.swing.JButton jbPesquisar;
@@ -612,7 +627,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
     private boolean validarCampos() throws Exception {
         String msg = "";
 
-        if (jftData_Nascimento.getText().equals("")) {
+        if (jftData_Nascimento.getText().equals("  /  /    ")) {
             msg += "\nData_Nascimento";
         }
         if (jtDependente.getText().equals("")) {
@@ -621,7 +636,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         if (jtEndereco.getText().equals("")) {
             msg += "\nEndereco";
         }
-                if (jtTelefone.getText().equals("(  )    -    ")) {
+        if (jtTelefone.getText().equals("(  )    -    ")) {
             msg += "\nTelefone";
         }
         if (jtTelefone.getText().equals("")) {
@@ -637,8 +652,6 @@ public class jifDependente extends javax.swing.JInternalFrame {
         if (jtAssociado.getText().equals("")) {
             msg += "\n Associado";
         }
-
-
 
         if (jcbParentesco.getSelectedIndex() == 0) {
             msg += "\n parentesco";
