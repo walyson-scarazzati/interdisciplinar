@@ -6,6 +6,7 @@ package view;
 
 import Data.DependenteData;
 import Data.ParentescoData;
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -142,6 +143,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlData_Nascimento.setText("Data Nascimento");
 
         jftData_Nascimento.setEditable(false);
+        jftData_Nascimento.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jftData_Nascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -159,6 +161,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlDependente.setText("Dependente");
 
         jtDependente.setEditable(false);
+        jtDependente.setBackground(new java.awt.Color(195, 195, 195));
         jtDependente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtDependente.setToolTipText("Digite o nome ");
 
@@ -168,6 +171,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlEndereco.setText("Endereço");
 
         jtEndereco.setEditable(false);
+        jtEndereco.setBackground(new java.awt.Color(195, 195, 195));
         jtEndereco.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtEndereco.setToolTipText("Digite o endereço");
 
@@ -182,6 +186,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlEmail.setText("E-mail");
 
         jtEmail.setEditable(false);
+        jtEmail.setBackground(new java.awt.Color(195, 195, 195));
         jtEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtEmail.setToolTipText("Digite o email");
 
@@ -191,6 +196,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlRG.setText("RG");
 
         jtRG.setEditable(false);
+        jtRG.setBackground(new java.awt.Color(195, 195, 195));
         jtRG.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtRG.setToolTipText("Digite o RG");
 
@@ -207,6 +213,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlParentesco.setForeground(new java.awt.Color(0, 0, 102));
         jlParentesco.setText("Parentesco");
 
+        jcbParentesco.setBackground(new java.awt.Color(195, 195, 195));
         jcbParentesco.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jcbParentesco.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Selecione>" }));
         jcbParentesco.setToolTipText("Selecione o Parentesco");
@@ -218,6 +225,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jlDependentes.setText("Associado");
 
         jtAssociado.setEditable(false);
+        jtAssociado.setBackground(new java.awt.Color(195, 195, 195));
         jtAssociado.setToolTipText("Associado");
         jtAssociado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,6 +234,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
         });
 
         jtTelefone.setEditable(false);
+        jtTelefone.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("( ## ) ####-####")));
         } catch (java.text.ParseException ex) {
@@ -451,6 +460,16 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
         limparCampos();
+        Color whiteColor = Color.WHITE;
+        jftData_Nascimento.setBackground(whiteColor);
+        jtDependente.setBackground(whiteColor);
+        jtEndereco.setBackground(whiteColor);
+        jtEmail.setBackground(whiteColor);
+        jtTelefone.setBackground(whiteColor);
+        jtAssociado.setBackground(whiteColor);
+        jtRG.setBackground(whiteColor);
+        jtCPF.setBackground(whiteColor);
+        jtAssociado.setBackground(whiteColor);
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
@@ -490,13 +509,25 @@ public class jifDependente extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(true);
         limparCampos();
+        Color grayColor = new Color(195, 195, 195);
+        jftData_Nascimento.setBackground(grayColor);
+        jtDependente.setBackground(grayColor);
+        jtEndereco.setBackground(grayColor);
+        jtEmail.setBackground(grayColor);
+        jtTelefone.setBackground(grayColor);
+        jtAssociado.setBackground(grayColor);
+        jtRG.setBackground(grayColor);
+        jtCPF.setBackground(grayColor);
+        jtAssociado.setBackground(grayColor);
         acao = 1;
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
         try {
-            if (DAO.excluir(Integer.parseInt(jtDependente.getText()))) {
+            DAO = new DependenteData();
+            obj = DAO.pesquisar(jtCPF.getText());
+            if (DAO.excluir(obj.getId())) {
                 JOptionPane.showMessageDialog(this, "Excluido com sucesso !");
                 jbCancelarActionPerformed(evt);
             } else {
@@ -529,7 +560,7 @@ public class jifDependente extends javax.swing.JInternalFrame {
 
         try {
             DAO = new DependenteData();
-            obj = DAO.pesquisar(jtDependente.getText());
+            obj = DAO.pesquisar(jtCPF.getText());
             if (obj == null) {
                 JOptionPane.showMessageDialog(this, "Registro não encontrado");
             } else {

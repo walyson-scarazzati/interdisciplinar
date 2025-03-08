@@ -6,6 +6,7 @@ package view;
 
 import Data.AssociadoData;
 import Data.DependenteData;
+import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,6 +136,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jlData_Nascimento.setText("Data Nascimento");
 
         jftData_Nascimento.setEditable(false);
+        jftData_Nascimento.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jftData_Nascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -147,6 +149,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         });
 
         jtAssociado.setEditable(false);
+        jtAssociado.setBackground(new java.awt.Color(195, 195, 195));
         jtAssociado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtAssociado.setToolTipText("Digite o nome ");
         jtAssociado.addActionListener(new java.awt.event.ActionListener() {
@@ -166,6 +169,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jlEndereco.setText("Endereço");
 
         jtEndereco.setEditable(false);
+        jtEndereco.setBackground(new java.awt.Color(195, 195, 195));
         jtEndereco.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtEndereco.setToolTipText("Digite o Endereço");
 
@@ -180,6 +184,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jlEmail.setText("E-mail");
 
         jtEmail.setEditable(false);
+        jtEmail.setBackground(new java.awt.Color(195, 195, 195));
         jtEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtEmail.setToolTipText("Digite o email");
 
@@ -189,6 +194,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jlRG.setText("RG");
 
         jtRG.setEditable(false);
+        jtRG.setBackground(new java.awt.Color(195, 195, 195));
         jtRG.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtRG.setToolTipText("Digite o RG");
         jtRG.addActionListener(new java.awt.event.ActionListener() {
@@ -211,6 +217,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jlProfissao.setText("Profissão");
 
         jtProfissao.setEditable(false);
+        jtProfissao.setBackground(new java.awt.Color(195, 195, 195));
         jtProfissao.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtProfissao.setToolTipText("Digite a profissão");
 
@@ -219,11 +226,11 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Id", "Dependente", "RG"
+                "Dependente", "RG", "CPF"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -254,6 +261,7 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         });
 
         jtTelefone.setEditable(false);
+        jtTelefone.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("( ## ) ####-####")));
         } catch (java.text.ParseException ex) {
@@ -469,10 +477,15 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
 
     private void jbRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbRemoverActionPerformed
-        if (jtbDependentes.getSelectedRow() > 0) {
+        int selectedRow = jtbDependentes.getSelectedRow();
+
+        if (selectedRow >= 0) {
             DefaultTableModel model = (DefaultTableModel) jtbDependentes.getModel();
-            model.removeRow(jtbDependentes.getSelectedRow());
+            model.removeRow(selectedRow);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma linha para remover.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_jbRemoverActionPerformed
 
     private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
@@ -500,6 +513,15 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         limparCampos();
+        Color whiteColor = Color.WHITE;
+        jtAssociado.setBackground(whiteColor);
+        jftData_Nascimento.setBackground(whiteColor);
+        jtEndereco.setBackground(whiteColor);
+        jtTelefone.setBackground(whiteColor);
+        jtEmail.setBackground(whiteColor);
+        jtRG.setBackground(whiteColor);
+        jtCPF.setBackground(whiteColor);
+        jtProfissao.setBackground(whiteColor);
         acao = 1;
     }//GEN-LAST:event_jbNovoActionPerformed
 
@@ -507,10 +529,8 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         try {
             if (validarCampos()) {
                 if (preencherObjeto()) {
-                    //inlcui associado
                     if (acao == 1) {
                         if (DAO.incluir(obj)) {
-                            //percorrer o vetor de dependentes inlcuindo cada depende
                             JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
                             jbCancelarActionPerformed(evt);
                             // cadastrarDependentes();
@@ -560,14 +580,14 @@ public class jifAssociado extends javax.swing.JInternalFrame {
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
 
-        jftData_Nascimento.setEditable(true);
-        jtAssociado.setEditable(true);
-        jtEndereco.setEditable(true);
-        jtTelefone.setEditable(true);
-        jtEmail.setEditable(true);
-        jtRG.setEditable(true);
+        jftData_Nascimento.setEditable(false);
+        jtAssociado.setEditable(false);
+        jtEndereco.setEditable(false);
+        jtTelefone.setEditable(false);
+        jtEmail.setEditable(false);
+        jtRG.setEditable(false);
         jtCPF.setEditable(true);
-        jtProfissao.setEditable(true);
+        jtProfissao.setEditable(false);
         jbNovo.setEnabled(true);
         jbSalvar.setEnabled(false);
         jbCancelar.setEnabled(false);
@@ -575,6 +595,16 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         jbPesquisar.setEnabled(true);
         jbExcluir.setEnabled(false);
         limparCampos();
+        DefaultTableModel tableModel = (DefaultTableModel) jtbDependentes.getModel();
+        tableModel.setNumRows(0);
+        Color grayColor = new Color(195, 195, 195);
+        jtAssociado.setBackground(grayColor);
+        jftData_Nascimento.setBackground(grayColor);
+        jtEndereco.setBackground(grayColor);
+        jtTelefone.setBackground(grayColor);
+        jtEmail.setBackground(grayColor);
+        jtRG.setBackground(grayColor);
+        jtProfissao.setBackground(grayColor);
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
@@ -598,7 +628,9 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
         try {
-            if (DAO.excluir(Integer.parseInt(jtAssociado.getText()))) {
+            DAO = new AssociadoData();
+            obj = DAO.pesquisar(jtCPF.getText());
+            if (DAO.excluir(obj.getId())) {
                 JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
                 jbCancelarActionPerformed(evt);
             } else {
@@ -616,37 +648,29 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtbDependentesMouseClicked
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
+
         try {
-            // Assuming AssociadoData is your data access object
             DAO = new AssociadoData();
-            obj = DAO.pesquisar(jtCPF.getText()); // Search for the associated record by CPF
+            obj = DAO.pesquisar(jtCPF.getText());
 
             if (obj == null) {
                 JOptionPane.showMessageDialog(this, "Registro não encontrado");
             } else {
-                // Set the associated name
                 jtAssociado.setText(obj.getNome());
 
-                // Get and handle the date of birth
                 String dataNascimento = obj.getData_nasc();
                 if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
-                    // Correct format: "dd/MM/yyyy" for the input data
-                    SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");  // Format used for parsing
-                    SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");   // Format for displaying
+                    SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
 
                     try {
-                        // Parsing the date string into a Date object
                         Date date = originalFormat.parse(dataNascimento);
-                        // Formatting the Date object back into a string
                         String formattedDate = targetFormat.format(date);
-                        // Set the formatted date to the text field
                         jftData_Nascimento.setText(formattedDate);
                     } catch (ParseException e) {
-                        // Handle parsing errors
                         JOptionPane.showMessageDialog(this, "Erro ao formatar a data: " + e.getMessage());
                     }
                 } else {
-                    // Handle case where date is null or empty
                     jftData_Nascimento.setText("");
                 }
                 jtEndereco.setText(obj.getEndereco());
@@ -661,6 +685,30 @@ public class jifAssociado extends javax.swing.JInternalFrame {
                 jbPesquisar.setEnabled(false);
                 jbNovo.setEnabled(false);
                 jbSalvar.setEnabled(false);
+
+                Color whiteColor = Color.WHITE;
+                jtAssociado.setBackground(whiteColor);
+                jftData_Nascimento.setBackground(whiteColor);
+                jtEndereco.setBackground(whiteColor);
+                jtTelefone.setBackground(whiteColor);
+                jtEmail.setBackground(whiteColor);
+                jtRG.setBackground(whiteColor);
+                jtCPF.setBackground(whiteColor);
+                jtProfissao.setBackground(whiteColor);
+
+                DefaultTableModel tableModel = (DefaultTableModel) jtbDependentes.getModel();
+                tableModel.setNumRows(0);
+                if (obj.getDependente() != null && !obj.getDependente().isEmpty()) {
+                    for (Dependente dependente : obj.getDependente()) {
+                        // Add rows to the table for each dependent
+                        Object[] rowData = new Object[]{
+                            dependente.getNome(),
+                            dependente.getRG(),
+                            dependente.getCpf()
+                        };
+                        tableModel.addRow(rowData);
+                    }
+                }
             }
         } catch (Exception e) {
             // Handle any other exception

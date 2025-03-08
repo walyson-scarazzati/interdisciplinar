@@ -5,6 +5,7 @@
 package view;
 
 import Data.ParentescoData;
+import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -127,6 +128,7 @@ public class jifParentesco extends javax.swing.JInternalFrame {
         jLabel2.setText("Descrição");
 
         jtDescricao.setEditable(false);
+        jtDescricao.setBackground(new java.awt.Color(195, 195, 195));
         jtDescricao.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jtDescricao.setToolTipText("Digite a descrição");
 
@@ -305,7 +307,8 @@ public class jifParentesco extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbCancelar.setEnabled(false);
         limparCampos();
-
+        Color grayColor = new Color(195, 195, 195);
+        jtDescricao.setBackground(grayColor);
         // TODO add your handling code here:
     }//GEN-LAST:event_jbCancelarActionPerformed
 
@@ -317,6 +320,8 @@ public class jifParentesco extends javax.swing.JInternalFrame {
         jbCancelar.setEnabled(true);
         jbPesquisar.setEnabled(false);
         limparCampos();
+        Color whiteColor = Color.WHITE;
+        jtDescricao.setBackground(whiteColor);
         acao = 1;
 
     }//GEN-LAST:event_jbNovoActionPerformed

@@ -6,6 +6,7 @@ package view;
 
 import Data.CategoriaData;
 import Data.Modalidade_esportivaData;
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -142,6 +143,7 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jLdescricao.setForeground(new java.awt.Color(0, 0, 102));
         jLdescricao.setText("Descrição");
 
+        jTdescricao.setBackground(new java.awt.Color(195, 195, 195));
         jTdescricao.setToolTipText("Digite a descrição");
 
         jlmodalidade.setBackground(new java.awt.Color(0, 0, 102));
@@ -352,7 +354,10 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jBsalvar.setEnabled(true);
         jBcancelar.setEnabled(true);
         limparCampos();
+        Color whiteColor = Color.WHITE;
+        jTdescricao.setBackground(whiteColor);
         acao = 1;
+        
     }//GEN-LAST:event_jBnovoActionPerformed
 
     private void jBcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBcancelarActionPerformed
@@ -367,6 +372,8 @@ public class jifModalidade extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         limparCampos();
+        Color grayColor = new Color(195, 195, 195);
+        jTdescricao.setBackground(grayColor);
     }//GEN-LAST:event_jBcancelarActionPerformed
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed

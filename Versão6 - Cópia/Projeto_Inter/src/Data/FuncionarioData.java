@@ -35,7 +35,6 @@ public class FuncionarioData {
 
             int funcionarioId = insertPessoa(conn, obj.getNome(), obj.getData_nasc(), obj.getEndereco(), obj.getTelefone(), obj.getEmail(), obj.getRG(), obj.getCpf());
 
-            // Inserir na tabela Funcionarios
             pstmt2 = conn.prepareStatement(SQL2);
             pstmt2.setInt(1, funcionarioId);
             pstmt2.setString(2, obj.getUsuario());

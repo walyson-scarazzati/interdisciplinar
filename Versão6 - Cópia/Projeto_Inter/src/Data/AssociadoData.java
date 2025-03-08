@@ -124,6 +124,19 @@ public class AssociadoData {
         }
     }
 
+    private Integer buscarIdPorCPF(String cpf, Connection conn) throws SQLException {
+        String SQL = "SELECT id FROM Pessoas WHERE CPF = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.setString(1, cpf);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean editar(Associado obj) throws Exception {
         Conexao objConexao = new Conexao();
         Connection conn = null;
@@ -134,23 +147,32 @@ public class AssociadoData {
             conn = objConexao.getConexao();
             conn.setAutoCommit(false); // Start transaction
 
+            Integer id = buscarIdPorCPF(obj.getCpf(), conn);
+            if (id == null) {
+                conn.rollback();
+                throw new Exception("Associado não encontrado para o CPF informado.");
+            }
+
             String SQL1 = "Update Associados set profissao = ? where associado_id = ?";
             pstmt1 = conn.prepareStatement(SQL1);
             pstmt1.setString(1, obj.getProfissao());
-            pstmt1.setInt(2, obj.getId());
+            pstmt1.setInt(2, id);
             int registros = pstmt1.executeUpdate();
 
             if (registros > 0) {
                 String SQL2 = "Update Pessoas set nome = ?, data_nasc = ?, endereco = ?, telefone = ?, email = ?, rg = ?, cpf = ? where id = ?";
                 pstmt2 = conn.prepareStatement(SQL2);
                 pstmt2.setString(1, obj.getNome());
-                pstmt2.setString(2, obj.getData_nasc());
+                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String dataFormatada = outputFormat.format(inputFormat.parse(obj.getData_nasc()));
+                pstmt2.setString(2, dataFormatada);
                 pstmt2.setString(3, obj.getEndereco());
                 pstmt2.setString(4, obj.getTelefone());
                 pstmt2.setString(5, obj.getEmail());
                 pstmt2.setString(6, obj.getRG());
                 pstmt2.setString(7, obj.getCpf());
-                pstmt2.setInt(8, obj.getId());
+                pstmt2.setInt(8, id);
                 pstmt2.executeUpdate();
 
                 conn.commit(); // Commit transaction
@@ -183,10 +205,11 @@ public class AssociadoData {
         Connection conn = null;
         PreparedStatement pstmt1 = null;
         PreparedStatement pstmt2 = null;
+        PreparedStatement pstmt3 = null;
 
         try {
             conn = objConexao.getConexao();
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false);
 
             String SQL1 = "Delete from Associados where associado_id = ?";
             pstmt1 = conn.prepareStatement(SQL1);
@@ -194,25 +217,30 @@ public class AssociadoData {
             int registros = pstmt1.executeUpdate();
 
             if (registros > 0) {
+                String SQL3 = "Delete from Dependentes where associado_id = ?";
+                pstmt3 = conn.prepareStatement(SQL3);
+                pstmt3.setInt(1, id);
+                pstmt3.executeUpdate();
+
                 String SQL2 = "Delete from Pessoas where id = ?";
                 pstmt2 = conn.prepareStatement(SQL2);
                 pstmt2.setInt(1, id);
                 int registros2 = pstmt2.executeUpdate();
 
                 if (registros2 > 0) {
-                    conn.commit(); // Commit transaction
+                    conn.commit();
                     return true;
                 } else {
-                    conn.rollback(); // Rollback if deletion from Pessoas fails
+                    conn.rollback();
                     return false;
                 }
             } else {
-                conn.rollback(); // Rollback if deletion from Associados fails
+                conn.rollback();
                 return false;
             }
         } catch (SQLException e) {
             if (conn != null) {
-                conn.rollback(); // Rollback transaction on error
+                conn.rollback();
             }
             throw new Exception("Error deleting Associado: " + e.getMessage(), e);
         } finally {
@@ -222,8 +250,11 @@ public class AssociadoData {
             if (pstmt2 != null) {
                 pstmt2.close();
             }
+            if (pstmt3 != null) {
+                pstmt3.close();
+            }
             if (conn != null) {
-                conn.setAutoCommit(true); // Restore auto-commit
+                conn.setAutoCommit(true);
                 objConexao.closeConnection(conn);
             }
         }

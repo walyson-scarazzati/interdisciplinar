@@ -8,6 +8,7 @@ import Data.AssociadoData;
 import Data.CategoriaData;
 import Data.ContratoData;
 import Data.FuncionarioData;
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -208,6 +209,7 @@ public class jifContrato extends javax.swing.JInternalFrame {
         jcAssociado.setToolTipText("Selecione o Associado");
         jcAssociado.setEnabled(false);
 
+        jtNroContrato.setBackground(new java.awt.Color(195, 195, 195));
         jtNroContrato.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jtNroContrato.setToolTipText("Digite o número de contrato");
         jtNroContrato.addActionListener(new java.awt.event.ActionListener() {
@@ -254,6 +256,7 @@ public class jifContrato extends javax.swing.JInternalFrame {
         jllDataCancelamento.setText("Data Cancelamento:");
 
         jtDataCon.setEditable(false);
+        jtDataCon.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtDataCon.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -266,6 +269,7 @@ public class jifContrato extends javax.swing.JInternalFrame {
         });
 
         jtDataCancelar.setEditable(false);
+        jtDataCancelar.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtDataCancelar.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -390,7 +394,11 @@ public class jifContrato extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
         jbEditar.setEnabled(false);
-        acao = 1;// TODO add your handling code here:
+        acao = 1;
+        Color whiteColor = Color.WHITE;
+        jtNroContrato.setBackground(whiteColor);
+        jtDataCon.setBackground(whiteColor);
+        jtDataCancelar.setBackground(whiteColor);
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -408,7 +416,11 @@ public class jifContrato extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(true);
         jbEditar.setEnabled(false);
-        limparCampos();// TODO add your handling code here:
+        limparCampos();
+        Color grayColor = new Color(195, 195, 195);
+        jtNroContrato.setBackground(grayColor);
+        jtDataCon.setBackground(grayColor);
+        jtDataCancelar.setBackground(grayColor);
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed

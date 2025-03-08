@@ -5,6 +5,7 @@
 package view;
 
 import Data.CategoriaData;
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -105,11 +106,13 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
         jLvalor.setText("Valor");
 
+        jTdescricao.setBackground(new java.awt.Color(195, 195, 195));
         jTdescricao.setToolTipText("Digite a descrição");
 
         jLdescricao.setText("Descrição");
 
         jTvalor.setEditable(false);
+        jTvalor.setBackground(new java.awt.Color(195, 195, 195));
         jTvalor.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         jTvalor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,6 +329,9 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jBsalvar.setEnabled(true);
         jBcancelar.setEnabled(true);
         limparCampos();
+        Color whiteColor = Color.WHITE;
+        jTdescricao.setBackground(whiteColor);
+        jTvalor.setBackground(whiteColor);
         acao = 1;
     }//GEN-LAST:event_jBnovoActionPerformed
 
@@ -426,6 +432,9 @@ public class jifCategorias extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         limparCampos();
+        Color grayColor = new Color(195, 195, 195);
+        jTdescricao.setBackground(grayColor);
+        jTvalor.setBackground(grayColor);
     }//GEN-LAST:event_jBcancelarActionPerformed
 
     private int getSelectedRowId() {

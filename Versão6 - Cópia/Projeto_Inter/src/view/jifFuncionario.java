@@ -5,9 +5,12 @@
 package view;
 
 import Data.FuncionarioData;
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import model.Funcionario;
+import static view.jifDependente.jtCPF;
+import static view.jifDependente.jtDependente;
 
 /**
  *
@@ -108,6 +111,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         Data_Nascimento.setText("Data Nascimento");
 
         jftData_Nascimento.setEditable(false);
+        jftData_Nascimento.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jftData_Nascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -125,6 +129,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlFuncionario.setText("Funcionário");
 
         jtFuncionario.setEditable(false);
+        jtFuncionario.setBackground(new java.awt.Color(195, 195, 195));
         jtFuncionario.setToolTipText("Digite o nome ");
 
         jlEndereco.setBackground(new java.awt.Color(0, 0, 102));
@@ -132,7 +137,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlEndereco.setForeground(new java.awt.Color(0, 0, 102));
         jlEndereco.setText("Endereço");
 
-        jtEndereco.setEditable(false);
+        jtEndereco.setBackground(new java.awt.Color(195, 195, 195));
         jtEndereco.setToolTipText("Digite o Endereço");
 
         jlTelefone.setBackground(new java.awt.Color(0, 0, 102));
@@ -146,6 +151,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlSalario.setText("Salário");
 
         jtSalario.setEditable(false);
+        jtSalario.setBackground(new java.awt.Color(195, 195, 195));
         jtSalario.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
 
         jlEmail.setBackground(new java.awt.Color(0, 0, 102));
@@ -154,6 +160,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlEmail.setText("E-mail");
 
         jtEmail.setEditable(false);
+        jtEmail.setBackground(new java.awt.Color(195, 195, 195));
         jtEmail.setToolTipText("Digite o email");
 
         jlRG.setBackground(new java.awt.Color(0, 0, 102));
@@ -162,6 +169,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlRG.setText("RG");
 
         jtRG.setEditable(false);
+        jtRG.setBackground(new java.awt.Color(195, 195, 195));
         jtRG.setToolTipText("Digite o RG");
 
         jlCPF.setBackground(new java.awt.Color(0, 0, 102));
@@ -169,6 +177,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlCPF.setForeground(new java.awt.Color(0, 0, 102));
         jlCPF.setText("CPF");
 
+        jtCPF.setBackground(new java.awt.Color(195, 195, 195));
         jtCPF.setToolTipText("Digite o CPF");
 
         jlUsuario.setBackground(new java.awt.Color(0, 0, 102));
@@ -177,6 +186,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlUsuario.setText("Usuário");
 
         jtUsuario.setEditable(false);
+        jtUsuario.setBackground(new java.awt.Color(195, 195, 195));
         jtUsuario.setToolTipText("Digite o usuario para login");
 
         jlSenha.setBackground(new java.awt.Color(0, 0, 102));
@@ -185,6 +195,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jlSenha.setText("Senha");
 
         jtSenha.setEditable(false);
+        jtSenha.setBackground(new java.awt.Color(195, 195, 195));
         jtSenha.setToolTipText("Digite a senha para login");
 
         jlTipo.setBackground(new java.awt.Color(0, 0, 102));
@@ -196,6 +207,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jC_usuario_tipo.setToolTipText("Selecione o Parentesco");
 
         jtTelefone.setEditable(false);
+        jtTelefone.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("( ## ) ####-####")));
         } catch (java.text.ParseException ex) {
@@ -455,6 +467,17 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(true);
         limparCampos();
+        Color grayColor = new Color(195, 195, 195);
+        jftData_Nascimento.setBackground(grayColor);
+        jtDependente.setBackground(grayColor);
+        jtEndereco.setBackground(grayColor);
+        jtEmail.setBackground(grayColor);
+        jtTelefone.setBackground(grayColor);
+        jtSalario.setBackground(grayColor);
+        jtRG.setBackground(grayColor);
+        jtCPF.setBackground(grayColor);
+        jtUsuario.setBackground(grayColor);
+        jtSenha.setBackground(grayColor);
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
@@ -477,6 +500,17 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
         limparCampos();
+        Color whiteColor = Color.WHITE;
+        jftData_Nascimento.setBackground(whiteColor);
+        jtDependente.setBackground(whiteColor);
+        jtEndereco.setBackground(whiteColor);
+        jtEmail.setBackground(whiteColor);
+        jtTelefone.setBackground(whiteColor);
+        jtSalario.setBackground(whiteColor);
+        jtRG.setBackground(whiteColor);
+        jtCPF.setBackground(whiteColor);
+        jtUsuario.setBackground(whiteColor);
+        jtSenha.setBackground(whiteColor);
         acao = 1;
     }//GEN-LAST:event_jbNovoActionPerformed
 

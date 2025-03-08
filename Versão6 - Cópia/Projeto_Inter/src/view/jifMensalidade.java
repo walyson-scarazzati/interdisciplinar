@@ -6,6 +6,7 @@ package view;
 
 import Data.ContratoData;
 import Data.MensalidadeData;
+import java.awt.Color;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -119,6 +120,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jlDataPgto.setText("Data pgto");
 
         jtDatapgto.setEditable(false);
+        jtDatapgto.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtDatapgto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -136,6 +138,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jlDataVenc.setText("Data Vencimento");
 
         jtDataVenc.setEditable(false);
+        jtDataVenc.setBackground(new java.awt.Color(195, 195, 195));
         try {
             jtDataVenc.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -148,6 +151,7 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jlValor.setText("Valor");
 
         jtValor.setEditable(false);
+        jtValor.setBackground(new java.awt.Color(195, 195, 195));
         jtValor.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 102));
@@ -167,11 +171,18 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jlMesRef.setText("Mês Referente");
 
         jtMesRef.setEditable(false);
+        jtMesRef.setBackground(new java.awt.Color(195, 195, 195));
         jtMesRef.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jtMesRef.setToolTipText("Digite o mês de referência");
 
         jtPreco.setEditable(false);
+        jtPreco.setBackground(new java.awt.Color(195, 195, 195));
         jtPreco.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
+        jtPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtPrecoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -410,7 +421,13 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jbCancelar.setEnabled(true);
         jbPesquisar.setEnabled(false);
         limparCampos();
-        acao = 1;
+        Color whiteColor = Color.WHITE;
+        jtPreco.setBackground(whiteColor);
+        jtDatapgto.setBackground(whiteColor);
+        jtDataVenc.setBackground(whiteColor);
+        jtValor.setBackground(whiteColor);
+        jtMesRef.setBackground(whiteColor);
+        acao = 1;        
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jbNovoActionPerformed
@@ -428,7 +445,13 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbCancelar.setEnabled(false);
         jbPesquisar.setEnabled(true);
-        limparCampos();// TODO add your handling code here:
+        limparCampos();
+        Color grayColor = new Color(195, 195, 195);
+        jtPreco.setBackground(grayColor);
+        jtDatapgto.setBackground(grayColor);
+        jtDataVenc.setBackground(grayColor);
+        jtValor.setBackground(grayColor);
+        jtMesRef.setBackground(grayColor);
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
@@ -460,6 +483,10 @@ public class jifMensalidade extends javax.swing.JInternalFrame {
         
         // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameActivated
+
+    private void jtPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtPrecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtPrecoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

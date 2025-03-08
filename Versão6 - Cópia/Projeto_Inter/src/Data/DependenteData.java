@@ -111,7 +111,7 @@ public class DependenteData {
                 + " from Dependentes d, Pessoas p, Parentescos pe, Associados a "
                 + " where p.id = d.dependente_id and "
                 + " d.associado_id = a.associado_id and "
-                + " pe.parentesco_id = d.parentesco_id and p.id = ?";
+                + " pe.parentesco_id = d.parentesco_id and p.cpf = ?";
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
         pstmt.setString(1, nome);
         ResultSet rs = pstmt.executeQuery();
