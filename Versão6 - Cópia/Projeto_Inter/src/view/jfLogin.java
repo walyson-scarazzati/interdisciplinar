@@ -5,7 +5,6 @@
 package view;
 
 import Data.FuncionarioData;
-import Data.TestaConexao;
 import javax.swing.JOptionPane;
 import model.Funcionario;
 
@@ -201,16 +200,16 @@ public class jfLogin extends javax.swing.JFrame {
         FuncionarioData DAO = new FuncionarioData();
         try {
             Funcionario obj = DAO.validarUsuario(
-                jtUsuario.getText(),
-                jpfSenha.getText());
+                    jtUsuario.getText(),
+                    jpfSenha.getText());
             if (obj != null) {
                 JOptionPane.showMessageDialog(this, "Seja bem vindo !"
-                    + "\n" + jtUsuario.getText());
+                        + "\n" + jtUsuario.getText());
                 new jfPrincipal(obj).setVisible(true);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
-                    "Usuário ou senha inválidos");
+                        "Usuário ou senha inválidos");
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, "Erro:" + erro.getMessage());
@@ -222,7 +221,7 @@ public class jfLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSairActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-       
+
     }//GEN-LAST:event_jbNovoActionPerformed
 
     /**

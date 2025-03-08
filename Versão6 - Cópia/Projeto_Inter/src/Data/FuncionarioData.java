@@ -4,9 +4,14 @@
  */
 package Data;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import model.Funcionario;
 
@@ -18,40 +23,88 @@ public class FuncionarioData {
 
     public boolean incluir(Funcionario obj) throws Exception {
         Conexao objConexao = new Conexao();
-        objConexao.getConexao().setAutoCommit(false);
-        String SQL = "Insert into Pessoas values (?,?,?,?,?,?,?,?)";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1, obj.getId());
-        pstmt.setString(2, obj.getNome());
-        pstmt.setString(3, convertToDate(obj.getData_nasc()));
-        pstmt.setString(4, obj.getEndereco());
-        pstmt.setString(5, obj.getTelefone());
-        pstmt.setString(6, obj.getEmail());
-        pstmt.setString(7, obj.getRG());
-        pstmt.setString(8, obj.getCpf());
-        int registros = pstmt.executeUpdate();
-        if (registros > 0) {
-            String SQL2 = "Insert into Funcionarios values (?,?,?,?)";
-            PreparedStatement pstmt2 = objConexao.getConexao().prepareStatement(SQL2);
-            pstmt2.setString(1, obj.getUsuario());
-            pstmt2.setString(2, obj.getSenha());
-            pstmt2.setDouble(3, obj.getSalario());
-            pstmt2.setInt(4, obj.getTipo());
-            int registros2 = pstmt2.executeUpdate();
-            if (registros2 > 0) {
-                objConexao.getConexao().commit();
-                objConexao.getConexao().setAutoCommit(true);
-                return true;
-            } else;
-            {
-                objConexao.getConexao().rollback();
-                objConexao.getConexao().setAutoCommit(true);
-                return false;
+        Connection conn = null;
+        PreparedStatement pstmt2 = null;
+        ResultSet rs = null;
+
+        String SQL2 = "INSERT INTO Funcionarios (funcionario_id, usuario, senha, salario, tipo) VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            conn = objConexao.getConexao();
+            conn.setAutoCommit(false);
+
+            int funcionarioId = insertPessoa(conn, obj.getNome(), obj.getData_nasc(), obj.getEndereco(), obj.getTelefone(), obj.getEmail(), obj.getRG(), obj.getCpf());
+
+            // Inserir na tabela Funcionarios
+            pstmt2 = conn.prepareStatement(SQL2);
+            pstmt2.setInt(1, funcionarioId);
+            pstmt2.setString(2, obj.getUsuario());
+            pstmt2.setString(3, obj.getSenha());
+            pstmt2.setDouble(4, obj.getSalario());
+            pstmt2.setInt(5, obj.getTipo());
+            pstmt2.executeUpdate();
+
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback();
             }
-        } else;
-        return false;
+            throw new Exception("Error adding Funcionario with Dependentes: " + e.getMessage(), e);
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt2 != null) {
+                pstmt2.close();
+            }
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    objConexao.closeConnection(conn);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
-    
+
+    private int insertPessoa(Connection conn, String nome, String dataNasc, String endereco, String telefone, String email, String rg, String cpf) throws SQLException, ParseException {
+        String SQL = "INSERT INTO Pessoas (nome, data_nasc, endereco, telefone, email, RG, CPF) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = originalFormat.parse(dataNasc);
+        String formattedDate = targetFormat.format(date);
+
+        try {
+            pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, nome);
+            pstmt.setString(2, formattedDate);
+            pstmt.setString(3, endereco);
+            pstmt.setString(4, telefone);
+            pstmt.setString(5, email);
+            pstmt.setString(6, rg);
+            pstmt.setString(7, cpf);
+            pstmt.executeUpdate();
+
+            rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Failed to insert into Pessoas, no ID obtained.");
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+        }
+    }
+
     private String convertToDate(String date) throws Exception {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -88,44 +141,88 @@ public class FuncionarioData {
         return false;
     }
 
-    public boolean excluir(int id) throws Exception {
+    public boolean excluir(String cpf) throws Exception {
         Conexao objConexao = new Conexao();
-        String SQL = "Delete from Contratos_Titulos where funcionario_id = ?";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1, id);
-        int registros = pstmt.executeUpdate();
-        if (registros > 0) {
-            String SQL2 = "Delete from Funcionarios where funcionario_id = ?";
-            PreparedStatement pstmt2 = objConexao.getConexao().prepareStatement(SQL2);
-            pstmt2.setInt(1, id);
-            int registros2 = pstmt.executeUpdate();
-            if (registros2 > 0) {
-                String SQL3 = "Delete from Pessoas where id = ?";
-                PreparedStatement pstmt3 = objConexao.getConexao().prepareStatement(SQL3);
-                pstmt3.setInt(1, id);
-                int registros3 = pstmt3.executeUpdate();
-                if (registros3 > 0) {
-                    return true;
-                } else;
+        Connection conn = null;
+        PreparedStatement pstmt1 = null;
+        PreparedStatement pstmt2 = null;
+        PreparedStatement pstmt3 = null;
+
+        try {
+            conn = objConexao.getConexao();
+            conn.setAutoCommit(false);
+            String SQL1 = "SELECT id FROM Pessoas WHERE CPF = ?";
+            pstmt1 = conn.prepareStatement(SQL1);
+            pstmt1.setString(1, cpf);
+            ResultSet rs = pstmt1.executeQuery();
+
+            int id = 0;
+            if (rs.next()) {
+                id = rs.getInt("id"); 
+            } else {
+                throw new SQLException("Pessoa com CPF " + cpf + " não encontrada.");
             }
-            return false;
+
+            String SQL2 = "DELETE FROM Funcionarios WHERE funcionario_id = ?";
+            pstmt2 = conn.prepareStatement(SQL2);
+            pstmt2.setInt(1, id);
+            int registros = pstmt2.executeUpdate();
+
+            if (registros > 0) {
+                String SQL3 = "DELETE FROM Pessoas WHERE id = ?";
+                pstmt3 = conn.prepareStatement(SQL3);
+                pstmt3.setInt(1, id);
+                int registros2 = pstmt3.executeUpdate();
+
+                if (registros2 > 0) {
+                    conn.commit();
+                    return true;
+                } else {
+                    conn.rollback();
+                    return false;
+                }
+            } else {
+                conn.rollback();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw new Exception("Erro ao excluir funcionário com CPF " + cpf + ": " + e.getMessage(), e);
+        } finally {
+            if (pstmt1 != null) {
+                pstmt1.close();
+            }
+            if (pstmt2 != null) {
+                pstmt2.close();
+            }
+            if (pstmt3 != null) {
+                pstmt3.close();
+            }
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                objConexao.closeConnection(conn);
+            }
         }
-        return true;
     }
 
-    public Funcionario pesquisarFuncionarios(int id) throws Exception {
+    public Funcionario pesquisarFuncionarios(String cpf) throws Exception {
         Conexao objConexao = new Conexao();
         Funcionario obj = null;
         String SQL = "select id, nome, data_nasc, endereco, telefone, email, rg, cpf, usuario, senha, salario, tipo from Funcionarios f, Pessoas p"
-                + " where p.id = f.funcionario_id and  p.id = ? ";
+                + " where p.id = f.funcionario_id and  p.cpf = ? ";
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
-        pstmt.setInt(1, id);
+        pstmt.setString(1, cpf);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
             obj = new Funcionario();
             obj.setId(rs.getInt("id"));
             obj.setNome(rs.getString("nome"));
-            obj.setData_nasc(rs.getString("data_nasc"));
+            Date dataNasc = rs.getDate("data_nasc");
+            String dataNascFormatada = (dataNasc != null) ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : "";
+            obj.setData_nasc(dataNascFormatada);
             obj.setEndereco(rs.getString("endereco"));
             obj.setTelefone(rs.getString("telefone"));
             obj.setEmail(rs.getString("email"));
@@ -155,7 +252,6 @@ public class FuncionarioData {
             obj.setSenha(rs.getString("senha"));
             obj.setTipo(rs.getInt("tipo"));
         }
-
         return obj;
 
     }

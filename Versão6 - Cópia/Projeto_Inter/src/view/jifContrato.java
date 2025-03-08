@@ -11,7 +11,6 @@ import Data.FuncionarioData;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import model.Associado;
 import model.Categoria;
 import model.Contrato;
@@ -471,6 +470,7 @@ public class jifContrato extends javax.swing.JInternalFrame {
                     }
 
                     jcStatus.setSelectedIndex(obj.getStatus());
+                    jcStatus.setEnabled(true);
                     jcCategoria.setEnabled(true);
                     jcFuncionario.setEnabled(true);
                     jbNovo.setEnabled(false);

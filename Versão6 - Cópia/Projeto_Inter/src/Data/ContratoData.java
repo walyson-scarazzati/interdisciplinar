@@ -39,10 +39,9 @@ public class ContratoData {
             pstmt.setString(2, formattedDate);
         }
 
-        // Handle data_cancelamento
         String dataCancelamento = obj.getData_cancelamento().trim();
         if (dataCancelamento.isEmpty() || dataCancelamento.equals("/  /")) {
-            pstmt.setNull(3, java.sql.Types.DATE); // or handle the default value
+            pstmt.setNull(3, java.sql.Types.DATE);
         } else {
             Date date2 = originalFormat.parse(dataCancelamento);
             String formattedDate2 = targetFormat.format(date2);
@@ -65,18 +64,12 @@ public class ContratoData {
 
     public boolean excluir(int id) throws Exception {
         Conexao objConexao = new Conexao();
-        String SQL2 = "Delete from Mensalidades  where contrato_id= ?";
-        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL2);
+        String SQL = "DELETE FROM Contratos_Titulos WHERE id = ?";
+        PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
         pstmt.setInt(1, id);
         int registros = pstmt.executeUpdate();
         if (registros > 0) {
-            String SQL = "Delete from  Contratos_Titulos where id = ?";
-            PreparedStatement pstmt2 = objConexao.getConexao().prepareStatement(SQL);
-            pstmt.setInt(1, id);
-            int registros2 = pstmt2.executeUpdate();
-            if (registros2 > 0) {
-                objConexao.getConexao().commit();
-            }
+
             return true;
         } else {
             return false;
@@ -109,10 +102,16 @@ public class ContratoData {
         PreparedStatement pstmt = objConexao.getConexao().prepareStatement(SQL);
         pstmt.setInt(1, id);
         ResultSet rs = pstmt.executeQuery();
+
         if (rs.next()) {
             obj = new Contrato();
-            obj.setData_contrato(rs.getString("data_contrato"));
-            obj.setData_cancelamento(rs.getString("data_cancel"));
+            Date dataContrato = rs.getDate("data_contrato");
+            String dataContratoFormatada = (dataContrato != null) ? new SimpleDateFormat("dd/MM/yyyy").format(dataContrato) : "";
+            obj.setData_contrato(dataContratoFormatada);
+
+            Date dataCancel = rs.getDate("data_cancel");
+            String dataCancelFormatada = (dataCancel != null) ? new SimpleDateFormat("dd/MM/yyyy").format(dataCancel) : "";
+            obj.setData_cancelamento(dataCancelFormatada);
             obj.setStatus(rs.getInt("status"));
             Associado obj2 = new Associado();
             obj2.setId(rs.getInt("associado_id"));
@@ -140,7 +139,7 @@ public class ContratoData {
             obj.setNro_contrato(rs.getInt("id"));
             obj.setData_contrato(rs.getString("data_contrato"));
             obj.setData_cancelamento(rs.getString("data_cancel"));
-//            obj.setStatus (rs.getInt("status"));
+            obj.setStatus(rs.getInt("status"));
             dados.add(obj);
         }
         return dados;

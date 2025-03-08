@@ -55,11 +55,11 @@ public class Modalidade_esportivaData {
                 obj = new Modalidade_esportiva();
                 obj.setId(rs.getInt("id"));
                 obj.setDescricao(rs.getString("descricao"));
-                
+
                 // Assuming Categoria is set elsewhere
                 Categoria categoria = new Categoria();
-                    categoria.setId(rs.getInt("categoria_id"));
-                    obj.setCategoria(categoria);
+                categoria.setId(rs.getInt("categoria_id"));
+                obj.setCategoria(categoria);
             }
         } catch (Exception e) {
             throw new Exception("Erro ao pesquisar modalidade esportiva: " + e.getMessage(), e);
@@ -85,7 +85,6 @@ public class Modalidade_esportivaData {
                     obj.setId(rs.getInt("id"));
                     obj.setDescricao(rs.getString("descricao"));
 
-                    // Populate the Categoria object
                     Categoria categoria = new Categoria();
                     categoria.setId(rs.getInt("categoria_id"));
                     obj.setCategoria(categoria);
@@ -124,34 +123,31 @@ public class Modalidade_esportivaData {
         try {
             conn = Conexao.getConexao();
 
-            // Start transaction
             conn.setAutoCommit(false);
 
-            // Remove dependent records
             String removeDependentsSQL = "DELETE FROM Categoria_modalidades WHERE modalidade_id = ?";
             pstmt = conn.prepareStatement(removeDependentsSQL);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
 
-            // Remove the record from Modalidades_Esportes
             String deleteSQL = "DELETE FROM Modalidades_Esportes WHERE id = ?";
             pstmt = conn.prepareStatement(deleteSQL);
             pstmt.setInt(1, id);
             int registros = pstmt.executeUpdate();
 
             if (registros > 0) {
-                conn.commit(); // Commit transaction
+                conn.commit();
                 return true;
             } else {
-                conn.rollback(); // Rollback transaction
+                conn.rollback();
                 return false;
             }
         } catch (Exception e) {
             if (conn != null) {
                 try {
-                    conn.rollback(); // Rollback on exception
+                    conn.rollback();
                 } catch (SQLException se) {
-                    // Handle rollback exception
+
                 }
             }
             throw new Exception("Erro ao excluir modalidade esportiva: " + e.getMessage(), e);
@@ -188,18 +184,14 @@ public class Modalidade_esportivaData {
 
         try (Connection conn = Conexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(SQL); ResultSet rs = pstmt.executeQuery()) {
 
-            // Adding the default option
             dados.add(new Modalidade_esportiva(0, "<Selecione>", null));
 
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String descricao = rs.getString("descricao");
 
-                // Fetching Categoria details
-                //int categoriaId = rs.getInt("categoria_id");
                 String categoriaDescricao = rs.getString("categoria_descricao");
-                //Categoria categoria = new Categoria(categoriaId, categoriaDescricao); // Assuming Categoria has a constructor
-                Categoria categoria = new Categoria(categoriaDescricao); // Assuming Categoria has a constructor
+                Categoria categoria = new Categoria(categoriaDescricao);
 
                 dados.add(new Modalidade_esportiva(id, descricao, categoria));
             }

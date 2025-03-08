@@ -9,7 +9,6 @@ import Data.MensalidadeData;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import model.Contrato;
 import model.Mensalidade;
 

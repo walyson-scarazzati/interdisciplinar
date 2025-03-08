@@ -16,8 +16,8 @@ public class JMoneyField extends JFormattedTextField {
     private static final long serialVersionUID = -5712106034509737967L;
     private static final SimpleAttributeSet nullAttribute = new SimpleAttributeSet();
 
-    /** 
-     * Creates a new instance of JMoneyField 
+    /**
+     * Creates a new instance of JMoneyField
      */
     public JMoneyField() {
         this.setHorizontalAlignment(JTextField.RIGHT);
@@ -45,8 +45,8 @@ public class JMoneyField extends JFormattedTextField {
 
     private final class MoneyFieldDocument extends PlainDocument {
 
-        /** 
-         *  
+        /**
+         *
          */
         private static final long serialVersionUID = -3802846632709128803L;
 
@@ -82,7 +82,7 @@ public class JMoneyField extends JFormattedTextField {
                         }
                     } else {
                         mascarado.insert(mascarado.length() - 2, ",");
-                   }
+                    }
 
                     if (mascarado.length() > 216) {
                         mascarado.insert(mascarado.length() - 16, ' ');
@@ -116,4 +116,4 @@ public class JMoneyField extends JFormattedTextField {
             }
         }
     }
-}  
+}

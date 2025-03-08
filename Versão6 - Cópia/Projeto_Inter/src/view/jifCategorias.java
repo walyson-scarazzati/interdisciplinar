@@ -5,7 +5,6 @@
 package view;
 
 import Data.CategoriaData;
-import Data.Modalidade_esportivaData;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -355,6 +354,7 @@ public class jifCategorias extends javax.swing.JInternalFrame {
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
         jTdescricao.setEditable(true);
+        jTvalor.setEditable(true);
         jBnovo.setEnabled(false);
         jBsalvar.setEnabled(true);
         jBcancelar.setEnabled(true);

@@ -9,14 +9,17 @@ package model;
  * @author MaqLab
  */
 public class Parentesco {
+
     private int id;
     private String descricao;
+
     // construtor Com e Sem parâmetros
-    public Parentesco(){
+    public Parentesco() {
         id = 0;
         descricao = "";
     }
-    public Parentesco(int id, String descricao){
+
+    public Parentesco(int id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
@@ -36,10 +39,11 @@ public class Parentesco {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
     @Override
-    public String toString(){
-       return + getId()+
-               "- " + getDescricao();
+    public String toString() {
+        return +getId()
+                + "- " + getDescricao();
     }
-    
+
 }

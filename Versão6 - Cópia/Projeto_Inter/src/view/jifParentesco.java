@@ -419,25 +419,25 @@ public class jifParentesco extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbExcluir.setEnabled(false);
         acao = 2;
-    try {
-        int selectedRow = getSelectedRowId();
+        try {
+            int selectedRow = getSelectedRowId();
 
-        if (selectedRow >= 0) {
+            if (selectedRow >= 0) {
 
-            DAO = new ParentescoData();
-            obj = DAO.pesquisarPorId(selectedRow);
+                DAO = new ParentescoData();
+                obj = DAO.pesquisarPorId(selectedRow);
 
-            if (obj != null) {
-                jtDescricao.setText(obj.getDescricao());
-                acao = 2;
+                if (obj != null) {
+                    jtDescricao.setText(obj.getDescricao());
+                    acao = 2;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
+                }
+
             } else {
-                JOptionPane.showMessageDialog(this, "Erro ao carregar os dados para edição.");
+                JOptionPane.showMessageDialog(this, "Selecione uma linha para editar.");
             }
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione uma linha para editar.");
-        }
-    } catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao excluir: " + e.getMessage());
         }
     }//GEN-LAST:event_jbEditarActionPerformed

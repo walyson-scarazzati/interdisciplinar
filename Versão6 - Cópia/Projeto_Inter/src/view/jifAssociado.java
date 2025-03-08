@@ -6,17 +6,12 @@ package view;
 
 import Data.AssociadoData;
 import Data.DependenteData;
-import Data.FuncionarioData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 import model.Associado;
 import model.Dependente;
 
@@ -487,12 +482,6 @@ public class jifAssociado extends javax.swing.JInternalFrame {
         ini.toFront();
         ini.setVisible(true);
 
-//        //atualiza o jtable
-//        DefaultTableModel model
-//                = (DefaultTableModel) jtbDependentes.getModel();
-//        
-//        model.addRow(new String[]{"sdfas sadf asdf "});
-
     }//GEN-LAST:event_jbAdicionarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
@@ -627,32 +616,39 @@ public class jifAssociado extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtbDependentesMouseClicked
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
-
         try {
+            // Assuming AssociadoData is your data access object
             DAO = new AssociadoData();
-            obj = DAO.pesquisar(jtCPF.getText());
+            obj = DAO.pesquisar(jtCPF.getText()); // Search for the associated record by CPF
+
             if (obj == null) {
                 JOptionPane.showMessageDialog(this, "Registro não encontrado");
             } else {
+                // Set the associated name
                 jtAssociado.setText(obj.getNome());
 
+                // Get and handle the date of birth
                 String dataNascimento = obj.getData_nasc();
                 if (dataNascimento != null && !dataNascimento.trim().isEmpty()) {
-                    // Convert date format from yyyy-MM-dd to dd/MM/yyyy
-                    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    // Correct format: "dd/MM/yyyy" for the input data
+                    SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");  // Format used for parsing
+                    SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");   // Format for displaying
+
                     try {
+                        // Parsing the date string into a Date object
                         Date date = originalFormat.parse(dataNascimento);
+                        // Formatting the Date object back into a string
                         String formattedDate = targetFormat.format(date);
+                        // Set the formatted date to the text field
                         jftData_Nascimento.setText(formattedDate);
                     } catch (ParseException e) {
-                        // Handle parsing error
+                        // Handle parsing errors
                         JOptionPane.showMessageDialog(this, "Erro ao formatar a data: " + e.getMessage());
                     }
                 } else {
-                    jftData_Nascimento.setText(""); // Handle null or empty date
+                    // Handle case where date is null or empty
+                    jftData_Nascimento.setText("");
                 }
-
                 jtEndereco.setText(obj.getEndereco());
                 jtTelefone.setText(String.valueOf(obj.getTelefone()));
                 jtEmail.setText(obj.getEmail());
@@ -666,10 +662,10 @@ public class jifAssociado extends javax.swing.JInternalFrame {
                 jbNovo.setEnabled(false);
                 jbSalvar.setEnabled(false);
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao pesquisar" + ex.getMessage());
+        } catch (Exception e) {
+            // Handle any other exception
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar associado: " + e.getMessage());
         }
-
     }//GEN-LAST:event_jbPesquisarActionPerformed
 
     private void jtRGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtRGActionPerformed

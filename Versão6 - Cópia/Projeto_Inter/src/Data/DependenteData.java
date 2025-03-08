@@ -8,8 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
-import model.Associado;
 import model.Dependente;
 import model.Parentesco;
 
@@ -51,7 +51,7 @@ public class DependenteData {
             return false;
         }
     }
-    
+
     private String convertToDate(String date) throws Exception {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -119,7 +119,9 @@ public class DependenteData {
             obj = new Dependente();
             obj.setId(rs.getInt("id"));
             obj.setNome(rs.getString("nome"));
-            obj.setData_nasc(rs.getString("data_nasc"));
+            Date dataNasc = rs.getDate("data_nasc");
+            String dataNascFormatada = (dataNasc != null) ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : "";
+            obj.setData_nasc(dataNascFormatada);
             obj.setEndereco(rs.getString("endereco"));
             obj.setTelefone(rs.getString("telefone"));
             obj.setEmail(rs.getString("email"));

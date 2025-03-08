@@ -9,20 +9,20 @@ package model;
  * @author MaqLab
  */
 public class Mensalidade {
+
     private int id;
     private float preco;
-    private String mes_ref; 
+    private String mes_ref;
     private String Data_venc;
     private String Data_pgto;
     private float valor;
     private Contrato contrato;
 
-
-    public Mensalidade (){
+    public Mensalidade() {
         id = 0;
         preco = 0;
         Data_pgto = "";
-       Data_venc = "";
+        Data_venc = "";
         valor = 0;
         mes_ref = "";
         contrato = new Contrato();
@@ -35,9 +35,8 @@ public class Mensalidade {
         this.Data_venc = Data_venc;
         this.mes_ref = mes_ref;
         this.valor = valor;
-         this.contrato = contrato;
+        this.contrato = contrato;
     }
-            
 
     public int getId() {
         return id;
@@ -97,9 +96,7 @@ public class Mensalidade {
 
     @Override
     public String toString() {
-        return  + id + "- R$:" + preco + "-Data de vencimento:" + Data_venc;
+        return +id + "- R$:" + preco + "-Data de vencimento:" + Data_venc;
     }
 
-        
-    
 }

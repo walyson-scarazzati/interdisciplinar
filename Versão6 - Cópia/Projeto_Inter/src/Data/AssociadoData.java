@@ -12,14 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 import model.Associado;
 import model.Dependente;
 import model.Parentesco;
-import static view.jifAssociado.vetorDependentes;
 
 /**
  *
@@ -256,7 +253,9 @@ public class AssociadoData {
                         obj = new Associado();
                         obj.setId(rs.getInt("id"));
                         obj.setNome(rs.getString("nome"));
-                        obj.setData_nasc(rs.getString("data_nasc"));
+                        Date dataNasc = rs.getDate("data_nasc");
+                        String dataNascFormatada = (dataNasc != null) ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : "";
+                        obj.setData_nasc(dataNascFormatada);
                         obj.setEndereco(rs.getString("endereco"));
                         obj.setTelefone(rs.getString("telefone"));
                         obj.setEmail(rs.getString("email"));
@@ -264,7 +263,6 @@ public class AssociadoData {
                         obj.setCpf(rs.getString("cpf"));
                         obj.setProfissao(rs.getString("profissao"));
 
-                        // Fetch Dependentes
                         try (PreparedStatement pstmtDependentes = conn.prepareStatement(SQLDependentes)) {
                             pstmtDependentes.setInt(1, obj.getId());
                             try (ResultSet rsDependentes = pstmtDependentes.executeQuery()) {
@@ -273,14 +271,15 @@ public class AssociadoData {
                                     Dependente dependente = new Dependente();
                                     dependente.setId(rsDependentes.getInt("dependente_id"));
                                     dependente.setNome(rsDependentes.getString("nome"));
-                                    dependente.setData_nasc(rsDependentes.getString("data_nasc"));
+                                    Date dataNascdependente = rs.getDate("data_nasc");
+                                    String dataNascdependenteFormatada = (dataNasc != null) ? new SimpleDateFormat("dd/MM/yyyy").format(dataNascdependente) : "";
+                                    obj.setData_nasc(dataNascdependenteFormatada);
                                     dependente.setEndereco(rsDependentes.getString("endereco"));
                                     dependente.setTelefone(rsDependentes.getString("telefone"));
                                     dependente.setEmail(rsDependentes.getString("email"));
                                     dependente.setRG(rsDependentes.getString("rg"));
                                     dependente.setCpf(rsDependentes.getString("cpf"));
 
-                                    // Assuming Parentesco is another object
                                     Parentesco parentesco = new Parentesco();
                                     parentesco.setId(rsDependentes.getInt("parentesco_id"));
                                     dependente.setParentesco(parentesco);

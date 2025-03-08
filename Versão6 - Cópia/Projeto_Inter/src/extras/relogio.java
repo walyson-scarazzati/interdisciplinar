@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package extras;
 
 import java.awt.event.ActionEvent;
@@ -20,9 +19,9 @@ public class relogio extends JLabel implements ActionListener {
     public relogio() {
         Timer t = new Timer(1000, this);
         t.start();
-  }
+    }
 
-  public void actionPerformed(ActionEvent ae) {
+    public void actionPerformed(ActionEvent ae) {
         String mascaraHora = "HH:mm:ss";
         String hora;
         java.util.Date agora = new java.util.Date();

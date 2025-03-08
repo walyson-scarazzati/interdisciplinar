@@ -15,8 +15,7 @@ public class splash extends javax.swing.JWindow {
      */
     public splash() {
         initComponents();
-        
-        
+
     }
 
     /**
@@ -116,15 +115,15 @@ public class splash extends javax.swing.JWindow {
             Thread tempo = new Thread();
             tempo.start();
             obj.setVisible(true);
-            for(int i=0;i<=100;i++){
+            for (int i = 0; i <= 100; i++) {
                 barraProgresso.setValue(i);
                 tempo.sleep(50);
             }
             tempo.sleep(200);
             obj.dispose();
             new jfLogin().setVisible(true);
-        }catch(Exception erro) {
-            
+        } catch (Exception erro) {
+
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -39,7 +39,7 @@ public class jifModalidade extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void jtbPesquisarMouseClicked(java.awt.event.MouseEvent evt) {
         int selectedRow = jtbPesquisar.getSelectedRow();
         if (selectedRow >= 0) {
@@ -60,7 +60,7 @@ public class jifModalidade extends javax.swing.JInternalFrame {
 
             for (Modalidade_esportiva modalidade : dados) {
                 Vector<Object> row = new Vector<>();
-                row.add(modalidade.getDescricao()); 
+                row.add(modalidade.getDescricao());
                 Categoria categoria = modalidade.getCategoria();
                 if (categoria != null) {
                     row.add(categoria.getDescricao());

@@ -4,10 +4,6 @@
  */
 package view;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.util.Locale;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import model.Funcionario;
 
@@ -21,13 +17,14 @@ public class jfPrincipal extends javax.swing.JFrame {
      * Creates new form jfPrincipal
      */
     public jfPrincipal() {
-        initComponents();        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     public jfPrincipal(Funcionario obj) {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+
         if (obj.getTipo() == 1) { //comum  
             jmCadastrar.setEnabled(true);
             jmControlePagamento.setEnabled(true);
@@ -191,9 +188,9 @@ public class jfPrincipal extends javax.swing.JFrame {
 
 //           new pgto().setVisible(true); 
         GereciamentoPagamento obj = new GereciamentoPagamento();
-         int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
         jdpPrincipal.add(obj);
         obj.setVisible(true);
 
@@ -206,19 +203,19 @@ public class jfPrincipal extends javax.swing.JFrame {
     private void jmiParentescoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiParentescoActionPerformed
         jifParentesco obj = new jifParentesco();
         jdpPrincipal.add(obj);
-        
-             int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
         obj.setVisible(true);
     }//GEN-LAST:event_jmiParentescoActionPerformed
 
     private void jmiModalidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiModalidadeActionPerformed
-        jifModalidade obj = new jifModalidade();        
+        jifModalidade obj = new jifModalidade();
         jdpPrincipal.add(obj);
-             int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
         obj.setVisible(true);
 
         // TODO add your handling code here:
@@ -226,18 +223,18 @@ public class jfPrincipal extends javax.swing.JFrame {
 
     private void jmiMensalidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiMensalidadeActionPerformed
         jifMensalidade obj = new jifMensalidade();
-             int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
         jdpPrincipal.add(obj);
         obj.setVisible(true);
     }//GEN-LAST:event_jmiMensalidadeActionPerformed
 
     private void jmiFuncionariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiFuncionariosActionPerformed
         jifFuncionario obj = new jifFuncionario();
-             int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
         jdpPrincipal.add(obj);
         obj.setVisible(true);
 
@@ -246,31 +243,31 @@ public class jfPrincipal extends javax.swing.JFrame {
 
     private void jmiDependenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiDependenteActionPerformed
         jifDependente obj = new jifDependente();
-             int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
         jdpPrincipal.add(obj);
         obj.setVisible(true);
     }//GEN-LAST:event_jmiDependenteActionPerformed
 
     private void jmiContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiContratoActionPerformed
         jifContrato obj = new jifContrato();
-        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
-        jdpPrincipal.add(obj);        
-        
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
+        jdpPrincipal.add(obj);
+
         obj.setVisible(true);
     }//GEN-LAST:event_jmiContratoActionPerformed
 
     private void jmiCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCategoriaActionPerformed
         jifCategorias obj = new jifCategorias();
-        
-        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-       // obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
-        jdpPrincipal.add(obj); 
-                
+
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        // obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
+        jdpPrincipal.add(obj);
+
         obj.setVisible(true);
 
         // TODO add your handling code here:
@@ -278,10 +275,10 @@ public class jfPrincipal extends javax.swing.JFrame {
 
     private void jmiAssociadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAssociadoActionPerformed
         jifAssociado obj = new jifAssociado();
-             int x1 = (jdpPrincipal.getSize().width - obj.getSize().width)/2;        
-        
-        obj.setBounds(x1,80,obj.getSize().width,obj.getSize().height);
-        jdpPrincipal.add(obj);        
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
+        jdpPrincipal.add(obj);
         obj.setVisible(true);
     }//GEN-LAST:event_jmiAssociadoActionPerformed
 
@@ -320,7 +317,7 @@ public class jfPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jfPrincipal().setVisible(true);                
+                new jfPrincipal().setVisible(true);
             }
         });
     }

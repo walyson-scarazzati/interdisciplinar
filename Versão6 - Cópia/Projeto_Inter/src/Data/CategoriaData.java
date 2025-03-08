@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 import model.Categoria;
-import model.Modalidade_esportiva;
 
 /**
  *
@@ -129,9 +128,9 @@ public class CategoriaData {
         }
         return dados;
     }
-    
+
     public Categoria pesquisarPorId(int id) throws Exception {
-      Categoria obj = null;
+        Categoria obj = null;
         Conexao objConexao = new Conexao();
         String SQL = "SELECT * FROM Categorias WHERE id = ? ";
 
@@ -150,7 +149,7 @@ public class CategoriaData {
         } catch (Exception e) {
             throw new Exception("Erro ao pesquisar modalidade esportiva: " + e.getMessage(), e);
         }
-         return obj;
+        return obj;
     }
 
 }

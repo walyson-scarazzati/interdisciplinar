@@ -9,26 +9,26 @@ package model;
  * @author MaqLab
  */
 public class Categoria {
+
     private int id;
     private String descricao;
-    private float  valor;
-    
-    
+    private float valor;
+
     // Construtores Com e Sem parâmetros
-    public Categoria(){
-      id = 0;
-      descricao = "";
-      valor     = 0;
-     
-      
+    public Categoria() {
+        id = 0;
+        descricao = "";
+        valor = 0;
+
     }
-    public Categoria(int id, String descricao, float valor){
-      this.id = id ;
-      this.descricao = descricao;
-      this.valor     = valor;
-    
+
+    public Categoria(int id, String descricao, float valor) {
+        this.id = id;
+        this.descricao = descricao;
+        this.valor = valor;
+
     }
-    
+
     public Categoria(String descricao) {
         this.id = id;
         this.descricao = descricao;
@@ -50,8 +50,8 @@ public class Categoria {
     public void setValor(float valor) {
         this.valor = valor;
     }
-    
-     public void setId(int id) {
+
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -61,10 +61,7 @@ public class Categoria {
 
     @Override
     public String toString() {
-        return  + id + "-" + descricao + "- R$:" + valor;
+        return +id + "-" + descricao + "- R$:" + valor;
     }
 
-   
-    
-      
 }

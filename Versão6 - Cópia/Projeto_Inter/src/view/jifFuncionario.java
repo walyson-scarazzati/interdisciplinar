@@ -4,12 +4,10 @@
  */
 package view;
 
-import Data.AssociadoData;
 import Data.FuncionarioData;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import model.Funcionario;
-import static view.jifAssociado.obj;
 
 /**
  *
@@ -510,7 +508,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
 
         try {
-            if (DAO.excluir(1)) {
+            if (DAO.excluir(jtCPF.getText())) {
                 JOptionPane.showMessageDialog(this, "Registro excluído com sucesso !");
                 jbCancelarActionPerformed(evt);
             } else {
@@ -530,7 +528,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
 
         try {
             DAO = new FuncionarioData();
-            obj = DAO.pesquisarFuncionarios(1);
+            obj = DAO.pesquisarFuncionarios(jtCPF.getText());
             if (obj == null) {
                 JOptionPane.showMessageDialog(this, "Registro não encontrado");
             } else {
@@ -629,7 +627,7 @@ public class jifFuncionario extends javax.swing.JInternalFrame {
             msg += "\nSalario";
         }
         if (jtEmail.getText().equals("")) {
-            msg += "\nnEmail";
+            msg += "\nEmail";
         }
         if (jtRG.getText().equals("")) {
             msg += "\nRG";

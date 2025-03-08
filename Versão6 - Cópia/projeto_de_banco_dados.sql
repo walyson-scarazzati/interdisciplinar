@@ -13,7 +13,11 @@ CREATE TABLE Pessoas (
   telefone  VARCHAR(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   email     VARCHAR(40)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   RG        VARCHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  CPF       VARCHAR(11)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+  CPF       VARCHAR(11)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  CONSTRAINT UNIQUE (RG),
+  CONSTRAINT UNIQUE (CPF),
+  CONSTRAINT UNIQUE (email),
+  CONSTRAINT unique_cpf_rg_email UNIQUE (CPF, RG, email)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Table: Associados
