@@ -20,6 +20,15 @@ import model.Parentesco;
  */
 public class DependenteData {
 
+    /** R1.12 - quantidade de dependentes cadastrados. */
+    public int contarDependentes() throws Exception {
+        Conexao objConexao = new Conexao();
+        String sql = "select count(*) total from Dependentes";
+        try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            return rs.next() ? rs.getInt("total") : 0;
+        }
+    }
+
     public boolean incluir(Dependente obj) throws Exception {
         Conexao objConexao = new Conexao();
         try (Connection conn = objConexao.getConexao()) {

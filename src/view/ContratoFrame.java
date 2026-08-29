@@ -381,7 +381,8 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtNroContratoActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-        jtNroContrato.setEditable(true);
+        jtNroContrato.setEditable(false);
+        jtNroContrato.setText("(gerado automaticamente ao salvar)");
         jtDataCon.setEditable(true);
         jtDataCancelar.setEditable(true);
         jcStatus.setEnabled(true);
@@ -432,7 +433,12 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
                     DAO = new ContratoData();
                     if (acao == 1) {
                         if (DAO.incluir(obj)) {
-                            JOptionPane.showMessageDialog(this, "Salvo com sucesso !");
+                            JOptionPane.showMessageDialog(this, "Salvo com sucesso !\n"
+                                    + "Nº do título gerado: " + obj.getNroContrato() + "\n"
+                                    + "Valor do título (" + obj.getCategoria().getDescricao() + "): R$ "
+                                    + String.format("%.2f", obj.getCategoria().getValor()) + "\n"
+                                    + "Data da compra: " + obj.getDataContrato() + "\n"
+                                    + "As 12 mensalidades do contrato já foram geradas.");
                             jbCancelarActionPerformed(evt);
                         }
                     }
@@ -493,6 +499,14 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
                     jbPesquisar.setEnabled(false);
                     jbEditar.setEnabled(true);
 
+                    // R1.7 - valor total e data da compra do título
+                    Categoria categoriaCompleta = new CategoriaData().pesquisarPorId(obj.getCategoria().getId());
+                    if (categoriaCompleta != null) {
+                        JOptionPane.showMessageDialog(this,
+                                "Valor do título (" + categoriaCompleta.getDescricao() + "): R$ "
+                                + String.format("%.2f", categoriaCompleta.getValor()) + "\n"
+                                + "Data da compra: " + obj.getDataContrato());
+                    }
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao pesquisar: " + ex.getMessage());
@@ -612,7 +626,7 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
     }
 
     private boolean validarCampos() throws Exception {
-        if (jtNroContrato.getText().equals("")) {
+        if (acao != 1 && jtNroContrato.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Digite o Nro do Contrato");
             jtNroContrato.requestFocus();
             return false;
@@ -652,7 +666,9 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
     }
 
     private boolean preencherObjeto() throws Exception {
-        obj.setNroContrato(Integer.parseInt(jtNroContrato.getText()));
+        // Nº do título é gerado automaticamente pelo banco ao incluir (R1.2);
+        // ao editar, o número já foi carregado pela pesquisa.
+        obj.setNroContrato(acao == 1 ? 0 : Integer.parseInt(jtNroContrato.getText()));
         obj.setDataCancelamento(jtDataCancelar.getText());
         obj.setDataContrato(jtDataCon.getText());
         obj.setAssociado(vetorAssociado.

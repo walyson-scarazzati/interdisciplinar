@@ -6,6 +6,7 @@ package view;
 
 import data.ContratoData;
 import data.MensalidadeData;
+import extras.PagamentoDialogo;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -527,16 +528,14 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Esta mensalidade já está paga.");
             return;
         }
-        int confirmacao = JOptionPane.showConfirmDialog(this,
-                "Confirma o registro do pagamento desta mensalidade hoje?",
-                "Registrar Pagamento", JOptionPane.YES_NO_OPTION);
-        if (confirmacao != JOptionPane.YES_OPTION) {
+        PagamentoDialogo.Resultado pagamento = PagamentoDialogo.coletar(this, obj.getValor());
+        if (pagamento == null) {
             return;
         }
         try {
             String hoje = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             DAO = new MensalidadeData();
-            if (DAO.registrarPagamento(obj.getId(), hoje)) {
+            if (DAO.registrarPagamento(obj.getId(), hoje, pagamento.formaPagamento, pagamento.valorRecebido, pagamento.troco)) {
                 obj.setDataPgto(hoje);
                 jtDatapgto.setText(hoje);
                 JOptionPane.showMessageDialog(this, "Pagamento registrado com sucesso!");

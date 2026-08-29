@@ -7,7 +7,11 @@ package data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 import model.Associado;
@@ -21,40 +25,104 @@ import model.Funcionario;
  */
 public class ContratoData {
 
+    private static final int PARCELAS_GERADAS_AUTOMATICAMENTE = 12;
+
+    /**
+     * Registra a venda de um título: grava o contrato (nº do título gerado
+     * automaticamente pelo banco - R1.2), registra a venda no log (R1.3) e
+     * gera as mensalidades do contrato (R2.1). Tudo em uma única transação.
+     */
     public boolean incluir(Contrato obj) throws Exception {
         Conexao objConexao = new Conexao();
-        String sql = "Insert into  Contratos_Titulos values(?,?,?,?,?,?,?)";
-        try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql = "Insert into Contratos_Titulos (data_contrato, data_cancel, status, associado_id, funcionario_id, categorias_id) values(?,?,?,?,?,?)";
+        try (Connection conn = objConexao.getConexao()) {
+            conn.setAutoCommit(false);
+            try {
+                SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date dataContratoParsed;
+                try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    // Handle data_contrato
+                    String dataContrato = obj.getDataContrato().trim();
+                    if (dataContrato.isEmpty() || dataContrato.equals("/  /")) {
+                        pstmt.setNull(1, java.sql.Types.DATE);
+                        dataContratoParsed = new Date();
+                    } else {
+                        dataContratoParsed = originalFormat.parse(dataContrato);
+                        pstmt.setString(1, targetFormat.format(dataContratoParsed));
+                    }
+
+                    String dataCancelamento = obj.getDataCancelamento().trim();
+                    if (dataCancelamento.isEmpty() || dataCancelamento.equals("/  /")) {
+                        pstmt.setNull(2, java.sql.Types.DATE);
+                    } else {
+                        Date date2 = originalFormat.parse(dataCancelamento);
+                        pstmt.setString(2, targetFormat.format(date2));
+                    }
+
+                    pstmt.setInt(3, obj.getStatus());
+                    pstmt.setInt(4, obj.getAssociado().getId());
+                    pstmt.setInt(5, obj.getFuncionario().getId());
+                    pstmt.setInt(6, obj.getCategoria().getId());
+
+                    int registros = pstmt.executeUpdate();
+                    if (registros == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+
+                    try (ResultSet keys = pstmt.getGeneratedKeys()) {
+                        if (!keys.next()) {
+                            throw new SQLException("Falha ao gerar o número do título.");
+                        }
+                        obj.setNroContrato(keys.getInt(1));
+                    }
+                }
+
+                registrarLogVenda(conn, obj);
+                gerarMensalidades(conn, obj, dataContratoParsed, targetFormat);
+
+                conn.commit();
+                return true;
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        }
+    }
+
+    private void registrarLogVenda(Connection conn, Contrato obj) throws SQLException {
+        String sql = "Insert into Log_Vendas (contrato_id, associado_id, funcionario_id, data_hora, descricao) values (?,?,?,?,?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, obj.getNroContrato());
+            pstmt.setInt(2, obj.getAssociado().getId());
+            pstmt.setInt(3, obj.getFuncionario().getId());
+            pstmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            pstmt.setString(5, "Venda do título nº " + obj.getNroContrato()
+                    + " (categoria " + obj.getCategoria().getDescricao() + ") registrada com sucesso.");
+            pstmt.executeUpdate();
+        }
+    }
 
-            SimpleDateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            // Handle data_contrato
-            String dataContrato = obj.getDataContrato().trim();
-            if (dataContrato.isEmpty() || dataContrato.equals("/  /")) {
-                pstmt.setNull(2, java.sql.Types.DATE); // or handle the default value
-            } else {
-                Date date = originalFormat.parse(dataContrato);
-                String formattedDate = targetFormat.format(date);
-                pstmt.setString(2, formattedDate);
+    private void gerarMensalidades(Connection conn, Contrato obj, Date dataContrato, SimpleDateFormat targetFormat) throws SQLException {
+        String sql = "Insert into Mensalidades (preco, data_venc, valor, mes_ref, contrato_id) values (?,?,?,?,?)";
+        float valorMensalidade = obj.getCategoria().getValor();
+        Calendar calendario = Calendar.getInstance();
+        calendario.setTime(dataContrato);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (int mesRef = 1; mesRef <= PARCELAS_GERADAS_AUTOMATICAMENTE; mesRef++) {
+                calendario.add(Calendar.MONTH, 1);
+                pstmt.setFloat(1, valorMensalidade);
+                pstmt.setString(2, targetFormat.format(calendario.getTime()));
+                pstmt.setFloat(3, valorMensalidade);
+                pstmt.setInt(4, mesRef);
+                pstmt.setInt(5, obj.getNroContrato());
+                pstmt.addBatch();
             }
-
-            String dataCancelamento = obj.getDataCancelamento().trim();
-            if (dataCancelamento.isEmpty() || dataCancelamento.equals("/  /")) {
-                pstmt.setNull(3, java.sql.Types.DATE);
-            } else {
-                Date date2 = originalFormat.parse(dataCancelamento);
-                String formattedDate2 = targetFormat.format(date2);
-                pstmt.setString(3, formattedDate2);
-            }
-
-            pstmt.setInt(4, obj.getStatus());
-            pstmt.setInt(5, obj.getAssociado().getId());
-            pstmt.setInt(6, obj.getFuncionario().getId());
-            pstmt.setInt(7, obj.getCategoria().getId());
-            int registros = pstmt.executeUpdate();
-            return registros > 0;
+            pstmt.executeBatch();
         }
     }
 
@@ -150,6 +218,15 @@ public class ContratoData {
             }
         }
         return dados;
+    }
+
+    /** R1.11 - quantidade de títulos vendidos. */
+    public int contarTitulosVendidos() throws Exception {
+        Conexao objConexao = new Conexao();
+        String sql = "select count(*) total from Contratos_Titulos";
+        try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            return rs.next() ? rs.getInt("total") : 0;
+        }
     }
 
     public Vector<Contrato> carregarCombo() throws Exception {

@@ -7,10 +7,20 @@ package view;
 import data.AssociadoData;
 import data.DependenteData;
 import data.MensalidadeData;
+import extras.PagamentoDialogo;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import model.Mensalidade;
 
@@ -328,6 +338,70 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
     private void jtbMouseClicked(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             exibirHistorico();
+            return;
+        }
+        if (evt.isPopupTrigger() || javax.swing.SwingUtilities.isRightMouseButton(evt)) {
+            int linha = jtb.rowAtPoint(evt.getPoint());
+            if (linha < 0) {
+                return;
+            }
+            jtb.setRowSelectionInterval(linha, linha);
+            abrirMenuContexto(evt);
+        }
+    }
+
+    private void abrirMenuContexto(java.awt.event.MouseEvent evt) {
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenuItem itemHistorico = new JMenuItem("Ver Histórico");
+        itemHistorico.addActionListener(e -> exibirHistorico());
+        menu.add(itemHistorico);
+
+        JMenuItem itemImprimir = new JMenuItem("Imprimir Carteirinha");
+        itemImprimir.addActionListener(e -> imprimirCarteirinha());
+        menu.add(itemImprimir);
+
+        menu.show(jtb, evt.getX(), evt.getY());
+    }
+
+    /** R1.8 - imprime a carteirinha do associado/dependente selecionado na tabela. */
+    private void imprimirCarteirinha() {
+        int linha = jtb.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um registro na tabela.");
+            return;
+        }
+        int id = (Integer) jtb.getValueAt(linha, 0);
+        String nome = String.valueOf(jtb.getValueAt(linha, 1));
+        String cpf = String.valueOf(jtb.getValueAt(linha, 2));
+        String status = String.valueOf(jtb.getValueAt(linha, 3));
+        String tipo = jcbSelecione.getSelectedIndex() == 1 ? "Associado" : "Dependente";
+
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable((graphics, pageFormat, pageIndex) -> {
+            if (pageIndex > 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+            Graphics2D g2d = (Graphics2D) graphics;
+            g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+            g2d.setFont(new Font("SansSerif", Font.BOLD, 18));
+            g2d.drawString("Carteirinha do Clube", 20, 30);
+            g2d.setFont(new Font("SansSerif", Font.PLAIN, 14));
+            g2d.drawString("Tipo: " + tipo, 20, 70);
+            g2d.drawString("Id: " + id, 20, 95);
+            g2d.drawString("Nome: " + nome, 20, 120);
+            g2d.drawString("CPF: " + cpf, 20, 145);
+            g2d.drawString("Status da mensalidade: " + status, 20, 170);
+            return Printable.PAGE_EXISTS;
+        });
+
+        if (job.printDialog()) {
+            try {
+                job.print();
+                JOptionPane.showMessageDialog(this, "Carteirinha enviada para impressão.");
+            } catch (PrinterException ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao imprimir: " + ex.getMessage());
+            }
         }
     }
 
@@ -349,15 +423,13 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 return;
             }
 
-            int confirmacao = JOptionPane.showConfirmDialog(this,
-                    "Registrar pagamento de " + nome + " (mês ref. " + pendente.getMesRef() + ", vencimento " + pendente.getDataVenc() + ") hoje?",
-                    "Registrar Pagamento", JOptionPane.YES_NO_OPTION);
-            if (confirmacao != JOptionPane.YES_OPTION) {
+            PagamentoDialogo.Resultado pagamento = PagamentoDialogo.coletar(this, pendente.getValor());
+            if (pagamento == null) {
                 return;
             }
 
             String hoje = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-            if (mdao.registrarPagamento(pendente.getId(), hoje)) {
+            if (mdao.registrarPagamento(pendente.getId(), hoje, pagamento.formaPagamento, pagamento.valorRecebido, pagamento.troco)) {
                 JOptionPane.showMessageDialog(this, "Pagamento registrado com sucesso!");
                 pesquisarEExibir();
             } else {

@@ -7,6 +7,9 @@ package data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
@@ -64,6 +67,141 @@ public class MensalidadeData {
             pstmt.setInt(2, id);
             int registros = pstmt.executeUpdate();
             return registros > 0;
+        }
+    }
+
+    /**
+     * Registra o pagamento informando a forma utilizada (R2.3 dinheiro/troco,
+     * R2.4 cartão, R2.5 cheque). Pagamentos em cartão são lançados também em
+     * Contas a Receber (R2.6), já que a operadora repassa o valor depois.
+     */
+    public boolean registrarPagamento(int id, String dataPagamento, String formaPagamento, Float valorRecebido, Float troco) throws Exception {
+        Conexao objConexao = new Conexao();
+        String sql = "Update Mensalidades set data_pgto = ?, forma_pagamento = ?, valor_recebido = ?, troco = ? where id = ?";
+        try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, convertToDate(dataPagamento));
+            pstmt.setString(2, formaPagamento);
+            if (valorRecebido != null) {
+                pstmt.setFloat(3, valorRecebido);
+            } else {
+                pstmt.setNull(3, Types.FLOAT);
+            }
+            if (troco != null) {
+                pstmt.setFloat(4, troco);
+            } else {
+                pstmt.setNull(4, Types.FLOAT);
+            }
+            pstmt.setInt(5, id);
+            int registros = pstmt.executeUpdate();
+            if (registros > 0 && "CARTAO".equals(formaPagamento)) {
+                registrarContaReceber(conn, id);
+            }
+            return registros > 0;
+        }
+    }
+
+    private void registrarContaReceber(Connection conn, int mensalidadeId) throws SQLException {
+        float valor = 0;
+        try (PreparedStatement pstmt = conn.prepareStatement("select valor from Mensalidades where id = ?")) {
+            pstmt.setInt(1, mensalidadeId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    valor = rs.getFloat("valor");
+                }
+            }
+        }
+        String sql = "Insert into Contas_Receber (mensalidade_id, valor, data_registro, status) values (?, ?, ?, 'PENDENTE')";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, mensalidadeId);
+            pstmt.setFloat(2, valor);
+            pstmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            pstmt.executeUpdate();
+        }
+    }
+
+    /**
+     * R2.7 - baixa automática: concilia o retorno bancário/da operadora de
+     * cartão (simulado) marcando como pagas as mensalidades cujo lançamento
+     * em Contas a Receber já foi liquidado.
+     */
+    public int baixarAutomaticamente() throws Exception {
+        Conexao objConexao = new Conexao();
+        String sqlSelect = "select cr.id as cr_id, cr.mensalidade_id from Contas_Receber cr "
+                + "join Mensalidades m on m.id = cr.mensalidade_id "
+                + "where cr.status = 'PENDENTE' and m.data_pgto is null";
+        int quantidade = 0;
+        try (Connection conn = objConexao.getConexao()) {
+            conn.setAutoCommit(false);
+            try {
+                String hoje = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                try (PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+                        ResultSet rs = pstmtSelect.executeQuery();
+                        PreparedStatement pstmtBaixa = conn.prepareStatement("Update Mensalidades set data_pgto = ? where id = ?");
+                        PreparedStatement pstmtConta = conn.prepareStatement("Update Contas_Receber set status = 'RECEBIDO' where id = ?")) {
+                    while (rs.next()) {
+                        pstmtBaixa.setString(1, hoje);
+                        pstmtBaixa.setInt(2, rs.getInt("mensalidade_id"));
+                        pstmtBaixa.addBatch();
+
+                        pstmtConta.setInt(1, rs.getInt("cr_id"));
+                        pstmtConta.addBatch();
+                        quantidade++;
+                    }
+                    if (quantidade > 0) {
+                        pstmtBaixa.executeBatch();
+                        pstmtConta.executeBatch();
+                    }
+                }
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        }
+        return quantidade;
+    }
+
+    /**
+     * R2.9 - processa nova cobrança aos inadimplentes, aplicando 2% de juros
+     * sobre as mensalidades vencidas e ainda não pagas (uma única vez).
+     */
+    public int aplicarJurosAtrasados() throws Exception {
+        Conexao objConexao = new Conexao();
+        String sqlSelect = "select id, valor from Mensalidades where data_pgto is null and data_venc < CURDATE() and juros_aplicado = 0";
+        int quantidade = 0;
+        try (Connection conn = objConexao.getConexao();
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+                ResultSet rs = pstmtSelect.executeQuery();
+                PreparedStatement pstmtUpdate = conn.prepareStatement("Update Mensalidades set valor = ?, juros_aplicado = 1 where id = ?")) {
+            while (rs.next()) {
+                float novoValor = rs.getFloat("valor") * 1.02f;
+                pstmtUpdate.setFloat(1, novoValor);
+                pstmtUpdate.setInt(2, rs.getInt("id"));
+                pstmtUpdate.addBatch();
+                quantidade++;
+            }
+            if (quantidade > 0) {
+                pstmtUpdate.executeBatch();
+            }
+        }
+        return quantidade;
+    }
+
+    /**
+     * R2.10 - valor total de pagamentos recebidos no período informado
+     * (mensal, trimestral ou anual, conforme o intervalo de datas passado).
+     */
+    public float totalRecebidoNoPeriodo(String dataInicioBr, String dataFimBr) throws Exception {
+        Conexao objConexao = new Conexao();
+        String sql = "select COALESCE(SUM(valor),0) total from Mensalidades where data_pgto between ? and ?";
+        try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, convertToDate(dataInicioBr));
+            pstmt.setString(2, convertToDate(dataFimBr));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next() ? rs.getFloat("total") : 0f;
+            }
         }
     }
 

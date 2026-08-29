@@ -4,7 +4,16 @@
  */
 package view;
 
+import data.AssociadoData;
+import data.ContratoData;
+import data.DependenteData;
+import data.MensalidadeData;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import model.Funcionario;
 
@@ -27,6 +36,7 @@ public class PrincipalFrame extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         adicionarConfirmacaoDeSaida();
+        adicionarMenuRelatorios();
 
         if (obj.getTipo() == 1) { //comum
             jmCadastrar.setEnabled(true);
@@ -38,6 +48,112 @@ public class PrincipalFrame extends javax.swing.JFrame {
             jmControlePagamento.setEnabled(true);
 
         }
+    }
+
+    /**
+     * Menu adicional com os relatórios/rotinas que não têm tela de cadastro
+     * própria: contadores (R1.11/R1.12), catraca (R2.11), cobrança com juros
+     * (R2.9), baixa automática (R2.7) e total de pagamentos por período
+     * (R2.10). Montado em código, fora do bloco gerado pelo Form Editor.
+     */
+    private void adicionarMenuRelatorios() {
+        JMenu jmRelatorios = new JMenu("Relatórios");
+        jmRelatorios.setMnemonic(java.awt.event.KeyEvent.VK_R);
+
+        JMenuItem itemTotais = new JMenuItem("Totais do Sistema");
+        itemTotais.addActionListener(e -> exibirTotais());
+        jmRelatorios.add(itemTotais);
+
+        JMenuItem itemPagamentosPeriodo = new JMenuItem("Total de Pagamentos por Período");
+        itemPagamentosPeriodo.addActionListener(e -> exibirTotalPagamentosPeriodo());
+        jmRelatorios.add(itemPagamentosPeriodo);
+
+        JMenuItem itemJuros = new JMenuItem("Processar Cobrança com Juros (Inadimplentes)");
+        itemJuros.addActionListener(e -> processarCobrancaComJuros());
+        jmRelatorios.add(itemJuros);
+
+        JMenuItem itemBaixaAutomatica = new JMenuItem("Baixa Automática (Retorno Bancário)");
+        itemBaixaAutomatica.addActionListener(e -> processarBaixaAutomatica());
+        jmRelatorios.add(itemBaixaAutomatica);
+
+        JMenuItem itemCatraca = new JMenuItem("Simulador de Catraca");
+        itemCatraca.addActionListener(e -> abrirCatraca());
+        jmRelatorios.add(itemCatraca);
+
+        jmbPrincipal.add(jmRelatorios);
+    }
+
+    private void exibirTotais() {
+        try {
+            int titulos = new ContratoData().contarTitulosVendidos();
+            int associados = new AssociadoData().contarAssociados();
+            int dependentes = new DependenteData().contarDependentes();
+            JOptionPane.showMessageDialog(this,
+                    "Títulos vendidos: " + titulos + "\n"
+                    + "Associados cadastrados: " + associados + "\n"
+                    + "Dependentes cadastrados: " + dependentes,
+                    "Totais do Sistema", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao calcular totais: " + ex.getMessage());
+        }
+    }
+
+    private void exibirTotalPagamentosPeriodo() {
+        String[] opcoes = {"Mensal", "Trimestral", "Anual"};
+        int escolha = JOptionPane.showOptionDialog(this, "Selecione o período:", "Total de Pagamentos",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+        if (escolha < 0) {
+            return;
+        }
+        int meses = escolha == 0 ? 1 : escolha == 1 ? 3 : 12;
+
+        Calendar calendario = Calendar.getInstance();
+        Date fim = calendario.getTime();
+        calendario.add(Calendar.MONTH, -meses);
+        Date inicio = calendario.getTime();
+
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            float total = new MensalidadeData().totalRecebidoNoPeriodo(formato.format(inicio), formato.format(fim));
+            JOptionPane.showMessageDialog(this,
+                    "Total recebido (" + opcoes[escolha].toLowerCase() + ", de " + formato.format(inicio)
+                    + " até " + formato.format(fim) + "): R$ " + String.format("%.2f", total));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao calcular total: " + ex.getMessage());
+        }
+    }
+
+    private void processarCobrancaComJuros() {
+        int confirmacao = JOptionPane.showConfirmDialog(this,
+                "Aplicar juros de atraso (2%) às mensalidades vencidas e não pagas?",
+                "Cobrança com Juros", JOptionPane.YES_NO_OPTION);
+        if (confirmacao != JOptionPane.YES_OPTION) {
+            return;
+        }
+        try {
+            int quantidade = new MensalidadeData().aplicarJurosAtrasados();
+            JOptionPane.showMessageDialog(this, quantidade + " mensalidade(s) atualizada(s) com juros de atraso.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao processar cobrança: " + ex.getMessage());
+        }
+    }
+
+    private void processarBaixaAutomatica() {
+        try {
+            int quantidade = new MensalidadeData().baixarAutomaticamente();
+            JOptionPane.showMessageDialog(this, quantidade
+                    + " mensalidade(s) baixada(s) automaticamente a partir do retorno bancário/da operadora (simulado).");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro na baixa automática: " + ex.getMessage());
+        }
+    }
+
+    private void abrirCatraca() {
+        CatracaFrame obj = new CatracaFrame();
+        int x1 = (jdpPrincipal.getSize().width - obj.getSize().width) / 2;
+        obj.setBounds(x1, 80, obj.getSize().width, obj.getSize().height);
+        jdpPrincipal.add(obj);
+        obj.setVisible(true);
     }
 
     private void adicionarConfirmacaoDeSaida() {

@@ -335,6 +335,15 @@ public class AssociadoData {
         return obj;
     }
 
+    /** R1.12 - quantidade de associados cadastrados. */
+    public int contarAssociados() throws Exception {
+        Conexao objConexao = new Conexao();
+        String sql = "select count(*) total from Associados";
+        try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            return rs.next() ? rs.getInt("total") : 0;
+        }
+    }
+
     public Vector<Associado> carregarCombo() throws Exception {
         Vector<Associado> dados = new Vector<Associado>();
         Conexao objConexao = new Conexao();
