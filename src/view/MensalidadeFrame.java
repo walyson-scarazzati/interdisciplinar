@@ -68,6 +68,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jlMesRef = new javax.swing.JLabel();
         jpMesRef = new javax.swing.JPanel();
         jcMesRef = new javax.swing.JComboBox();
+        jlBarraMesAno = new javax.swing.JLabel();
         jcAnoRef = new javax.swing.JComboBox();
         jtPreco = new javax.swing.JFormattedTextField();
         jtPreco = new extras.JMoneyField();
@@ -185,15 +186,22 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jcMesRef.setModel(new javax.swing.DefaultComboBoxModel(MESES));
         jcMesRef.setEnabled(false);
         jcMesRef.setToolTipText("Selecione o mês de referência");
+        jcMesRef.setPreferredSize(new java.awt.Dimension(130, 24));
+
+        jlBarraMesAno.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jlBarraMesAno.setForeground(new java.awt.Color(0, 0, 102));
+        jlBarraMesAno.setText("/");
 
         jcAnoRef.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jcAnoRef.setModel(new javax.swing.DefaultComboBoxModel(criarAnosCombo()));
         jcAnoRef.setEnabled(false);
         jcAnoRef.setToolTipText("Selecione o ano de referência");
+        jcAnoRef.setPreferredSize(new java.awt.Dimension(80, 24));
 
         jpMesRef.setBackground(new java.awt.Color(255, 255, 255));
-        jpMesRef.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 4, 0));
+        jpMesRef.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 0));
         jpMesRef.add(jcMesRef);
+        jpMesRef.add(jlBarraMesAno);
         jpMesRef.add(jcAnoRef);
 
         jlStatusLabel.setBackground(new java.awt.Color(0, 0, 102));
@@ -616,6 +624,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox jcNroContrato;
     private javax.swing.JLabel jlDataPgto;
     private javax.swing.JLabel jlDataVenc;
+    private javax.swing.JLabel jlBarraMesAno;
     private javax.swing.JLabel jlMesRef;
     private javax.swing.JLabel jlPreco;
     private javax.swing.JLabel jlStatus;
