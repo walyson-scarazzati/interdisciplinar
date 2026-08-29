@@ -6,7 +6,6 @@ package view;
 
 import data.ContratoData;
 import data.MensalidadeData;
-import extras.PagamentoDialogo;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,15 +74,12 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtPreco = new extras.JMoneyField();
         //jFp_Precocusto = new extras.Moeda();
 
-        jlStatusLabel = new javax.swing.JLabel();
-        jlStatus = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jbNovo = new javax.swing.JButton();
         jbSalvar = new javax.swing.JButton();
         jbCancelar = new javax.swing.JButton();
         jbPesquisar = new javax.swing.JButton();
         jbEditar = new javax.swing.JButton();
-        jbRegistrarPagamento = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -205,14 +201,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jpMesRef.add(jlBarraMesAno);
         jpMesRef.add(jcAnoRef);
 
-        jlStatusLabel.setBackground(new java.awt.Color(0, 0, 102));
-        jlStatusLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jlStatusLabel.setForeground(new java.awt.Color(0, 0, 102));
-        jlStatusLabel.setText("Status");
-
-        jlStatus.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jlStatus.setText(" ");
-
         jtPreco.setEditable(false);
         jtPreco.setBackground(new java.awt.Color(195, 195, 195));
         jtPreco.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
@@ -258,12 +246,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                     .addComponent(jlPreco)
                     .addComponent(jlDataPgto))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jlStatusLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlStatus)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,11 +274,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlMesRef)
                     .addComponent(jpMesRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlStatusLabel)
-                    .addComponent(jlStatus))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(153, 204, 255));
@@ -345,21 +323,12 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
             }
         });
 
-        jbRegistrarPagamento.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jbRegistrarPagamento.setText("Registrar Pagamento");
-        jbRegistrarPagamento.setEnabled(false);
-        jbRegistrarPagamento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbRegistrarPagamentoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(98, 98, 98)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jbNovo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -369,8 +338,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                     .addComponent(jbEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(51, 51, 51)
                 .addComponent(jbCancelar)
-                .addGap(51, 51, 51)
-                .addComponent(jbRegistrarPagamento)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -379,7 +346,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbNovo)
-                    .addComponent(jbRegistrarPagamento)
                     .addComponent(jbSalvar)
                     .addComponent(jbCancelar))
                 .addGap(18, 18, 18)
@@ -440,7 +406,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                     jbEditar.setEnabled(true);
                     jbCancelar.setEnabled(true);
                     jbPesquisar.setEnabled(false);
-                    atualizarStatus();
 
                 }
             }catch(Exception ex){
@@ -476,7 +441,9 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
 
         jtPreco.setEditable(true);
-        jtDatapgto.setEditable(true);
+        // Data pgto nunca é digitada à mão: só é preenchida pelo fluxo de
+        // "Registrar Pagamento" em Gerenciamento de Mensalidade, então
+        // continua travada e cinza aqui.
         jtDataVenc.setEditable(true);
         jtValor.setEditable(true);
         jcMesRef.setEnabled(true);
@@ -487,11 +454,9 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbCancelar.setEnabled(true);
         jbPesquisar.setEnabled(false);
-        jbRegistrarPagamento.setEnabled(false);
         limparCampos();
         Color whiteColor = Color.WHITE;
         jtPreco.setBackground(whiteColor);
-        jtDatapgto.setBackground(whiteColor);
         jtDataVenc.setBackground(whiteColor);
         jtValor.setBackground(whiteColor);
         acao = 1;
@@ -502,7 +467,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
 
         jtPreco.setEditable(false);
-        jtDatapgto.setEditable(false);
         jtDataVenc.setEditable(false);
         jtValor.setEditable(false);
         jcNroContrato.setEnabled(true);
@@ -513,67 +477,16 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbCancelar.setEnabled(false);
         jbPesquisar.setEnabled(true);
-        jbRegistrarPagamento.setEnabled(false);
         limparCampos();
         Color grayColor = new Color(195, 195, 195);
         jtPreco.setBackground(grayColor);
-        jtDatapgto.setBackground(grayColor);
         jtDataVenc.setBackground(grayColor);
         jtValor.setBackground(grayColor);
-        jlStatus.setText(" ");
     }//GEN-LAST:event_jbCancelarActionPerformed
-
-    private void jbRegistrarPagamentoActionPerformed(java.awt.event.ActionEvent evt) {
-        if (!obj.getDataPgto().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Esta mensalidade já está paga.");
-            return;
-        }
-        PagamentoDialogo.Resultado pagamento = PagamentoDialogo.coletar(this, obj.getValor());
-        if (pagamento == null) {
-            return;
-        }
-        try {
-            String hoje = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-            DAO = new MensalidadeData();
-            if (DAO.registrarPagamento(obj.getId(), hoje, pagamento.formaPagamento, pagamento.valorRecebido, pagamento.troco)) {
-                obj.setDataPgto(hoje);
-                jtDatapgto.setText(hoje);
-                JOptionPane.showMessageDialog(this, "Pagamento registrado com sucesso!");
-                atualizarStatus();
-            } else {
-                JOptionPane.showMessageDialog(this, "Não foi possível registrar o pagamento.");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao registrar pagamento: " + ex.getMessage());
-        }
-    }
-
-    private void atualizarStatus() {
-        if (obj.getDataPgto() != null && !obj.getDataPgto().isEmpty()) {
-            jlStatus.setText("PAGO");
-            jlStatus.setForeground(new Color(0, 128, 0));
-            jbRegistrarPagamento.setEnabled(false);
-        } else {
-            boolean vencida = venceuAntesDeHoje(obj.getDataVenc());
-            jlStatus.setText(vencida ? "EM ATRASO" : "PENDENTE");
-            jlStatus.setForeground(vencida ? new Color(178, 34, 34) : new Color(184, 134, 11));
-            jbRegistrarPagamento.setEnabled(true);
-        }
-    }
-
-    private boolean venceuAntesDeHoje(String dataVencDdMmYyyy) {
-        try {
-            Date vencimento = new SimpleDateFormat("dd/MM/yyyy").parse(dataVencDdMmYyyy);
-            return vencimento.before(new Date());
-        } catch (Exception ex) {
-            return false;
-        }
-    }
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
 
         jtPreco.setEditable(true);
-        jtDatapgto.setEditable(true);
         jtDataVenc.setEditable(true);
         jcNroContrato.setEnabled(true);
         jtValor.setEditable(true);
@@ -584,7 +497,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jbEditar.setEnabled(false);
         jbCancelar.setEnabled(true);
         jbPesquisar.setEnabled(false);
-        jbRegistrarPagamento.setEnabled(false);
         acao = 2;        // TODO add your handling code here:
     }//GEN-LAST:event_jbEditarActionPerformed
 
@@ -596,9 +508,9 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     }catch(Exception e){
        JOptionPane.showMessageDialog(this, "erro " + e.getMessage());
         }
-        
-          
-        
+
+
+
         // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameActivated
 
@@ -616,7 +528,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbEditar;
     private javax.swing.JButton jbNovo;
     private javax.swing.JButton jbPesquisar;
-    private javax.swing.JButton jbRegistrarPagamento;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JComboBox jcAnoRef;
     private javax.swing.JComboBox jcMesRef;
@@ -626,8 +537,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlBarraMesAno;
     private javax.swing.JLabel jlMesRef;
     private javax.swing.JLabel jlPreco;
-    private javax.swing.JLabel jlStatus;
-    private javax.swing.JLabel jlStatusLabel;
     private javax.swing.JLabel jlValor;
     private javax.swing.JPanel jpMesRef;
     private javax.swing.JFormattedTextField jtDataVenc;
@@ -644,7 +553,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
        jcMesRef.setSelectedIndex(0);
        jcAnoRef.setSelectedIndex(0);
        jcNroContrato.setSelectedIndex(0);
-       jlStatus.setText(" ");
 
 
     }
@@ -707,26 +615,23 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
          jtPreco.requestFocus();
          return false;
        }
-         
-          if(jtDatapgto.getText().equals("")){
-         JOptionPane.showMessageDialog(this, "Digite a Data de pagamento");
-         jtDatapgto.requestFocus();
-         return false;
-       }
-       
+
+       // Data pgto é preenchida automaticamente por "Registrar Pagamento";
+       // uma mensalidade nova/editada fica pendente até isso acontecer.
+
              if(jtDataVenc.getText().equals("")){
          JOptionPane.showMessageDialog(this, "Digite a Data de vencimento");
          jtDataVenc.requestFocus();
          return false;
        }
-       
+
         if(jtValor.getText().equals("")){
          JOptionPane.showMessageDialog(this, "Digite o Valor");
          jtValor.setText("0,00");
          jtValor.requestFocus();
          return false;
        }
-       
+
        if(jcMesRef.getSelectedIndex()==0){
          JOptionPane.showMessageDialog(this, "Selecione o mês de referência");
          return false;

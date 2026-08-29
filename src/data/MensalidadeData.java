@@ -24,15 +24,17 @@ public class MensalidadeData {
 
     public boolean incluir(Mensalidade obj) throws Exception {
         Conexao objConexao = new Conexao();
-        String sql = "Insert into Mensalidades values(?,?,?,?,?,?,?)";
+        // id é AUTO_INCREMENT e forma_pagamento/valor_recebido/troco/juros_aplicado só
+        // existem depois que o pagamento é registrado, então uma mensalidade nova entra
+        // sempre com data_pgto em aberto (NULL) e sem forma de pagamento.
+        String sql = "Insert into Mensalidades (preco, data_pgto, data_venc, valor, mes_ref, contrato_id) values (?,?,?,?,?,?)";
         try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, obj.getId());
-            pstmt.setFloat(2, obj.getPreco());
-            pstmt.setString(3, convertToDate(obj.getDataPgto()));
-            pstmt.setString(4, convertToDate(obj.getDataVenc()));
-            pstmt.setFloat(5, obj.getValor());
-            pstmt.setInt(6, Integer.parseInt(obj.getMesRef()));
-            pstmt.setInt(7, obj.getContrato().getNroContrato());
+            pstmt.setFloat(1, obj.getPreco());
+            setDataOuNula(pstmt, 2, obj.getDataPgto());
+            pstmt.setString(3, convertToDate(obj.getDataVenc()));
+            pstmt.setFloat(4, obj.getValor());
+            pstmt.setInt(5, Integer.parseInt(obj.getMesRef()));
+            pstmt.setInt(6, obj.getContrato().getNroContrato());
             int registros = pstmt.executeUpdate();
             return registros > 0;
         }
@@ -44,6 +46,15 @@ public class MensalidadeData {
         return outputFormat.format(inputFormat.parse(date));
     }
 
+    /** data_pgto é opcional (mensalidade ainda não paga): grava NULL em vez de estourar o parse. */
+    private void setDataOuNula(PreparedStatement pstmt, int indice, String dataBr) throws Exception {
+        if (dataBr == null || dataBr.trim().isEmpty()) {
+            pstmt.setNull(indice, Types.DATE);
+        } else {
+            pstmt.setString(indice, convertToDate(dataBr));
+        }
+    }
+
     public boolean editar(Mensalidade obj) throws Exception {
         Conexao objConexao = new Conexao();
         String sql = "Update Mensalidades set  mes_ref = ?,  valor = ?, data_venc = ?, data_pgto = ?, preco = ? where id = ?";
@@ -51,7 +62,7 @@ public class MensalidadeData {
             pstmt.setInt(1, Integer.parseInt(obj.getMesRef()));
             pstmt.setFloat(2, obj.getValor());
             pstmt.setString(3, convertToDate(obj.getDataVenc()));
-            pstmt.setString(4, convertToDate(obj.getDataPgto()));
+            setDataOuNula(pstmt, 4, obj.getDataPgto());
             pstmt.setFloat(5, obj.getPreco());
             pstmt.setInt(6, obj.getId());
             int registros = pstmt.executeUpdate();

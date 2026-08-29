@@ -8,6 +8,8 @@ import data.AssociadoData;
 import data.DependenteData;
 import data.MensalidadeData;
 import extras.PagamentoDialogo;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,6 +23,9 @@ import java.util.Vector;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Mensalidade;
 
@@ -30,6 +35,9 @@ import model.Mensalidade;
  */
 public class GereciamentoPagamento extends javax.swing.JInternalFrame {
 
+    private static final int COLUNA_STATUS = 3;
+    private static final int COLUNA_VALOR_DEVIDO = 4;
+
     /**
      * Creates new form NewJInternalFrame
      */
@@ -37,6 +45,51 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         initComponents();
         getRootPane().setDefaultButton(jButton1);
         jcbSelecione.requestFocusInWindow();
+        configurarRendererStatus();
+    }
+
+    /**
+     * Destaca visualmente cada linha de acordo com o status da mensalidade
+     * (mesmas cores usadas na tela de Mensalidade), para o usuário identificar
+     * inadimplência sem precisar ler a coluna com atenção.
+     */
+    private void configurarRendererStatus() {
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                setHorizontalAlignment(column == 0 || column == COLUNA_VALOR_DEVIDO ? SwingConstants.CENTER : SwingConstants.LEFT);
+
+                String status = String.valueOf(table.getModel().getValueAt(table.convertRowIndexToModel(row), COLUNA_STATUS));
+                Color cor = corDoStatus(status);
+                if (!isSelected) {
+                    setBackground(Color.WHITE);
+                    setForeground(cor);
+                } else {
+                    setForeground(cor.darker());
+                }
+                setFont(column == COLUNA_STATUS ? getFont().deriveFont(Font.BOLD) : getFont().deriveFont(Font.PLAIN));
+                return c;
+            }
+        };
+        jtb.setDefaultRenderer(Object.class, renderer);
+        jtb.setRowHeight(24);
+    }
+
+    private Color corDoStatus(String status) {
+        switch (status) {
+            case "PAGO":
+                return new Color(0, 128, 0);
+            case "EM ATRASO":
+                return new Color(178, 34, 34);
+            case "VENCE EM BREVE":
+                return new Color(184, 134, 11);
+            case "PENDENTE":
+                return new Color(70, 70, 70);
+            default:
+                return Color.BLACK;
+        }
     }
 
     /**
