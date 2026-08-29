@@ -28,6 +28,7 @@ public class ParentescoFrame extends javax.swing.JInternalFrame {
      */
     public ParentescoFrame() {
         initComponents();
+        getRootPane().setDefaultButton(jbPesquisar);
         loadData();
 
         jtbPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -331,6 +332,7 @@ public class ParentescoFrame extends javax.swing.JInternalFrame {
         Color whiteColor = Color.WHITE;
         jtDescricao.setBackground(whiteColor);
         acao = 1;
+        jtDescricao.requestFocusInWindow();
 
     }//GEN-LAST:event_jbNovoActionPerformed
 
@@ -432,6 +434,7 @@ public class ParentescoFrame extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao editar: " + e.getMessage());
         }
+        jtDescricao.requestFocusInWindow();
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed

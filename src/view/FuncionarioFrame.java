@@ -29,6 +29,7 @@ public class FuncionarioFrame extends javax.swing.JInternalFrame {
      */
     public FuncionarioFrame() {
         initComponents();
+        getRootPane().setDefaultButton(jbPesquisar);
         obj = new Funcionario();
         vetorFuncionarios = new Vector<Funcionario>();
         DAO = new FuncionarioData();
@@ -456,6 +457,7 @@ public class FuncionarioFrame extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
         acao = 2;
+        jtFuncionario.requestFocusInWindow();
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -523,6 +525,7 @@ public class FuncionarioFrame extends javax.swing.JInternalFrame {
         jtUsuario.setBackground(whiteColor);
         jtSenha.setBackground(whiteColor);
         acao = 1;
+        jtFuncionario.requestFocusInWindow();
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed

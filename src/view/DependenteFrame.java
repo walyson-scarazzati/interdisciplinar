@@ -36,6 +36,7 @@ public class DependenteFrame extends javax.swing.JInternalFrame {
     public DependenteFrame() {
         initComponents();
         initComponents();
+        getRootPane().setDefaultButton(jbPesquisar);
         obj = new Dependente();
         vetorAssociado = new Vector<Associado>();
         vetorParentescos = new Vector<Parentesco>();
@@ -47,6 +48,7 @@ public class DependenteFrame extends javax.swing.JInternalFrame {
     public DependenteFrame(String nome) {
         initComponents();
         initComponents();
+        getRootPane().setDefaultButton(jbPesquisar);
         obj = new Dependente();
         vetorAssociado = new Vector<Associado>();
         vetorParentescos = new Vector<Parentesco>();
@@ -481,6 +483,7 @@ public class DependenteFrame extends javax.swing.JInternalFrame {
         jtRg.setBackground(whiteColor);
         jtCpf.setBackground(whiteColor);
         jtAssociado.setBackground(whiteColor);
+        jtDependente.requestFocusInWindow();
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
@@ -622,6 +625,7 @@ public class DependenteFrame extends javax.swing.JInternalFrame {
         jbExcluir.setEnabled(false);
         jbPesquisar.setEnabled(false);
         acao = 2;
+        jtEndereco.requestFocusInWindow();
     }//GEN-LAST:event_jbEditarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

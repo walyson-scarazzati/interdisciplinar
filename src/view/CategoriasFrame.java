@@ -28,6 +28,7 @@ public class CategoriasFrame extends javax.swing.JInternalFrame {
      */
     public CategoriasFrame() {
         initComponents();
+        getRootPane().setDefaultButton(jbPesquisar);
         obj = new Categoria();
         loadData();
         vetorModalidadeEsportiva = new Vector<ModalidadeEsportiva>();
@@ -341,6 +342,7 @@ public class CategoriasFrame extends javax.swing.JInternalFrame {
         jTdescricao.setBackground(whiteColor);
         jTvalor.setBackground(whiteColor);
         acao = 1;
+        jTdescricao.requestFocusInWindow();
     }//GEN-LAST:event_jBnovoActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
@@ -396,6 +398,7 @@ public class CategoriasFrame extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, selecione um registro para editar.");
         }
+        jTdescricao.requestFocusInWindow();
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed

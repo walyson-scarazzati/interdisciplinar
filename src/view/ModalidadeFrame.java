@@ -30,6 +30,7 @@ public class ModalidadeFrame extends javax.swing.JInternalFrame {
      */
     public ModalidadeFrame() {
         initComponents();
+        getRootPane().setDefaultButton(jbPesquisar);
         loadData();
         obj = new ModalidadeEsportiva();
         DAO = new ModalidadeEsportivaData();
@@ -365,7 +366,7 @@ public class ModalidadeFrame extends javax.swing.JInternalFrame {
         Color whiteColor = Color.WHITE;
         jTdescricao.setBackground(whiteColor);
         acao = 1;
-        
+        jTdescricao.requestFocusInWindow();
     }//GEN-LAST:event_jBnovoActionPerformed
 
     private void jBcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBcancelarActionPerformed
@@ -487,6 +488,7 @@ public class ModalidadeFrame extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, selecione um registro para editar.");
         }
+        jTdescricao.requestFocusInWindow();
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed

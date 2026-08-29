@@ -25,6 +25,8 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
      */
     public GereciamentoPagamento() {
         initComponents();
+        getRootPane().setDefaultButton(jButton1);
+        jcbSelecione.requestFocusInWindow();
     }
 
     /**
@@ -98,6 +100,7 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
 
         jTfiltro.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
         jTfiltro.setForeground(new java.awt.Color(102, 102, 102));
+        jTfiltro.setText("Filtrar");
         jTfiltro.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTfiltro.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -268,6 +271,7 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 DependenteData dependenteData = new DependenteData();
                 jtb.setModel(new DefaultTableModel(dependenteData.listar(textoFiltro()), cabecalho));
             }
+            jlTipoSelecionado.setText("Exibindo: " + jcbSelecione.getSelectedItem());
             jbRegistrarPagamento.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro:" + e.getMessage());
@@ -305,6 +309,7 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         DefaultTableModel tableModel = (DefaultTableModel) jtb.getModel();
         tableModel.setNumRows(0);
         jbRegistrarPagamento.setEnabled(false);
+        jlTipoSelecionado.setText(" ");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jtbValueChanged(javax.swing.event.ListSelectionEvent evt) {

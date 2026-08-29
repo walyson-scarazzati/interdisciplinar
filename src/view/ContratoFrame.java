@@ -35,7 +35,7 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
      */
     public ContratoFrame() {
         initComponents();
-
+        getRootPane().setDefaultButton(jbPesquisar);
     }
 
     /**
@@ -399,6 +399,7 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
         jtNroContrato.setBackground(whiteColor);
         jtDataCon.setBackground(whiteColor);
         jtDataCancelar.setBackground(whiteColor);
+        jtNroContrato.requestFocusInWindow();
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -568,6 +569,7 @@ public class ContratoFrame extends javax.swing.JInternalFrame {
         jbPesquisar.setEnabled(false);
         jbEditar.setEnabled(false);
         acao = 2;
+        jtDataCancelar.requestFocusInWindow();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jbEditarActionPerformed

@@ -5,6 +5,7 @@
 package view;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import model.Funcionario;
 
 /**
@@ -19,13 +20,15 @@ public class PrincipalFrame extends javax.swing.JFrame {
     public PrincipalFrame() {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        adicionarConfirmacaoDeSaida();
     }
 
     public PrincipalFrame(Funcionario obj) {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        adicionarConfirmacaoDeSaida();
 
-        if (obj.getTipo() == 1) { //comum  
+        if (obj.getTipo() == 1) { //comum
             jmCadastrar.setEnabled(true);
             jmControlePagamento.setEnabled(true);
         }
@@ -34,6 +37,23 @@ public class PrincipalFrame extends javax.swing.JFrame {
             jmCadastrar.setEnabled(true);
             jmControlePagamento.setEnabled(true);
 
+        }
+    }
+
+    private void adicionarConfirmacaoDeSaida() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                sair();
+            }
+        });
+    }
+
+    private void sair() {
+        int confirmacao = JOptionPane.showConfirmDialog(this,
+                "Deseja realmente sair do sistema?", "Sair",
+                JOptionPane.YES_NO_OPTION);
+        if (confirmacao == JOptionPane.YES_OPTION) {
+            System.exit(0);
         }
     }
 
@@ -70,6 +90,7 @@ public class PrincipalFrame extends javax.swing.JFrame {
         jmbPrincipal.setForeground(new java.awt.Color(153, 204, 255));
 
         jmCadastrar.setText("Cadastrar");
+        jmCadastrar.setMnemonic(java.awt.event.KeyEvent.VK_C);
 
         jmiAssociado.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jmiAssociado.setText("Associado");
@@ -144,7 +165,7 @@ public class PrincipalFrame extends javax.swing.JFrame {
         });
         jmCadastrar.add(jmiParentesco);
 
-        jmiSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jmiSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         jmiSair.setText("Sair");
         jmiSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,6 +177,7 @@ public class PrincipalFrame extends javax.swing.JFrame {
         jmbPrincipal.add(jmCadastrar);
 
         jmControlePagamento.setText("Controle de pagamento");
+        jmControlePagamento.setMnemonic(java.awt.event.KeyEvent.VK_O);
 
         jmiControlePagamento.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jmiControlePagamento.setText("Controle de pagamento");
@@ -197,7 +219,7 @@ public class PrincipalFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiControlePagamentoActionPerformed
 
     private void jmiSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSairActionPerformed
-        System.exit(0);
+        sair();
     }//GEN-LAST:event_jmiSairActionPerformed
 
     private void jmiParentescoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiParentescoActionPerformed

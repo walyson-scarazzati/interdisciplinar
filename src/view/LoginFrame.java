@@ -19,6 +19,9 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public LoginFrame() {
         initComponents();
+        getRootPane().setDefaultButton(jbAcessar);
+        setLocationRelativeTo(null);
+        jtUsuario.requestFocusInWindow();
     }
 
     /**
@@ -30,9 +33,6 @@ public class LoginFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jbNovo = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -43,21 +43,6 @@ public class LoginFrame extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jbAcessar = new javax.swing.JButton();
         jbSair = new javax.swing.JButton();
-
-        jbNovo.setText("Novo");
-        jbNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbNovoActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setBackground(new java.awt.Color(0, 0, 102));
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 102));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Funcionario");
-
-        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -210,6 +195,9 @@ public class LoginFrame extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Usuário ou senha inválidos");
+                jpfSenha.setText("");
+                jtUsuario.requestFocusInWindow();
+                jtUsuario.selectAll();
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, "Erro:" + erro.getMessage());
@@ -219,10 +207,6 @@ public class LoginFrame extends javax.swing.JFrame {
     private void jbSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jbSairActionPerformed
-
-    private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-
-    }//GEN-LAST:event_jbNovoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -259,14 +243,11 @@ public class LoginFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton jbAcessar;
-    private javax.swing.JButton jbNovo;
     private javax.swing.JButton jbSair;
     private javax.swing.JLabel jlSenha;
     private javax.swing.JLabel jlUsuario;
