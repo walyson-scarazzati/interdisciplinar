@@ -78,14 +78,41 @@ CREATE TABLE Contratos_Titulos (
 
 -- Table: Mensalidades
 CREATE TABLE Mensalidades (
-  id          INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  preco       DECIMAL(10,2) NULL,
-  data_pgto   DATE          NULL,
-  data_venc   DATE          NOT NULL,
-  valor       DECIMAL(10,2) NULL,
-  mes_ref     INT   NOT NULL,
-  contrato_id INT   NOT NULL,
+  id               INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  preco            DECIMAL(10,2) NULL,
+  data_pgto        DATE          NULL,
+  data_venc        DATE          NOT NULL,
+  valor            DECIMAL(10,2) NULL,
+  mes_ref          INT   NOT NULL,
+  contrato_id      INT   NOT NULL,
+  forma_pagamento  VARCHAR(20)   NULL,          -- DINHEIRO, CARTAO ou CHEQUE
+  valor_recebido   DECIMAL(10,2) NULL,          -- quantia informada pelo cliente (pagamento em dinheiro)
+  troco            DECIMAL(10,2) NULL,          -- troco devido ao cliente
+  juros_aplicado   TINYINT(1)    NOT NULL DEFAULT 0,
   FOREIGN KEY (contrato_id) REFERENCES Contratos_Titulos(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Table: Log_Vendas (R1.3 - registro de venda no log completada)
+CREATE TABLE Log_Vendas (
+  id             INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  contrato_id    INT  NOT NULL,
+  associado_id   INT  NOT NULL,
+  funcionario_id INT  NOT NULL,
+  data_hora      DATETIME NOT NULL,
+  descricao      VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  FOREIGN KEY (contrato_id)    REFERENCES Contratos_Titulos(id),
+  FOREIGN KEY (associado_id)   REFERENCES Pessoas(id),
+  FOREIGN KEY (funcionario_id) REFERENCES Pessoas(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Table: Contas_Receber (R2.6 - pagamentos com cartão a receber da operadora)
+CREATE TABLE Contas_Receber (
+  id             INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  mensalidade_id INT  NOT NULL,
+  valor          DECIMAL(10,2) NOT NULL,
+  data_registro  DATETIME NOT NULL,
+  status         VARCHAR(20) NOT NULL DEFAULT 'PENDENTE', -- PENDENTE ou RECEBIDO
+  FOREIGN KEY (mensalidade_id) REFERENCES Mensalidades(id)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Table: Modalidades_Esportes
@@ -144,6 +171,6 @@ VALUES (40.00, '2011-01-05', '2011-01-10', 40.00, 1, 1),
        (40.00, '2011-05-05', '2011-05-10', 40.00, 5, 3);
 
 -- Insert into Modalidades_Esportes
-INSERT INTO Modalidades_Esportes (descricao, categoria_id) 
+INSERT INTO Modalidades_Esportes (descricao, categoria_id)
 VALUES ('Futebol', 1), ('Basquete', 1), ('Vôlei', 2);
 
