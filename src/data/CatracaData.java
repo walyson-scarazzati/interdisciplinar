@@ -26,32 +26,32 @@ public class CatracaData {
         }
     }
 
-    public Resultado verificarAssociado(int associadoId) throws Exception {
+    public Resultado verificarAssociado(String numeroCarteirinha) throws Exception {
         String sql = "select B.nome, " + StatusMensalidadeSql.EXPRESSAO + " status_da_mensalidade "
                 + "from Associados A JOIN Pessoas B On B.id = A.associado_id "
                 + "JOIN Contratos_Titulos C on B.id = C.associado_id "
                 + "JOIN Mensalidades D ON C.id = D.contrato_id "
-                + "where A.associado_id = ? "
+                + "where B.numero_carteirinha = ? "
                 + "GROUP BY A.associado_id, B.nome";
-        return consultar(sql, associadoId);
+        return consultar(sql, numeroCarteirinha);
     }
 
-    public Resultado verificarDependente(int dependenteId) throws Exception {
+    public Resultado verificarDependente(String numeroCarteirinha) throws Exception {
         String sql = "SELECT B.nome, " + StatusMensalidadeSql.EXPRESSAO + " AS status_da_mensalidade "
                 + "FROM Dependentes A "
                 + "JOIN Pessoas B ON B.id = A.dependente_id "
                 + "JOIN Associados E ON E.associado_id = A.associado_id "
                 + "JOIN Contratos_Titulos C ON E.associado_id = C.associado_id "
                 + "JOIN Mensalidades D ON C.id = D.contrato_id "
-                + "where A.dependente_id = ? "
+                + "where B.numero_carteirinha = ? "
                 + "GROUP BY A.dependente_id, B.nome";
-        return consultar(sql, dependenteId);
+        return consultar(sql, numeroCarteirinha);
     }
 
-    private Resultado consultar(String sql, int id) throws Exception {
+    private Resultado consultar(String sql, String numeroCarteirinha) throws Exception {
         Conexao objConexao = new Conexao();
         try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, numeroCarteirinha);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (!rs.next()) {
                     return new Resultado(false, null, null, false);

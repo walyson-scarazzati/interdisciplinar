@@ -70,19 +70,11 @@ public class CatracaFrame extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Informe o número da carteirinha.");
             return;
         }
-        int id;
-        try {
-            id = Integer.parseInt(texto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Número de carteirinha inválido.");
-            return;
-        }
-
         try {
             CatracaData dao = new CatracaData();
             CatracaData.Resultado consulta = radioAssociado.isSelected()
-                    ? dao.verificarAssociado(id)
-                    : dao.verificarDependente(id);
+                    ? dao.verificarAssociado(texto)
+                    : dao.verificarDependente(texto);
 
             if (!consulta.encontrado) {
                 resultado.setBackground(Color.LIGHT_GRAY);

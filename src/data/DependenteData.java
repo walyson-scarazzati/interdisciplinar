@@ -35,7 +35,8 @@ public class DependenteData {
             conn.setAutoCommit(false);
             try {
                 int registros;
-                try (PreparedStatement pstmt = conn.prepareStatement("Insert into Pessoas values (?,?,?,?,?,?,?)")) {
+                try (PreparedStatement pstmt = conn.prepareStatement(
+                        "Insert into Pessoas (nome, data_nasc, endereco, telefone, email, RG, CPF) values (?,?,?,?,?,?,?)")) {
                     pstmt.setString(1, obj.getNome());
                     pstmt.setString(2, convertToDate(obj.getDataNasc()));
                     pstmt.setString(3, obj.getEndereco());

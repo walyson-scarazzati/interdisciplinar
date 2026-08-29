@@ -14,6 +14,7 @@ CREATE TABLE Pessoas (
   email     VARCHAR(40)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   rg        VARCHAR(15)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   cpf       VARCHAR(11)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  numero_carteirinha VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL, 
   CONSTRAINT UNIQUE (rg),
   CONSTRAINT UNIQUE (cpf),
   CONSTRAINT UNIQUE (email),
@@ -124,18 +125,18 @@ CREATE TABLE Modalidades_Esportes (
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Inserting data
-INSERT INTO Pessoas (nome, data_nasc, endereco, telefone, email, RG, CPF)
+INSERT INTO Pessoas (nome, data_nasc, endereco, telefone, email, RG, CPF, numero_carteirinha)
 VALUES
-('Ana Felisberto', '1988-10-02', 'Rua: Ipiranga', '32146894', 'ana_felisberto@hotmail.com', '48786451-7', '40599520808'),
-('Beatriz Graciosa', '1977-01-10', 'Rua: Salvador', '32185943', 'beatriz_graciosa@hotmail.com', '50421211-9', '11400191444'),
-('Karina Formosa','1957-01-10','Rua: Dos poetas','32198392','karina_formosa@hotmail.com','30421595-1','61211418110'),
-('Débora Linda', '1964-09-10', 'Rua: Potirendaba', '32947297', 'debora_linda@hotmail.com', '11015201-14', '61100000818'),
-('Eliana Cristina', '1985-05-09', 'Rua: Votuporanga', '32483018', 'eliana_cristina@hotmail.com', '28462411-X', '10100995122'),
-('Fernanda Cristal', '1989-07-05', 'Rua: Brigadeiro', '32194029', 'fernanda_cristal@hotmail.com', '22548244-9', '84522506928'),
-('Gisele Esmeralda', '1987-04-08', 'Rua: Santa Efigenia', '32198384', 'gisele_esmeralda@hotmail.com', '76751244-9', '72679931912'),
-('Pedro Flavio', '2009-10-10', 'Rua: Brasilia', '997143269', 'pedro_flavio@hotmail.com', '77291431-8', '80269841917'),
-('Camila Rosa', '2007-09-01', 'Rua: México', '981116119', 'camila_rosa@hotmail.com', '99212129-4', '20196124819'),
-('Micaela Pérola', '2005-03-05', 'Rua: Mirassol', '988551129', 'micaela_perola@hotmail.com', '18716121-1', '86979727877');
+('Ana Felisberto', '1988-10-02', 'Rua: Ipiranga', '32146894', 'ana_felisberto@hotmail.com', '48786451-7', '40599520808', '4521'),
+('Beatriz Graciosa', '1977-01-10', 'Rua: Salvador', '32185943', 'beatriz_graciosa@hotmail.com', '50421211-9', '11400191444', '4587'),
+('Karina Formosa','1957-01-10','Rua: Dos poetas','32198392','karina_formosa@hotmail.com','30421595-1','61211418110', '4633'),
+('Débora Linda', '1964-09-10', 'Rua: Potirendaba', '32947297', 'debora_linda@hotmail.com', '11015201-14', '61100000818', '4678'),
+('Eliana Cristina', '1985-05-09', 'Rua: Votuporanga', '32483018', 'eliana_cristina@hotmail.com', '28462411-X', '10100995122', '3421'),
+('Fernanda Cristal', '1989-07-05', 'Rua: Brigadeiro', '32194029', 'fernanda_cristal@hotmail.com', '22548244-9', '84522506928', '3422'),
+('Gisele Esmeralda', '1987-04-08', 'Rua: Santa Efigenia', '32198384', 'gisele_esmeralda@hotmail.com', '76751244-9', '72679931912', '3423'),
+('Pedro Flavio', '2009-10-10', 'Rua: Brasilia', '997143269', 'pedro_flavio@hotmail.com', '77291431-8', '80269841917', '7710'),
+('Camila Rosa', '2007-09-01', 'Rua: México', '981116119', 'camila_rosa@hotmail.com', '99212129-4', '20196124819', '7745'),
+('Micaela Pérola', '2005-03-05', 'Rua: Mirassol', '988551129', 'micaela_perola@hotmail.com', '18716121-1', '86979727877', '7788');
 
 -- Insert into Associados
 INSERT INTO Associados (associado_id, profissao) 
@@ -169,6 +170,11 @@ VALUES (40.00, '2011-01-05', '2011-01-10', 40.00, 1, 1),
        (40.00, '2011-03-05', '2011-03-10', 40.00, 3, 2),
        (40.00, '2011-04-05', '2011-04-10', 40.00, 4, 2),
        (40.00, '2011-05-05', '2011-05-10', 40.00, 5, 3);
+
+
+INSERT INTO Mensalidades (preco, data_pgto, data_venc, valor, mes_ref, contrato_id)
+VALUES (40.00, NULL, DATE_SUB(CURDATE(), INTERVAL 15 DAY), 40.00,
+        YEAR(CURDATE()) * 100 + MONTH(CURDATE()), 2);
 
 -- Insert into Modalidades_Esportes
 INSERT INTO Modalidades_Esportes (descricao, categoria_id)

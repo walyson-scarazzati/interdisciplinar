@@ -15,14 +15,21 @@ import java.awt.Graphics2D;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Mensalidade;
@@ -464,6 +471,15 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         }
     }
 
+    private static final String[] NOMES_MESES = {
+        "", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    };
+    private static final int HIST_COL_PGTO = 2;
+    private static final int HIST_COL_STATUS = 4;
+
+    /** Abre o histórico mês a mês do associado/dependente selecionado, permitindo
+     * registrar o pagamento de qualquer mês pendente direto da tabela. */
     private void exibirHistorico() {
         int linha = jtb.getSelectedRow();
         if (linha < 0) {
@@ -482,16 +498,153 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 return;
             }
 
-            StringBuilder texto = new StringBuilder("Histórico de mensalidades - " + nome + "\n\n");
-            texto.append(String.format("%-10s %-14s %-14s %-10s%n", "Mês Ref.", "Vencimento", "Pagamento", "Valor"));
-            for (Mensalidade m : historico) {
-                String pagamento = m.getDataPgto().isEmpty() ? "PENDENTE" : m.getDataPgto();
-                texto.append(String.format("%-10s %-14s %-14s R$ %.2f%n", m.getMesRef(), m.getDataVenc(), pagamento, m.getValor()));
-            }
-            JOptionPane.showMessageDialog(this, texto.toString(), "Histórico de Pagamentos", JOptionPane.INFORMATION_MESSAGE);
+            abrirDialogoHistorico(nome, historico);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao buscar histórico: " + ex.getMessage());
         }
+    }
+
+    private void abrirDialogoHistorico(String nome, Vector<Mensalidade> historico) {
+        Vector<String> cabecalho = new Vector<>();
+        cabecalho.add("Mês/Ano");
+        cabecalho.add("Vencimento");
+        cabecalho.add("Pagamento");
+        cabecalho.add("Valor");
+        cabecalho.add("Status");
+
+        Vector<Vector<Object>> linhas = new Vector<>();
+        for (Mensalidade m : historico) {
+            Vector<Object> linha = new Vector<>();
+            linha.add(formatarMesRef(m));
+            linha.add(m.getDataVenc());
+            linha.add(m.getDataPgto().isEmpty() ? "-" : m.getDataPgto());
+            linha.add(String.format("R$ %.2f", m.getValor()));
+            linha.add(statusMensalidade(m));
+            linhas.add(linha);
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(linhas, cabecalho) {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
+        JTable tabelaHistorico = new JTable(modelo);
+        tabelaHistorico.setRowHeight(24);
+        tabelaHistorico.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    setForeground(corDoStatus(String.valueOf(table.getModel().getValueAt(row, HIST_COL_STATUS))));
+                }
+                return c;
+            }
+        });
+
+        JButton btnRegistrar = new JButton("Registrar Pagamento");
+        btnRegistrar.setEnabled(false);
+
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),
+                "Histórico de Mensalidades - " + nome, true);
+
+        tabelaHistorico.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
+            int r = tabelaHistorico.getSelectedRow();
+            btnRegistrar.setEnabled(r >= 0 && !"PAGO".equals(modelo.getValueAt(r, HIST_COL_STATUS)));
+        });
+
+        btnRegistrar.addActionListener(e -> {
+            int r = tabelaHistorico.getSelectedRow();
+            if (r < 0) {
+                return;
+            }
+            Mensalidade selecionada = historico.get(r);
+            PagamentoDialogo.Resultado pagamento = PagamentoDialogo.coletar(dialog, selecionada.getValor());
+            if (pagamento == null) {
+                return;
+            }
+            try {
+                MensalidadeData mdao = new MensalidadeData();
+                String hoje = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+                if (mdao.registrarPagamento(selecionada.getId(), hoje, pagamento.formaPagamento, pagamento.valorRecebido, pagamento.troco)) {
+                    selecionada.setDataPgto(hoje);
+                    modelo.setValueAt(hoje, r, HIST_COL_PGTO);
+                    modelo.setValueAt(statusMensalidade(selecionada), r, HIST_COL_STATUS);
+                    btnRegistrar.setEnabled(false);
+                    JOptionPane.showMessageDialog(dialog, "Pagamento registrado com sucesso!");
+                    pesquisarEExibir();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Não foi possível registrar o pagamento.");
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Erro ao registrar pagamento: " + ex.getMessage());
+            }
+        });
+
+        javax.swing.JPanel rodape = new javax.swing.JPanel();
+        rodape.add(btnRegistrar);
+
+        dialog.setLayout(new BorderLayout());
+        dialog.add(new JScrollPane(tabelaHistorico), BorderLayout.CENTER);
+        dialog.add(rodape, BorderLayout.SOUTH);
+        dialog.setSize(560, 320);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    private String formatarMesRef(Mensalidade m) {
+        try {
+            int valor = Integer.parseInt(m.getMesRef());
+            int mes;
+            int ano;
+            if (valor >= 100) { // ano*100 + mes (ex.: 202608)
+                ano = valor / 100;
+                mes = valor % 100;
+            } else { // dado legado: só o mês, sem ano gravado
+                mes = valor;
+                ano = anoDaData(m.getDataVenc());
+            }
+            String nomeMes = (mes >= 1 && mes <= 12) ? NOMES_MESES[mes] : String.valueOf(mes);
+            return nomeMes + "/" + ano;
+        } catch (NumberFormatException ex) {
+            return m.getMesRef();
+        }
+    }
+
+    private int anoDaData(String dataBr) {
+        try {
+            Date data = new SimpleDateFormat("dd/MM/yyyy").parse(dataBr);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(data);
+            return cal.get(Calendar.YEAR);
+        } catch (Exception ex) {
+            return Calendar.getInstance().get(Calendar.YEAR);
+        }
+    }
+
+    private String statusMensalidade(Mensalidade m) {
+        if (m.getDataPgto() != null && !m.getDataPgto().isEmpty()) {
+            return "PAGO";
+        }
+        try {
+            Date venc = new SimpleDateFormat("dd/MM/yyyy").parse(m.getDataVenc());
+            Date hoje = new Date();
+            if (venc.before(hoje)) {
+                return "EM ATRASO";
+            }
+            Calendar limite = Calendar.getInstance();
+            limite.setTime(hoje);
+            limite.add(Calendar.DAY_OF_MONTH, 5);
+            if (!venc.after(limite.getTime())) {
+                return "VENCE EM BREVE";
+            }
+        } catch (Exception ex) {
+            // mantém PENDENTE se a data não puder ser interpretada
+        }
+        return "PENDENTE";
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
