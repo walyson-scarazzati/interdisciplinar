@@ -11,9 +11,7 @@ import extras.PagamentoDialogo;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -111,7 +109,6 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtb = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jbRegistrarPagamento = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -205,26 +202,12 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jtb.getSelectionModel().addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jtbValueChanged(evt);
-            }
-        });
         jtb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtbMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jtb);
-
-        jbRegistrarPagamento.setFont(new java.awt.Font("Segoe UI Symbol", 0, 14)); // NOI18N
-        jbRegistrarPagamento.setText("Registrar Pagamento");
-        jbRegistrarPagamento.setEnabled(false);
-        jbRegistrarPagamento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbRegistrarPagamentoActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Limpar Tabela");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -256,8 +239,6 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jbRegistrarPagamento)
-                .addGap(18, 18, 18)
                 .addComponent(jButton2)
                 .addGap(271, 271, 271))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,9 +260,7 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jbRegistrarPagamento)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(67, 67, 67)
@@ -335,7 +314,6 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
                 jtb.setModel(new DefaultTableModel(dependenteData.listar(textoFiltro()), cabecalho));
             }
             jlTipoSelecionado.setText("Exibindo: " + jcbSelecione.getSelectedItem());
-            jbRegistrarPagamento.setEnabled(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro:" + e.getMessage());
         }
@@ -371,22 +349,8 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         DefaultTableModel tableModel = (DefaultTableModel) jtb.getModel();
         tableModel.setNumRows(0);
-        jbRegistrarPagamento.setEnabled(false);
         jlTipoSelecionado.setText(" ");
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jtbValueChanged(javax.swing.event.ListSelectionEvent evt) {
-        if (evt.getValueIsAdjusting()) {
-            return;
-        }
-        int linha = jtb.getSelectedRow();
-        if (linha < 0) {
-            jbRegistrarPagamento.setEnabled(false);
-            return;
-        }
-        String status = String.valueOf(jtb.getValueAt(linha, 3));
-        jbRegistrarPagamento.setEnabled(!"PAGO".equals(status));
-    }
 
     private void jtbMouseClicked(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 2) {
@@ -413,6 +377,13 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         JMenuItem itemImprimir = new JMenuItem("Imprimir Carteirinha");
         itemImprimir.addActionListener(e -> imprimirCarteirinha());
         menu.add(itemImprimir);
+
+        int linha = jtb.getSelectedRow();
+        String status = linha < 0 ? "" : String.valueOf(jtb.getValueAt(linha, COLUNA_STATUS));
+        JMenuItem itemRegistrarPagamento = new JMenuItem("Registrar Pagamento");
+        itemRegistrarPagamento.setEnabled(linha >= 0 && !"PAGO".equals(status));
+        itemRegistrarPagamento.addActionListener(e -> registrarPagamento());
+        menu.add(itemRegistrarPagamento);
 
         menu.show(jtb, evt.getX(), evt.getY());
     }
@@ -458,7 +429,7 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
         }
     }
 
-    private void jbRegistrarPagamentoActionPerformed(java.awt.event.ActionEvent evt) {
+    private void registrarPagamento() {
         int linha = jtb.getSelectedRow();
         if (linha < 0) {
             return;
@@ -530,7 +501,6 @@ public class GereciamentoPagamento extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JButton jbRegistrarPagamento;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTfiltro;
     private javax.swing.JComboBox jcbSelecione;
