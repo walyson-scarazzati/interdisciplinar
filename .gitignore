@@ -1,20 +1,20 @@
-# Ignore all .class files
+# Compiled/build output (NetBeans regenerates these from source)
+**/build/
+**/dist/
 *.class
 
-# Ignore the 'build' directory inside the Projeto_Inter folder
-Projeto_Inter/build/
+# NetBeans per-user project state (machine-specific, not shareable)
+**/nbproject/private/
 
-# Ignore NetBeans specific directories
-Projeto_Inter/nbproject/private/
-Projeto_Inter/build/
-Projeto_Inter/dist/
+# OS junk
+.DS_Store
+Thumbs.db
 
-# Ignore other unnecessary or temporary files
+# Editor/IDE junk
+.vscode/
+.idea/
+*.iml
+
+# Logs and temp files
 *.log
 *.tmp
-
-# Ignore all .class files within the build/classes directory
-Projeto_Inter/build/classes/**/*.class
-/Versão6 - Cópia/Projeto_Inter/build/
-/Versão6 - Cópia/Projeto_Inter/dist/
-/Versão6 - Cópia/Projeto_Inter/nbproject/private/
