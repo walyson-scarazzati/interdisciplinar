@@ -24,8 +24,13 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     MensalidadeData  DAO;
     int acao = 0;
     Vector<Contrato>contratos;
-    
-    
+
+    private static final String[] MESES = {
+        "<Selecione>", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    };
+
+
     /**
      * Creates new form MensalidadeFrame
      */
@@ -61,7 +66,9 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jcNroContrato = new javax.swing.JComboBox();
         jlMesRef = new javax.swing.JLabel();
-        jtMesRef = new javax.swing.JTextField();
+        jpMesRef = new javax.swing.JPanel();
+        jcMesRef = new javax.swing.JComboBox();
+        jcAnoRef = new javax.swing.JComboBox();
         jtPreco = new javax.swing.JFormattedTextField();
         jtPreco = new extras.JMoneyField();
         //jFp_Precocusto = new extras.Moeda();
@@ -174,10 +181,20 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jlMesRef.setForeground(new java.awt.Color(0, 0, 102));
         jlMesRef.setText("Mês Referente");
 
-        jtMesRef.setEditable(false);
-        jtMesRef.setBackground(new java.awt.Color(195, 195, 195));
-        jtMesRef.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jtMesRef.setToolTipText("Digite o mês de referência");
+        jcMesRef.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jcMesRef.setModel(new javax.swing.DefaultComboBoxModel(MESES));
+        jcMesRef.setEnabled(false);
+        jcMesRef.setToolTipText("Selecione o mês de referência");
+
+        jcAnoRef.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jcAnoRef.setModel(new javax.swing.DefaultComboBoxModel(criarAnosCombo()));
+        jcAnoRef.setEnabled(false);
+        jcAnoRef.setToolTipText("Selecione o ano de referência");
+
+        jpMesRef.setBackground(new java.awt.Color(255, 255, 255));
+        jpMesRef.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 4, 0));
+        jpMesRef.add(jcMesRef);
+        jpMesRef.add(jcAnoRef);
 
         jlStatusLabel.setBackground(new java.awt.Color(0, 0, 102));
         jlStatusLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -225,7 +242,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGap(44, 44, 44)
-                                        .addComponent(jtMesRef, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jpMesRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
                                         .addComponent(jcNroContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))))))
@@ -265,7 +282,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlMesRef)
-                    .addComponent(jtMesRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jpMesRef, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlStatusLabel)
@@ -401,7 +418,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
                     jtDatapgto.setText(obj.getDataPgto());
                     jtDataVenc.setText(obj.getDataVenc());
                     jtValor.setText(""+ obj.getValor());
-                    jtMesRef.setText(obj.getMesRef());
+                    preencherMesRef(obj);
                     jcNroContrato.setEnabled(true);
 
                      for(int i=0;i<contratos.size();i++){
@@ -453,7 +470,8 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtDatapgto.setEditable(true);
         jtDataVenc.setEditable(true);
         jtValor.setEditable(true);
-        jtMesRef.setEditable(true);
+        jcMesRef.setEnabled(true);
+        jcAnoRef.setEnabled(true);
         jcNroContrato.setEnabled(true);
         jbNovo.setEnabled(false);
         jbSalvar.setEnabled(true);
@@ -467,8 +485,7 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtDatapgto.setBackground(whiteColor);
         jtDataVenc.setBackground(whiteColor);
         jtValor.setBackground(whiteColor);
-        jtMesRef.setBackground(whiteColor);
-        acao = 1;        
+        acao = 1;
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jbNovoActionPerformed
@@ -480,7 +497,8 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtDataVenc.setEditable(false);
         jtValor.setEditable(false);
         jcNroContrato.setEnabled(true);
-        jtMesRef.setEditable(false);
+        jcMesRef.setEnabled(false);
+        jcAnoRef.setEnabled(false);
         jbNovo.setEnabled(true);
         jbSalvar.setEnabled(false);
         jbEditar.setEnabled(false);
@@ -493,7 +511,6 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtDatapgto.setBackground(grayColor);
         jtDataVenc.setBackground(grayColor);
         jtValor.setBackground(grayColor);
-        jtMesRef.setBackground(grayColor);
         jlStatus.setText(" ");
     }//GEN-LAST:event_jbCancelarActionPerformed
 
@@ -553,7 +570,8 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtDataVenc.setEditable(true);
         jcNroContrato.setEnabled(true);
         jtValor.setEditable(true);
-        jtMesRef.setEditable(true);
+        jcMesRef.setEnabled(true);
+        jcAnoRef.setEnabled(true);
         jbNovo.setEnabled(false);
         jbSalvar.setEnabled(true);
         jbEditar.setEnabled(false);
@@ -593,6 +611,8 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbPesquisar;
     private javax.swing.JButton jbRegistrarPagamento;
     private javax.swing.JButton jbSalvar;
+    private javax.swing.JComboBox jcAnoRef;
+    private javax.swing.JComboBox jcMesRef;
     private javax.swing.JComboBox jcNroContrato;
     private javax.swing.JLabel jlDataPgto;
     private javax.swing.JLabel jlDataVenc;
@@ -601,9 +621,9 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlStatus;
     private javax.swing.JLabel jlStatusLabel;
     private javax.swing.JLabel jlValor;
+    private javax.swing.JPanel jpMesRef;
     private javax.swing.JFormattedTextField jtDataVenc;
     private javax.swing.JFormattedTextField jtDatapgto;
-    private javax.swing.JTextField jtMesRef;
     private javax.swing.JFormattedTextField jtPreco;
     private javax.swing.JFormattedTextField jtValor;
     // End of variables declaration//GEN-END:variables
@@ -613,11 +633,64 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
         jtDatapgto.setText("");
         jtDataVenc.setText("");
        jtValor.setText("");
-       jtMesRef.setText("");
+       jcMesRef.setSelectedIndex(0);
+       jcAnoRef.setSelectedIndex(0);
        jcNroContrato.setSelectedIndex(0);
        jlStatus.setText(" ");
-       
-         
+
+
+    }
+
+    private Object[] criarAnosCombo() {
+        int anoAtual = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+        Object[] anos = new Object[11];
+        anos[0] = "<Selecione>";
+        for (int i = 1; i < anos.length; i++) {
+            anos[i] = anoAtual - 5 + (i - 1);
+        }
+        return anos;
+    }
+
+    private void preencherMesRef(Mensalidade m) {
+        try {
+            int valor = Integer.parseInt(m.getMesRef());
+            int mes;
+            int ano;
+            if (valor >= 100) { // formato atual: ano*100 + mes (ex.: 202608)
+                ano = valor / 100;
+                mes = valor % 100;
+            } else { // dado legado: apenas o mês, sem ano gravado
+                mes = valor;
+                ano = anoDaDataVenc(m.getDataVenc());
+            }
+            jcMesRef.setSelectedIndex(mes >= 1 && mes <= 12 ? mes : 0);
+            selecionarAno(ano);
+        } catch (NumberFormatException ex) {
+            jcMesRef.setSelectedIndex(0);
+            jcAnoRef.setSelectedIndex(0);
+        }
+    }
+
+    private int anoDaDataVenc(String dataVencDdMmYyyy) {
+        try {
+            Date data = new SimpleDateFormat("dd/MM/yyyy").parse(dataVencDdMmYyyy);
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(data);
+            return cal.get(java.util.Calendar.YEAR);
+        } catch (Exception ex) {
+            return java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+        }
+    }
+
+    private void selecionarAno(int ano) {
+        for (int i = 0; i < jcAnoRef.getItemCount(); i++) {
+            Object item = jcAnoRef.getItemAt(i);
+            if (item instanceof Integer && (Integer) item == ano) {
+                jcAnoRef.setSelectedIndex(i);
+                return;
+            }
+        }
+        jcAnoRef.setSelectedIndex(0);
     }
     private boolean validarCampos() throws Exception{
          if(jtPreco.getText().equals("")){
@@ -646,18 +719,16 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
          return false;
        }
        
-       if( jtMesRef.getText().equals("")){
-         JOptionPane.showMessageDialog(this, "Digite ao Mês de referencia");
-          jtMesRef.requestFocus();
+       if(jcMesRef.getSelectedIndex()==0){
+         JOptionPane.showMessageDialog(this, "Selecione o mês de referência");
          return false;
        }
 
-       if (!jtMesRef.getText().trim().matches("\\d+")) {
-         JOptionPane.showMessageDialog(this, "Mês de referência deve ser um número");
-         jtMesRef.requestFocus();
+       if(jcAnoRef.getSelectedIndex()==0){
+         JOptionPane.showMessageDialog(this, "Selecione o ano de referência");
          return false;
        }
-       
+
        if(jcNroContrato.getSelectedIndex()==0){
          JOptionPane.showMessageDialog(this, "Digite o número do contrato");
          return false;
@@ -670,7 +741,9 @@ public class MensalidadeFrame extends javax.swing.JInternalFrame {
        obj.setDataPgto(jtDatapgto.getText());
        obj.setDataVenc(jtDataVenc.getText());
        obj.setValor(Float.parseFloat(jtValor.getText().replace(",", ".").toUpperCase()));
-       obj.setMesRef(jtMesRef.getText());
+       int mes = jcMesRef.getSelectedIndex();
+       int ano = (Integer) jcAnoRef.getSelectedItem();
+       obj.setMesRef(String.valueOf(ano * 100 + mes));
        obj.setContrato(contratos.
             get(jcNroContrato.getSelectedIndex()));
       return true;

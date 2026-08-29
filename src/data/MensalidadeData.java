@@ -28,7 +28,7 @@ public class MensalidadeData {
             pstmt.setString(3, convertToDate(obj.getDataPgto()));
             pstmt.setString(4, convertToDate(obj.getDataVenc()));
             pstmt.setFloat(5, obj.getValor());
-            pstmt.setString(6, obj.getMesRef());
+            pstmt.setInt(6, Integer.parseInt(obj.getMesRef()));
             pstmt.setInt(7, obj.getContrato().getNroContrato());
             int registros = pstmt.executeUpdate();
             return registros > 0;
@@ -45,7 +45,7 @@ public class MensalidadeData {
         Conexao objConexao = new Conexao();
         String sql = "Update Mensalidades set  mes_ref = ?,  valor = ?, data_venc = ?, data_pgto = ?, preco = ? where id = ?";
         try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, obj.getMesRef());
+            pstmt.setInt(1, Integer.parseInt(obj.getMesRef()));
             pstmt.setFloat(2, obj.getValor());
             pstmt.setString(3, convertToDate(obj.getDataVenc()));
             pstmt.setString(4, convertToDate(obj.getDataPgto()));
@@ -192,7 +192,7 @@ public class MensalidadeData {
         Contrato obj2 = new Contrato();
         obj2.setNroContrato(rs.getInt("contrato_id"));
         obj.setContrato(obj2);
-        obj.setMesRef(rs.getString("mes_ref"));
+        obj.setMesRef(String.valueOf(rs.getInt("mes_ref")));
         return obj;
     }
 
