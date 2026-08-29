@@ -5,6 +5,7 @@
 package view;
 
 import data.FuncionarioData;
+import data.UsuarioBloqueadoException;
 import javax.swing.JOptionPane;
 import model.Funcionario;
 
@@ -199,6 +200,11 @@ public class LoginFrame extends javax.swing.JFrame {
                 jtUsuario.requestFocusInWindow();
                 jtUsuario.selectAll();
             }
+        } catch (UsuarioBloqueadoException erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+            jtUsuario.setText("");
+            jpfSenha.setText("");
+            jtUsuario.requestFocusInWindow();
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(this, "Erro:" + erro.getMessage());
         }

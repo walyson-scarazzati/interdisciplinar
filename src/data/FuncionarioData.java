@@ -86,7 +86,7 @@ public class FuncionarioData {
 
     public boolean editar(Funcionario obj) throws Exception {
         Conexao objConexao = new Conexao();
-        String sql = "Update Funcionarios set tipo = ?, salario = ?, usuario = ?, senha = ? where funcionario_id= ?";
+        String sql = "Update Funcionarios set tipo = ?, salario = ?, usuario = ?, senha = ?, tentativas_falhas = 0, bloqueado = 0 where funcionario_id= ?";
         try (Connection conn = objConexao.getConexao(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, obj.getTipo());
             pstmt.setDouble(2, obj.getSalario());
@@ -194,6 +194,8 @@ public class FuncionarioData {
         return obj;
     }
 
+    private static final int MAX_TENTATIVAS_LOGIN = 3;
+
     public Funcionario validarUsuario(String usuario, String senha) throws Exception {
         Conexao objConexao = new Conexao();
         Funcionario obj = null;
@@ -202,16 +204,43 @@ public class FuncionarioData {
             pstmt.setString(1, usuario);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
+                    int funcionarioId = rs.getInt("funcionario_id");
+                    if (rs.getBoolean("bloqueado")) {
+                        throw new UsuarioBloqueadoException(
+                                "Usuário bloqueado após " + MAX_TENTATIVAS_LOGIN
+                                + " tentativas inválidas. Procure o administrador ou refaça seu cadastro.");
+                    }
+
                     String hashArmazenado = rs.getString("senha");
                     if (SenhaUtil.verificar(senha, hashArmazenado)) {
+                        registrarTentativa(conn, funcionarioId, 0, false);
                         obj = new Funcionario();
                         obj.setUsuario(rs.getString("usuario"));
                         obj.setTipo(rs.getInt("tipo"));
+                    } else {
+                        int tentativas = rs.getInt("tentativas_falhas") + 1;
+                        boolean bloquear = tentativas >= MAX_TENTATIVAS_LOGIN;
+                        registrarTentativa(conn, funcionarioId, tentativas, bloquear);
+                        if (bloquear) {
+                            throw new UsuarioBloqueadoException(
+                                    "Usuário bloqueado após " + MAX_TENTATIVAS_LOGIN
+                                    + " tentativas inválidas. Procure o administrador ou refaça seu cadastro.");
+                        }
                     }
                 }
             }
         }
         return obj;
+    }
+
+    private void registrarTentativa(Connection conn, int funcionarioId, int tentativas, boolean bloqueado) throws SQLException {
+        String sql = "Update Funcionarios set tentativas_falhas = ?, bloqueado = ? where funcionario_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, tentativas);
+            pstmt.setBoolean(2, bloqueado);
+            pstmt.setInt(3, funcionarioId);
+            pstmt.executeUpdate();
+        }
     }
 
     public Vector<Funcionario> carregarCombo() throws Exception {

@@ -29,11 +29,13 @@ CREATE TABLE Associados (
 
 -- Table: Funcionarios
 CREATE TABLE Funcionarios (
-  funcionario_id INT  NOT NULL PRIMARY KEY,
-  usuario        VARCHAR(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  senha          VARCHAR(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  salario        DECIMAL(10,2) NOT NULL,
-  tipo           INT  NOT NULL,
+  funcionario_id    INT  NOT NULL PRIMARY KEY,
+  usuario           VARCHAR(30)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  senha             VARCHAR(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  salario           DECIMAL(10,2) NOT NULL,
+  tipo              INT  NOT NULL,
+  tentativas_falhas INT NOT NULL DEFAULT 0,
+  bloqueado         TINYINT(1) NOT NULL DEFAULT 0,
   FOREIGN KEY (funcionario_id) REFERENCES Pessoas(id)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
